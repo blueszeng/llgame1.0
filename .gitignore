@@ -1,5 +1,4 @@
 
-scripts/interface/._Poller.py
+logs/
 .idea/
-log/
 *.pyc
