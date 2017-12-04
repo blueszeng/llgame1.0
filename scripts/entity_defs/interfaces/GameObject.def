@@ -1,0 +1,80 @@
+<root>
+	<Properties>
+	    <cid>
+                <Type>			INT32			</Type>
+                <Flags>			BASE	      	</Flags>
+                <Default>		0				</Default>
+        </cid>
+	</Properties>
+
+	<ClientMethods>
+
+		<onSay>
+			<Arg>	UNICODE		</Arg>
+		</onSay>
+
+        <onMessage>
+            <Arg> INT32</Arg>
+            <Arg> INT32</Arg>
+            <Arg> UNICODE </Arg>
+        </onMessage>
+
+		<onEnterGame>
+		    <Arg>	INT32	</Arg>
+		    <Arg>	UNICODE	</Arg>
+		</onEnterGame>
+
+        <onLeaveGame>
+		    <Arg>	INT32	</Arg>
+		</onLeaveGame>
+
+		<onEnterHall>
+		    <Arg>	INT32	</Arg>
+		</onEnterHall>
+
+        <onLeaveHall>
+		    <Arg>	INT32	</Arg>
+		</onLeaveHall>
+
+	</ClientMethods>
+
+	<BaseMethods>
+
+        <reqEnterGame>
+            <Exposed/>
+            <Arg> INT32 </Arg>
+        </reqEnterGame>
+
+        <reqLeaveGame>
+            <Exposed/>
+        </reqLeaveGame>
+
+        <reqEnterHall>
+            <Exposed/>
+            <Arg> INT32 </Arg>
+        </reqEnterHall>
+
+        <reqLeaveHall>
+            <Exposed/>
+        </reqLeaveHall>
+
+        <reqEnterRoom>
+            <Exposed/>
+        </reqEnterRoom>
+
+        <reqLeaveRoom>
+            <Exposed/>
+        </reqLeaveRoom>
+
+	</BaseMethods>
+
+	<CellMethods>
+
+	    <reqMessageC>
+	        <Exposed/>
+            <Arg> INT32</Arg>
+            <Arg> UNICODE </Arg>
+        </reqMessageC>
+
+	</CellMethods>
+</root>

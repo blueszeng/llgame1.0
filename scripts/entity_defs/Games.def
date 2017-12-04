@@ -1,0 +1,37 @@
+<root>
+	<Implements>
+		<Interface>	BaseObject	</Interface>
+	</Implements>
+
+	<Properties>
+
+	     <income>
+			<Type>			FLOAT				</Type>
+			<Flags>			BASE			    </Flags>
+			<Default>								</Default>
+		    <Persistent>		true				</Persistent>
+		</income>
+
+	</Properties>
+
+	<BaseMethods>
+
+        <addIncome>
+			<Arg>	FLOAT	</Arg>
+		</addIncome>
+
+		<reqChargeToPlayer>
+			<Arg>	UNICODE	</Arg>
+			<Arg>	FLOAT	</Arg>
+		</reqChargeToPlayer>
+
+		<reqGameInfo>
+		<Arg>  MAILBOX   </Arg>
+		</reqGameInfo>
+
+	</BaseMethods>
+
+	<CellMethods>
+	</CellMethods>
+</root>
+

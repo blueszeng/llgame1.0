@@ -1,0 +1,21 @@
+<root>
+	<Implements>
+	    <Interface> BaseObject </Interface>
+	</Implements>
+
+	<Properties>
+
+		<open>
+		    <Type>			UINT8				</Type>
+			<Flags>			BASE				</Flags>
+		</open>
+
+	</Properties>
+
+	<BaseMethods>
+	</BaseMethods>
+
+	<CellMethods>
+	</CellMethods>
+</root>
+

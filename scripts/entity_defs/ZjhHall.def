@@ -1,0 +1,25 @@
+<root>
+	<Implements>
+		<Interface>	BaseObject	</Interface>
+	</Implements>
+
+	<Properties>
+	</Properties>
+
+	<BaseMethods>
+
+	    <reqEnterRoom>
+		    <Arg>	MAILBOX	</Arg>
+		</reqEnterRoom>
+
+        <onRoomLosePlayer>
+            <Arg>	INT32	</Arg>
+		    <Arg>	MAILBOX	</Arg>
+		</onRoomLosePlayer>
+
+	</BaseMethods>
+
+	<CellMethods>
+	</CellMethods>
+</root>
+

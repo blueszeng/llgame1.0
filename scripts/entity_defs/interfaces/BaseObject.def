@@ -1,0 +1,30 @@
+<root>
+	<Properties>
+
+	    <parent>
+			<Type>			MAILBOX				</Type>
+			<Flags>			BASE			    </Flags>
+		</parent>
+
+	</Properties>
+
+	<BaseMethods>
+
+	    <reqEnter>
+            <Arg> MAILBOX </Arg>
+        </reqEnter>
+
+        <reqLeave>
+            <Arg> MAILBOX </Arg>
+        </reqLeave>
+
+        <reqEnterChild>
+            <Arg> MAILBOX </Arg>
+            <Arg> INT32 </Arg>
+        </reqEnterChild>
+
+        <reqPlayerCount>
+        </reqPlayerCount>
+
+	</BaseMethods>
+</root>

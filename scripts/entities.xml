@@ -1,0 +1,20 @@
+<root>
+	<!--
+		实体注册文件(<你的资产库>/scripts/entities.xml)
+		详细说明请参考：http://kbengine.org/cn/docs/configuration/entities.html
+					http://www.kbengine.org/cn/docs/programming/entitydef.html
+	-->
+	
+	<Player hasClient="true"></Player>		<!--玩家账号实体-->
+	<DdzAvatar hasClient="true"></DdzAvatar>
+	<ZjhAvatar hasClient="true"></ZjhAvatar>
+	<Ranks/>								<!--排行榜管理-->
+	<Games/>      							<!--游戏管理-->
+	<DdzGame/>
+	<DdzHall/>       						<!--斗地主大厅 -->
+	<DdzRoom/>								<!--斗地主房间-->
+	<ZjhGame/>
+	<ZjhHall/>       						<!--炸金花大厅 -->
+	<ZjhRoom/>								<!--诈金花房间-->
+
+</root>

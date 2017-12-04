@@ -1,0 +1,82 @@
+<root>
+	<Implements>
+	    <Interface>	BaseObject	</Interface>
+	</Implements>
+
+	<Properties>
+
+		<state>
+			<Type>			INT32				</Type>
+			<Flags>			BASE				</Flags>
+		</state>
+
+		<limit>
+			<Type>			FLOAT				</Type>
+			<Flags>			BASE				</Flags>
+		</limit>
+
+		<taxRate>
+			<Type>			FLOAT				</Type>
+			<Flags>			BASE				</Flags>
+		</taxRate>
+
+		<zjList>
+			<Type>	        UNICODE         	</Type>
+			<Flags>			BASE				</Flags>
+		</zjList>
+
+        <!-- Cell 属性 -->
+
+        <stateC>
+			<Type>			INT32				</Type>
+			<Flags>			ALL_CLIENTS				</Flags>
+		</stateC>
+
+		<dizhuC>
+			<Type>			FLOAT				</Type>
+			<Flags>			ALL_CLIENTS				</Flags>
+		</dizhuC>
+
+		<taxRateC>
+			<Type>			FLOAT				</Type>
+			<Flags>			ALL_CLIENTS				</Flags>
+		</taxRateC>
+
+		<jzListC>
+			<Type>      	UNICODE	            </Type>
+			<Flags>			ALL_CLIENTS				</Flags>
+		</jzListC>
+
+	</Properties>
+
+	<BaseMethods>
+
+		<set_state>
+		    <Arg>	INT32	</Arg>
+		</set_state>
+
+	</BaseMethods>
+
+	<CellMethods>
+
+	    <onEnter>
+			<Arg>		MAILBOX		</Arg>
+		</onEnter>
+
+		<onLeave>
+			<Arg>		MAILBOX		</Arg>
+		</onLeave>
+
+		<reqMessage>
+		    <Arg> MAILBOX	</Arg>
+            <Arg> INT32</Arg>
+            <Arg> UNICODE </Arg>
+        </reqMessage>
+
+        <set_state>
+		    <Arg>	INT32	</Arg>
+		</set_state>
+
+	</CellMethods>
+</root>
+
