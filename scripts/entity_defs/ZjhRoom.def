@@ -10,6 +10,11 @@
 			<Flags>			BASE				</Flags>
 		</state>
 
+		<dizhu>
+			<Type>			FLOAT				</Type>
+			<Flags>			BASE				</Flags>
+		</dizhu>
+
 		<limit>
 			<Type>			FLOAT				</Type>
 			<Flags>			BASE				</Flags>

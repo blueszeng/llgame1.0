@@ -5,6 +5,7 @@ import time
 import json
 import Functor
 from KBEDebug import *
+
 class Ranks(KBEngine.Base):
 	"""
 	排行榜管理器实体

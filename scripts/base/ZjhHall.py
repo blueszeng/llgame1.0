@@ -19,7 +19,7 @@ class ZjhHall(KBEngine.Base,BaseObject):
 
 	def reqEnter(self,player):
 
-		if player.gold < d_DDZ[self.cid]["limit"]:
+		if player.gold < d_ZJH[self.cid]["limit"]:
 
 			DEBUG_MSG("%r::reqEnter() Entity[%r] Gold < Limit" % (self.className, player.id))
 			if player.client:
@@ -85,9 +85,10 @@ class ZjhHall(KBEngine.Base,BaseObject):
 			params = {'parent': self,
 					  'cid': self.lastNewRoomKey,
 					  'state': 0,
-					  'difen': d_ZJH[self.cid]['base'],
-					  'jzList':d_ZJH[self.cid]['jzList'],
-					  'taxRate': d_ZJH['taxRate']}
+					  'dizhu': d_ZJH[self.cid]['base'],
+					  'jzList': json.dumps(d_ZJH[self.cid]['jzList']),
+					  'taxRate': d_ZJH['taxRate']
+					  }
 
 			KBEngine.createBaseAnywhere("ZjhRoom", params, None)
 

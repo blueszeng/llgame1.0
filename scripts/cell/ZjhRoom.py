@@ -68,7 +68,18 @@ class ZjhRoom(KBEngine.Entity,RoomEntity):
 
     def onEnter(self, player):
 
-        DEBUG_MSG('ZjhRoom::onEnter space[%d] cid = %i.' % (self.spaceID, player.cid))
+        DEBUG_MSG('%r::onEnter() space[%d] cid[%i]' % (self.className, self.spaceID, player.cid))
+
+        # 分配座位顺序
+        for i in range(1, 6):
+            have = False
+            for pp in self.players.values():
+                if i == pp.cid:
+                    have = True
+                    break
+            if not have:
+                player.cid = i
+                break
 
         self.players[player.cid] = player
 
@@ -80,10 +91,13 @@ class ZjhRoom(KBEngine.Entity,RoomEntity):
 
     def onLeave(self, player):
 
-        DEBUG_MSG('ZjhRoom::onLeave space[%d] cid = %i.' % (self.spaceID, player.cid))
+        DEBUG_MSG('%r::onLeave() space[%d] cid[%i]' % (self.className, self.spaceID, player.cid))
 
         if player.cid in self.players:
             del self.players[player.cid]
+
+            if len(self.players) == 0:
+                self.destroy()
 
     def onDispatchCards(self):
         """

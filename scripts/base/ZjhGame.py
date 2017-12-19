@@ -46,7 +46,7 @@ class ZjhGame(KBEngine.Base,BaseObject):
         json_results = json.dumps(results)
 
         if player.client:
-            player.client.onEnterGame(0, json_results)
+            player.client.onEnterGame(self.cid, json_results)
 
     def reqLeave(self,player):
         super().reqLeave(player)

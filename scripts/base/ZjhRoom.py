@@ -50,54 +50,23 @@ class ZjhRoom(KBEngine.Base,BaseObject):
 
     def reqEnter(self, player):
 
-        #去重
         if player.id in self.players:
             return
 
-        if self.state == 1:
-            #断线重连，重新进入游戏
-            player.cell.set_AoiRadius(80.0)
+        super().reqEnter(player)
 
-            player.roomID = self.roomID
-            self.players[player.id] = player
+        if self.state == ROOM_STATE_READY:
+            player.createCell(self.cell)
 
-        else:
-            for i in range(1, 6):
-                has = False
-                for pp in self.players.values():
-                    if i == pp.cid:
-                        has = True
-                        break
-                if has == False:
-                    player.cid = i
-                    break
-
-            player.createCell(self.cell, player.cid)
-
-            player.roomID = self.roomID
-            self.players[player.id] = player
 
 
     def reqLeave(self, player):
-        # 防止多次离开
 
-        DEBUG_MSG("ZjhRoom::onLeaveRoom Player[%r] PlayerCount[%r]" % (player.id,len(self.players)))
-
-        if player.id not in self.players:
+        # 如果房间正在游戏中，不予处理
+        if self.state == ROOM_STATE_INGAME:
             return
 
-        if self.state == ROOM_STATE_INGAME:
-            #游戏进行中断线，离开游戏
-            player.cell.set_AoiRadius(0.0)
+        super().reqLeave(player)
 
-        elif player.cell:
+        if player.cell:
             player.destroyCellEntity()
-
-        if player.id in self.players:
-
-            del self.players[player.id]
-
-            if player.client:
-                player.client.onLeaveRoom(self.state, player.cid)
-
-            player.roomID = 0
