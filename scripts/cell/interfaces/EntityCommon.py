@@ -9,6 +9,7 @@ class EntityCommon:
 	def __init__(self):
 		#定时器管理器
 		self.timerMgr = {}
+		self.callbackFunc = None
 
 	def getCurrRoomBase(self):
 		"""
@@ -51,3 +52,21 @@ class EntityCommon:
 			tid = self.timerMgr.pop(userArg)
 
 			self.delTimer(tid)
+
+	def invoke(self,callbackFunc,initialOffset):
+		"""
+		回调方法
+		"""
+		self.callbackFunc = callbackFunc
+		self.addTimerMgr(initialOffset,0,0)
+
+	def onTimer(self, id, userArg):
+		"""
+        KBEngine method.
+        使用addTimer后， 当时间到达则该接口被调用
+        @param id		: addTimer 的返回值ID
+        @param userArg	: addTimer 最后一个参数所给入的数据
+        """
+		if userArg == 0 and self.callbackFunc is not None:
+			self.callbackFunc
+			self.callbackFunc = None

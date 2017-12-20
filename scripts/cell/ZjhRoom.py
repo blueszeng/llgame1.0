@@ -10,11 +10,9 @@ class ZjhRoom(KBEngine.Entity,RoomEntity):
 
     def __init__(self):
         KBEngine.Entity.__init__(self)
+        RoomEntity.__init__(self)
 
         self.position = (9999.0, 0.0, 0.0)
-        self.timerMgr = {}
-
-        self.players = {}
 
         # 房间时间
         self.roomtime   = 10
@@ -62,7 +60,7 @@ class ZjhRoom(KBEngine.Entity,RoomEntity):
 
         if state == ROOM_STATE_INGAME:
             for pp in self.players:
-                pp.state = PLAYER_STATE_START
+                pp.state = PLAYER_STATE_READY
 
         KBEngine.setSpaceData(self.spaceID, "state", str(self.stateC))
 
@@ -83,11 +81,13 @@ class ZjhRoom(KBEngine.Entity,RoomEntity):
 
         self.players[player.cid] = player
 
+        #如果该房已开始游戏，则后面加入的玩家设置为灰色状态
         if self.stateC != ROOM_STATE_INGAME:
             player.stateC = PLAYER_STATE_READY
-
-        if self.stateC != ROOM_STATE_INGAME and len(self.players) >= 2:
-            self.addTimerMgr(1,0,ACTION_ROOM_TIME)
+            if len(self.players) >= 2:
+                self.addTimerMgr(1, 0, ACTION_ROOM_TIME)
+        else:
+            player.stateC = PLAYER_STATE_GARK
 
     def onLeave(self, player):
 
@@ -100,9 +100,7 @@ class ZjhRoom(KBEngine.Entity,RoomEntity):
                 self.destroy()
 
     def onDispatchCards(self):
-        """
-        发牌
-        """
+        """ 发牌 """
         cards = reqRandomCards52()
         for pp in self.players.values():
             pp.cards        = getCardsby(cards, 3)
@@ -151,9 +149,7 @@ class ZjhRoom(KBEngine.Entity,RoomEntity):
         data["curDizhu"] = self.curDizhu
         data["curRoomtime"] = self.curRoomtime
 
-        data_json = json.dumps(data)
-        KBEngine.setSpaceData(self.spaceID, "ACTION_ROOM_NEXT", data_json)
-
+        KBEngine.setSpaceData(self.spaceID, "ACTION_ROOM_NEXT", json.dumps(data))
 
 
     def reqMessage(self, player, action, buf):
@@ -206,7 +202,7 @@ class ZjhRoom(KBEngine.Entity,RoomEntity):
         count = 0
         tmpid = 0
         for pp in self.chairPlayers.values():
-            if pp.state > PLAYER_STATE_LINE:
+            if pp.state == PLAYER_STATE_INGAME:
                 tmpid = pp.chairID
                 count += 1
 
@@ -235,6 +231,7 @@ class ZjhRoom(KBEngine.Entity,RoomEntity):
         @param id		: addTimer 的返回值ID
         @param userArg	: addTimer 最后一个参数所给入的数据
         """
+        EntityCommon.onTimer(id,userArg)
 
         if userArg == ACTION_ROOM_TIME:
 

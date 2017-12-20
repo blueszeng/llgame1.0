@@ -42,6 +42,15 @@ def convertDict(httpStr,str1,str2):
 
 
 
+def func1(args1,args2):
+    print("func1 %d" % args2)
+
+def func2(func):
+    func
+
+func2(func1(1,3))
+
+
 
 
 

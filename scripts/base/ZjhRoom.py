@@ -59,7 +59,6 @@ class ZjhRoom(KBEngine.Base,BaseObject):
             player.createCell(self.cell)
 
 
-
     def reqLeave(self, player):
 
         # 如果房间正在游戏中，不予处理

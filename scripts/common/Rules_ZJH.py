@@ -3,9 +3,15 @@
 from KBEDebug import *
 import random
 
+#玩家状态
+PLAYER_STATE_GARK  = 0   #灰色状态
+PLAYER_STATE_READY = 1   #准备状态
+PLAYER_STATE_INGAME = 2  #游戏中
+PLAYER_STATE_QIPAI = 3   #放弃
+
 #房间状态
-ROOM_STATE_GARK     =   0   #灰色状态
-ROOM_STATE_READY    =   1   #准备阶段
+ROOM_STATE_READY    =   0  #准备状态
+ROOM_STATE_BEGIN_TIME    =   1   #开始到计时
 ROOM_STATE_INGAME   =   2   #正在游戏
 ROOM_STATE_FINISH   =   3   #游戏结束
 
@@ -26,20 +32,9 @@ ACTION_ROOM_SETTLE             = 19 #游戏结算
 ACTION_ROOM_PUBLICH            = 20 #公布玩家的牌
 ACTION_ROOM_CLEARGAME          = 21 #清理空间开始下一局
 ACTION_ROOM_KAIPAI_BEGIN       = 22 #开牌
-ACTION_ROOM_KAIPAI_END         = 23 #kaipai jiesu
+ACTION_ROOM_KAIPAI_END         = 23 #
 
-ACTION_INFO_UPDATE             = 100  #更新玩家信息
 
-PLAYER_STATE_GARK  = 0   #灰色状态
-PLAYER_STATE_READY = 1   #准备状态
-PLAYER_STATE_QIPAI = 2   #弃牌状态
-PLAYER_STATE_LOSER = 3   #比牌输
-
-PLAYER_STATE_LINE  = 10   #状态分割线,上为游戏准备，下为游戏中
-
-PLAYER_STATE_START  = 11  #游戏中
-PLAYER_STATE_KANPAI = 12  #看牌
-PLAYER_STATE_WIN    = 13  #比牌赢
 
 DEBUG_ACTION_STRING = {ACTION_ROOM_TIME:"ACTION_ROOM_TIME",
                        ACTION_ROOM_WAIT:"ACTION_ROOM_WAIT",
@@ -56,18 +51,9 @@ DEBUG_ACTION_STRING = {ACTION_ROOM_TIME:"ACTION_ROOM_TIME",
                        ACTION_ROOM_SETTLE:"ACTION_ROOM_SETTLE",
                        ACTION_ROOM_PUBLICH:"ACTION_ROOM_PUBLICH",
                        ACTION_ROOM_CLEARGAME: "ACTION_ROOM_CLEARGAME",
-                       ACTION_INFO_UPDATE:"ACTION_INFO_UPDATE",
                        ACTION_ROOM_KAIPAI_BEGIN:"ACTION_ROOM_KAIPAI_BEGIN",
                        ACTION_ROOM_KAIPAI_END:"ACTION_ROOM_KAIPAI_END"}
 
-DEBUG_PLAYER_STRING = {PLAYER_STATE_GARK: "PLAYER_STATE_0",
-                       PLAYER_STATE_READY:"PLAYER_STATE_READY",
-                       PLAYER_STATE_QIPAI:"PLAYER_STATE_QIPAI",
-                       PLAYER_STATE_LOSER:"PLAYER_STATE_LOSER",
-                       PLAYER_STATE_LINE:"PLAYER_STATE_LINE",
-                       PLAYER_STATE_START:"PLAYER_STATE_START",
-                       PLAYER_STATE_KANPAI:"PLAYER_STATE_KANPAI",
-                       PLAYER_STATE_WIN:"PLAYER_STATE_WIN"}
 
 # 负责炸金花的游戏规则
 def reqRandomCards52():
