@@ -51,6 +51,7 @@ class ZjhRoom(KBEngine.Entity,RoomEntity):
         #下注记录，用于给观战玩家生成筹码界面
         self.chipsList = []
 
+        KBEngine.setSpaceData(self.spaceID, "curDizhu", str(self.curDizhu))
 
     def set_state(self,state):
 
@@ -66,8 +67,6 @@ class ZjhRoom(KBEngine.Entity,RoomEntity):
 
     def onEnter(self, player):
 
-        DEBUG_MSG('%r::onEnter() space[%d] cid[%i]' % (self.className, self.spaceID, player.cid))
-
         # 分配座位顺序
         for i in range(1, 6):
             have = False
@@ -80,6 +79,8 @@ class ZjhRoom(KBEngine.Entity,RoomEntity):
                 break
 
         self.players[player.cid] = player
+
+        DEBUG_MSG('%r::onEnter() space[%d] cid[%i]' % (self.className, self.spaceID, player.cid))
 
         #如果该房已开始游戏，则后面加入的玩家设置为灰色状态
         if self.stateC != ROOM_STATE_INGAME:

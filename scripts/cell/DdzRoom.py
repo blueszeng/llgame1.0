@@ -53,8 +53,6 @@ class DdzRoom(KBEngine.Entity,RoomEntity):
 
     def onEnter(self, player):
 
-        DEBUG_MSG('%r::onEnter() space[%d] cid[%i]' % (self.className,self.spaceID, player.cid))
-
         #分配座位顺序
         for i in range(1, 4):
             have = False
@@ -67,6 +65,8 @@ class DdzRoom(KBEngine.Entity,RoomEntity):
                 break
 
         self.players[player.cid] = player
+
+        DEBUG_MSG('%r::onEnter() space[%d] cid[%i]' % (self.className, self.spaceID, player.cid))
 
         #满足开局人数
         if len(self.players.values()) == 3:
