@@ -136,8 +136,6 @@ class Player(KBEngine.Proxy,GameObject):
 
 	def reqEnterGame(self,gameID):
 
-		DEBUG_MSG(d_games[1]['sign'])
-
 		if self.activeProxy == None and gameID in d_games:
 			entity = d_games[gameID]['sign']+"Avatar"
 

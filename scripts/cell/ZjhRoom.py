@@ -25,8 +25,6 @@ class ZjhRoom(KBEngine.Entity,RoomEntity):
         #重置房间数据
         self.reset()
 
-        KBEngine.globalData["Room_%i" % self.spaceID] = self.base
-
         KBEngine.setSpaceData(self.spaceID, "dizhu",    str(self.dizhuC))
         KBEngine.setSpaceData(self.spaceID, "totalzhu", str(self.totalzhu))
         KBEngine.setSpaceData(self.spaceID, "roomtime", str(self.roomtime))
@@ -60,7 +58,7 @@ class ZjhRoom(KBEngine.Entity,RoomEntity):
         self.stateC = state
 
         if state == ROOM_STATE_INGAME:
-            for pp in self.players:
+            for pp in self.players.values():
                 pp.state = PLAYER_STATE_READY
 
         KBEngine.setSpaceData(self.spaceID, "state", str(self.stateC))
@@ -232,7 +230,7 @@ class ZjhRoom(KBEngine.Entity,RoomEntity):
         @param id		: addTimer 的返回值ID
         @param userArg	: addTimer 最后一个参数所给入的数据
         """
-        EntityCommon.onTimer(id,userArg)
+        EntityCommon.onTimer(self,id,userArg)
 
         if userArg == ACTION_ROOM_TIME:
 

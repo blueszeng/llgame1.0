@@ -21,9 +21,10 @@ class ZjhHall(KBEngine.Base,BaseObject):
 
 		if player.gold < d_ZJH[self.cid]["limit"]:
 
-			DEBUG_MSG("%r::reqEnter() Entity[%r] Gold < Limit" % (self.className, player.id))
 			if player.client:
 				player.client.onEnterHall(-1)
+
+			WARNING_MSG("%r::reqEnter() Entity[%r] Gold < Limit" % (self.className, player.id))
 			return
 
 		super().reqEnter(player)
@@ -61,7 +62,7 @@ class ZjhHall(KBEngine.Base,BaseObject):
 		"""
 		# todo 未添加到def
 		if roomKey in self.childs:
-			self.sortNotFullRooms(self.childs[roomKey])
+			self.sortNotFullRooms(roomKey,self.childs[roomKey]['players'])
 			del self.childs[roomKey]
 
 	def reqEnterRoom(self, player):
@@ -69,18 +70,18 @@ class ZjhHall(KBEngine.Base,BaseObject):
 		先查找空房间，如果没空房，则将玩家排队，再创建新房间
 		"""
 
-		roomData = self.findNotFullRooms()
+		sortData = self.findNotFullRooms()
 
-		if roomData:
+		if sortData:
+			roomKey = sortData["roomKey"]
+			room = self.childs[roomKey]["roomMailbox"]
 
-			roomData['players'].append(player)
-			self.sortNotFullRooms(roomData)
+			self.childs[roomKey]["players"].append(player)
+			self.sortNotFullRooms(roomKey,self.childs[roomKey]["players"])
 
-			if not roomData['roomMailbox']:
-				roomData['roomMailbox'].reqEnter(player)
+			room.reqEnter(player)
 
 		else:
-
 			self.lastNewRoomKey = self.lastNewRoomKey + 1
 			params = {'parent': self,
 					  'cid': self.lastNewRoomKey,
@@ -96,14 +97,15 @@ class ZjhHall(KBEngine.Base,BaseObject):
 						 "players": [player]}
 
 			self.childs[self.lastNewRoomKey] = roomDatas
-			self.sortNotFullRooms(roomDatas)
+
+			self.sortNotFullRooms(self.lastNewRoomKey,roomDatas["players"])
 
 	def onRoomLosePlayer(self,roomkey,player):
-		#玩家房间
+		"""玩家丢失"""
 
 		if roomkey in self.childs and player in self.childs[roomkey]['players']:
 			del self.childs[roomkey]['players'][player]
-			self.sortNotFullRooms(self.childs[roomkey])
+			self.sortNotFullRooms(roomkey,self.childs[roomkey]['players'])
 
 	def findNotFullRooms(self):
 		"""
@@ -115,20 +117,35 @@ class ZjhHall(KBEngine.Base,BaseObject):
 		else:
 			return self.notFullRooms[0]
 
-	def sortNotFullRooms(self,roomData):
+	def sortNotFullRooms(self,roomKey,players):
 		"""
 		重新排列房间顺序，优先把人数最多的房间置顶
 		"""
+		playersCount = len(players)
+		sortData = {"roomKey":roomKey,"playersCount":playersCount}
 
 		#如果房间满人或者没人，则从队列中清理掉
-		if (len(roomData['players']) == 0 or len(roomData['players']) == 5) and roomData in self.notFullRooms:
-			del self.notFullRooms[roomData]
+		if (playersCount == 0 or playersCount == 5) and sortData in self.notFullRooms:
+			del self.notFullRooms[self.notFullRooms.index(sortData)]
+			return
+
+		if len(self.notFullRooms) <= 0:
+			self.notFullRooms.append(sortData)
 			return
 
 		#如果房间还有空位，则排队
-		for notFullRoom in self.notFullRooms:
-			if len(roomData['players']) < len(notFullRoom['players']):
-				index = self.notFullRooms.index(notFullRoom)
-				self.notFullRooms.insert(index+1,roomData)
+		for notRoom in self.notFullRooms:
+
+			if notRoom == sortData:
+				break
+
+			index = self.notFullRooms.index(notRoom)
+
+			if playersCount > notRoom['playersCount']:
+				self.notFullRooms.insert(index,sortData)
+				break
+			elif len(self.notFullRooms) == (index+1):
+				self.notFullRooms.append(sortData)
+
 
 
