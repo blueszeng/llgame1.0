@@ -59,7 +59,7 @@ class ZjhRoom(KBEngine.Entity,RoomEntity):
 
         if state == ROOM_STATE_INGAME:
             for pp in self.players.values():
-                pp.state = PLAYER_STATE_READY
+                pp.stateC = PLAYER_STATE_INGAME
 
         KBEngine.setSpaceData(self.spaceID, "state", str(self.stateC))
 
@@ -124,12 +124,11 @@ class ZjhRoom(KBEngine.Entity,RoomEntity):
             self.firstCid = self.curCid
             self.players[self.curCid].first = 1
 
-            KBEngine.setSpaceData(self.spaceID, "firstCid", str(self.firstCid))
         else:
             for i in range(0, 5):
                 tCid = (self.curCid + i) % 5 + 1
                 if tCid in self.players:
-                    if self.players[tCid].stateC == ROOM_STATE_INGAME:
+                    if self.players[tCid].stateC == PLAYER_STATE_INGAME:
                         self.curCid = tCid
                         break
 
@@ -145,11 +144,55 @@ class ZjhRoom(KBEngine.Entity,RoomEntity):
 
         data = {}
         data["curCid"] = self.curCid
-        data["curDizhu"] = self.curDizhu
-        data["curRoomtime"] = self.curRoomtime
+        data["curRoomTime"] = self.curRoomtime
 
-        KBEngine.setSpaceData(self.spaceID, "ACTION_ROOM_NEXT", json.dumps(data))
+        json_data = json.dumps(data)
+        KBEngine.setSpaceData(self.spaceID, "ACTION_ROOM_NEXT", json_data)
 
+        DEBUG_MSG("ACTION_ROOM_NEXT cid[%d]" % (self.curCid))
+
+
+    def onTimer(self, id, userArg):
+        """
+        KBEngine method.
+        使用addTimer后， 当时间到达则该接口被调用
+        @param id		: addTimer 的返回值ID
+        @param userArg	: addTimer 最后一个参数所给入的数据
+        """
+        EntityCommon.onTimer(self,id,userArg)
+
+        if userArg == ACTION_ROOM_TIME:
+
+            self.curRoomtime = self.roomtime
+            self.set_state(ROOM_STATE_READY)
+
+            self.addTimerMgr(1,1,ACTION_ROOM_READY)
+            KBEngine.setSpaceData(self.spaceID, "ACTION_ROOM_READY",str(self.curRoomtime))
+
+        elif userArg == ACTION_ROOM_READY:
+            self.curRoomtime -= 1
+
+            if self.curRoomtime <= 0:
+                self.delTimerMgr(0)
+
+                self.set_state(ROOM_STATE_INGAME)
+
+                self.onDispatchCards()
+
+                self._nextPlayer()
+
+        elif userArg == ACTION_ROOM_NEXT:
+            self.curRoomtime -= 1
+
+            if self.curRoomtime <= 0:
+                self.onOuttime(userArg,self.players[self.curCid])
+
+    def onOuttime(self, userArg, player):
+        """超时处理"""
+
+        if userArg == ACTION_ROOM_NEXT:
+            #弃牌
+            self._nextPlayer()
 
     def reqMessage(self, player, action, buf):
 
@@ -201,14 +244,14 @@ class ZjhRoom(KBEngine.Entity,RoomEntity):
         count = 0
         tmpid = 0
         for pp in self.chairPlayers.values():
-            if pp.state == PLAYER_STATE_INGAME:
+            if pp.stateC == PLAYER_STATE_INGAME:
                 tmpid = pp.chairID
                 count += 1
 
         if count <= 1:
             # 存储胜利ID
             self.victoryID = tmpid
-            self.state = 2
+            self.stateC = 2
             return True
 
         return False
@@ -223,48 +266,7 @@ class ZjhRoom(KBEngine.Entity,RoomEntity):
         self.chairPlayers[self.victoryID].gold += self.totalzhu
         self.chairPlayers[self.victoryID].chip  = -self.totalzhu
 
-    def onTimer(self, id, userArg):
-        """
-        KBEngine method.
-        使用addTimer后， 当时间到达则该接口被调用
-        @param id		: addTimer 的返回值ID
-        @param userArg	: addTimer 最后一个参数所给入的数据
-        """
-        EntityCommon.onTimer(self,id,userArg)
 
-        if userArg == ACTION_ROOM_TIME:
-
-            self.curRoomtime = self.roomtime
-            self.set_state(ROOM_STATE_READY)
-
-            self.addTimerMgr(1,1,ACTION_ROOM_READY)
-            KBEngine.setSpaceData(self.spaceID, "ACTION_ROOM_READY",str(self.curRoomtime))
-
-        elif userArg == ACTION_ROOM_READY:
-            self.curRoomtime -= 1
-
-            if self.curRoomtime <= 0:
-                self.delTimerMgr(0)
-
-                self.set_state(ROOM_STATE_INGAME)
-
-                self.onDispatchCards()
-
-                self._nextPlayer()
-
-        elif userArg == ACTION_ROOM_NEXT:
-
-            self.curRoomtime -= 1
-
-            if self.curRoomtime <= 0:
-                self.onOuttime(userArg,self.players[self.curCid])
-
-    def onOuttime(self, userArg, player):
-        """超时处理"""
-
-        if userArg == ACTION_ROOM_NEXT:
-            #弃牌
-            self._nextPlayer()
 
 
 
