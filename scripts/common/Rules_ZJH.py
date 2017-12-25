@@ -10,33 +10,27 @@ PLAYER_STATE_INGAME = 2  #游戏中
 PLAYER_STATE_QIPAI = 3   #放弃
 
 #房间状态
-ROOM_STATE_READY    =   0  #准备状态
-ROOM_STATE_BEGIN_TIME    =   1   #开始到计时
+ROOM_STATE_READY    =   0  #准备好了
 ROOM_STATE_INGAME   =   2   #正在游戏
-ROOM_STATE_FINISH   =   3   #游戏结束
+ROOM_STATE_FINISH   =   3   #游戏结束,清理断线玩家
 
+ACTION_ROOM_NONE               = 0  #空
 ACTION_ROOM_TIME               = 1  #下发房间时间
 ACTION_ROOM_READY			   = 10 #准备
-ACTION_ROOM_START    		   = 11 #开始游戏
 ACTION_ROOM_DISPATCH           = 12 #发牌
 ACTION_ROOM_GENZHU             = 13 #跟住
 ACTION_ROOM_JIAZHU             = 14 #加注
 ACTION_ROOM_KANPAI             = 15 #看牌
 ACTION_ROOM_QIPAI              = 16 #弃牌
 ACTION_ROOM_BIPAI              = 17 #比牌
-
 ACTION_ROOM_NEXT               = 18 #下一位
 ACTION_ROOM_SETTLE             = 19 #游戏结算
 ACTION_ROOM_PUBLICH            = 20 #公布玩家的牌
-ACTION_ROOM_CLEARGAME          = 21 #清理空间开始下一局
-ACTION_ROOM_KAIPAI_BEGIN       = 22 #开牌
-ACTION_ROOM_KAIPAI_END         = 23 #
 
 
 
 DEBUG_ACTION_STRING = {ACTION_ROOM_TIME:"ACTION_ROOM_TIME",
                        ACTION_ROOM_READY:"ACTION_ROOM_READY",
-                       ACTION_ROOM_START:"ACTION_ROOM_START",
                        ACTION_ROOM_DISPATCH:"ACTION_ROOM_DISPATCH",
                        ACTION_ROOM_GENZHU:"ACTION_ROOM_GENZHU",
                        ACTION_ROOM_JIAZHU:"ACTION_ROOM_JIAZHU",
@@ -46,9 +40,7 @@ DEBUG_ACTION_STRING = {ACTION_ROOM_TIME:"ACTION_ROOM_TIME",
                        ACTION_ROOM_NEXT:"ACTION_ROOM_NEXT",
                        ACTION_ROOM_SETTLE:"ACTION_ROOM_SETTLE",
                        ACTION_ROOM_PUBLICH:"ACTION_ROOM_PUBLICH",
-                       ACTION_ROOM_CLEARGAME: "ACTION_ROOM_CLEARGAME",
-                       ACTION_ROOM_KAIPAI_BEGIN:"ACTION_ROOM_KAIPAI_BEGIN",
-                       ACTION_ROOM_KAIPAI_END:"ACTION_ROOM_KAIPAI_END"}
+                       }
 
 
 # 负责炸金花的游戏规则

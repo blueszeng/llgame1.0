@@ -1,6 +1,7 @@
 import KBEngine
 import json
 from interfaces.EntityCommon import *
+import Rules_ZJH
 
 class ZjhAvatar(KBEngine.Entity,EntityCommon):
 
@@ -31,4 +32,7 @@ class ZjhAvatar(KBEngine.Entity,EntityCommon):
         if exposed != self.id:
             return
 
-        self.getCurrRoom().reqMessage(self, action, buf)
+        if action == Rules_ZJH.ACTION_ROOM_KANPAI:
+            self.lookcard = 2
+        else:
+            self.getCurrRoom().reqMessage(self, action, buf)

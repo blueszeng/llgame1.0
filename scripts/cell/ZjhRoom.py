@@ -17,17 +17,11 @@ class ZjhRoom(KBEngine.Entity,RoomEntity):
         self.curRoomtime = 0
 
         #先手ID
-        self.firstCid   = 0
+        self.firstCid = 0
         self.winCid  = 0
 
         #重置房间数据
         self.reset()
-
-        KBEngine.setSpaceData(self.spaceID, "dizhu",    str(self.dizhuC))
-        KBEngine.setSpaceData(self.spaceID, "totalzhu", str(self.totalzhu))
-        KBEngine.setSpaceData(self.spaceID, "roomtime", str(self.roomtime))
-        KBEngine.setSpaceData(self.spaceID, "curRound", str(self.curRound))
-        KBEngine.setSpaceData(self.spaceID, "state", str(self.stateC))
 
         KBEngine.setSpaceData(self.spaceID, "jzList", self.jzListC)
 
@@ -47,13 +41,23 @@ class ZjhRoom(KBEngine.Entity,RoomEntity):
         #下注记录，用于给观战玩家生成筹码界面
         self.chipsList = []
 
+        self.curAction = ACTION_ROOM_NONE
+
+        self.set_state(ROOM_STATE_READY)
+
+        KBEngine.setSpaceData(self.spaceID, "dizhu", str(self.dizhuC))
         KBEngine.setSpaceData(self.spaceID, "curDizhu", str(self.curDizhu))
+        KBEngine.setSpaceData(self.spaceID, "totalzhu", str(self.totalzhu))
+        KBEngine.setSpaceData(self.spaceID, "roomtime", str(self.roomtime))
+        KBEngine.setSpaceData(self.spaceID, "curRound", str(self.curRound))
+        KBEngine.setSpaceData(self.spaceID, "state", str(self.stateC))
 
     def set_state(self,state):
 
         DEBUG_MSG("ZjhRoom::set_state space[%r] state[%r]" % (self.spaceID,state))
 
         self.stateC = state
+        self.base.set_state(state)
 
         if state == ROOM_STATE_INGAME:
             for pp in self.players.values():
@@ -62,8 +66,7 @@ class ZjhRoom(KBEngine.Entity,RoomEntity):
         KBEngine.setSpaceData(self.spaceID, "state", str(self.stateC))
 
     def onEnter(self, player):
-
-        # 分配座位顺序
+        """分配座位顺序"""
         for i in range(1, 6):
             have = False
             for pp in self.players.values():
@@ -121,7 +124,6 @@ class ZjhRoom(KBEngine.Entity,RoomEntity):
             self.curCid = random.randint(1, len(self.players))
             self.firstCid = self.curCid
             self.players[self.curCid].first = 1
-
         else:
             for i in range(0, 5):
                 tCid = (self.curCid + i) % 5 + 1
@@ -144,8 +146,8 @@ class ZjhRoom(KBEngine.Entity,RoomEntity):
         data["curCid"] = self.curCid
         data["curRoomTime"] = self.curRoomtime
 
-        json_data = json.dumps(data)
-        KBEngine.setSpaceData(self.spaceID, "ACTION_ROOM_NEXT", json_data)
+        self.sendAllClients(ACTION_ROOM_NEXT,json.dumps(data))
+        self.curAction = ACTION_ROOM_NONE
 
         DEBUG_MSG("ACTION_ROOM_NEXT cid[%d]" % (self.curCid))
 
@@ -164,7 +166,7 @@ class ZjhRoom(KBEngine.Entity,RoomEntity):
             self.set_state(ROOM_STATE_READY)
 
             self.addTimerMgr(1,1,ACTION_ROOM_READY)
-            KBEngine.setSpaceData(self.spaceID, "ACTION_ROOM_READY",str(self.curRoomtime))
+            self.sendAllClients(ACTION_ROOM_READY,str(self.curRoomtime))
 
         elif userArg == ACTION_ROOM_READY:
             self.curRoomtime -= 1
@@ -179,26 +181,35 @@ class ZjhRoom(KBEngine.Entity,RoomEntity):
             self.curRoomtime -= 1
 
             if self.curRoomtime <= 0:
-                self.onOuttime(userArg,self.players[self.curCid])
+                self.delTimerMgr(0)
+                self.onQipai(self.players[self.curCid], userArg)
 
-    def onOuttime(self, userArg, player):
-        """超时处理"""
+        elif userArg == ACTION_ROOM_SETTLE:
+            #重置场景及玩家数据
+            self.reset()
+            for pp in self.players.values():
+                pp.cost = 0.0
+                pp.cards = []
+                pp.cardCount = 0
+                pp.lookcard = 1
+                pp.stateC = PLAYER_STATE_READY
 
-        if userArg == ACTION_ROOM_NEXT:
-            #todo 弃牌操作
-            self.onNextPlayer()
+            if len(self.players) >= 2:
+                self.addTimerMgr(1, 0, ACTION_ROOM_TIME)
 
     def reqMessage(self, player, action, buf):
 
-        DEBUG_MSG("ZjhRoom::reqMessage %r space[%d] player[%r] buf[%r]"
-                  % (DEBUG_ACTION_STRING.get(action), self.spaceID, player.cid, buf))
+        DEBUG_MSG("ZjhRoom::reqMessage() %r space[%d] player[%r] buf[%r]" % (DEBUG_ACTION_STRING.get(action), self.spaceID, player.cid, buf))
+
+        #过滤玩家的重复操作
+        if self.curCid == player.cid and self.curAction == action:
+            return
+
+        self.curAction = action
 
         if action == ACTION_ROOM_GENZHU:
             self.delTimerMgr(0)
             self.onGenzhu(player,buf)
-
-        elif action == ACTION_ROOM_KANPAI:
-            player.lookcard = 2
 
         elif action == ACTION_ROOM_JIAZHU:
             self.delTimerMgr(0)
@@ -313,6 +324,7 @@ class ZjhRoom(KBEngine.Entity,RoomEntity):
 
     def onCheckResult(self):
         """检测当局是否有玩家获胜了"""
+
         count = 0
         for pp in self.players.values():
             if pp.stateC == PLAYER_STATE_INGAME:
@@ -329,16 +341,26 @@ class ZjhRoom(KBEngine.Entity,RoomEntity):
         return False
 
     def onSettle(self):
-        #结算
+        """结算"""
         player = self.players[self.winCid]
-
         taxGold = Helper.Round((self.totalzhu - player.cost) * self.taxRateC)
 
         self.totalzhu -= taxGold
         player.goldC += self.totalzhu
 
-        #todo 下发结算动画通知,并延迟2秒开始下一局游戏
+        #更新base进程数据及税收
+        player.set_gold(self.totalzhu)
+
+        for pp in self.players.values():
+            pp.set_gold(-pp.cost)
+
         KBEngine.globalData["Games"].addIncome(taxGold)
+
+        self.sendAllClients(ACTION_ROOM_SETTLE,str(self.winCid))
+        self.set_state(ROOM_STATE_FINISH)
+        self.addTimerMgr(2,0,ACTION_ROOM_SETTLE)
+
+
 
 
 

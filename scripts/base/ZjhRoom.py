@@ -23,9 +23,14 @@ class ZjhRoom(KBEngine.Base,BaseObject):
         self.createInNewSpace(None)
 
     def set_state(self,state):
+        # 游戏结束，因为只能在base进程中检测client状态
+        # 所以需要把游戏状态发回base进程
+        self.state = state
 
-        pass
-
+        if state == ROOM_STATE_FINISH:
+            for pp in self.players.values():
+                if not pp.client and pp.cell:
+                    pp.destroyCellEntity()
 
     def onGetCell(self):
         """
@@ -55,8 +60,7 @@ class ZjhRoom(KBEngine.Base,BaseObject):
 
         super().reqEnter(player)
 
-        if self.state == ROOM_STATE_READY:
-            player.createCell(self.cell)
+        player.createCell(self.cell)
 
 
     def reqLeave(self, player):
