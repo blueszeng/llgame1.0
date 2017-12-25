@@ -9,7 +9,12 @@ class EntityCommon:
 	def __init__(self):
 		#定时器管理器
 		self.timerMgr = {}
+
+		#回调函数及其参数
 		self.callbackFunc = None
+		self.arg1 = None
+		self.arg2 = None
+		self.arg3 = None
 
 	def getCurrRoomBase(self):
 		"""
@@ -53,11 +58,14 @@ class EntityCommon:
 
 			self.delTimer(tid)
 
-	def invoke(self,callbackFunc,initialOffset):
+	def invoke3(self,initialOffset,callbackFunc,arg1,arg2,arg3):
 		"""
-		回调方法
+		3参数回掉函数
 		"""
 		self.callbackFunc = callbackFunc
+		self.arg1 = arg1
+		self.arg2 = arg2
+		self.arg3 = arg3
 		self.addTimerMgr(initialOffset,0,0)
 
 	def onTimer(self, id, userArg):
@@ -67,6 +75,7 @@ class EntityCommon:
         @param id		: addTimer 的返回值ID
         @param userArg	: addTimer 最后一个参数所给入的数据
         """
-		if userArg == 0 and self.callbackFunc is not None:
-			self.callbackFunc
+		if userArg == 0 and self.callbackFunc:
+			DEBUG_MSG("22222222222222222222222")
+			self.callbackFunc(self.arg1,self.arg2,self.arg3)
 			self.callbackFunc = None

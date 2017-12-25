@@ -16,16 +16,14 @@ ROOM_STATE_INGAME   =   2   #正在游戏
 ROOM_STATE_FINISH   =   3   #游戏结束
 
 ACTION_ROOM_TIME               = 1  #下发房间时间
-ACTION_ROOM_WAIT               = 9  #处于等待状态
-ACTION_ROOM_READY			   = 10 #准备好了
+ACTION_ROOM_READY			   = 10 #准备
 ACTION_ROOM_START    		   = 11 #开始游戏
 ACTION_ROOM_DISPATCH           = 12 #发牌
 ACTION_ROOM_GENZHU             = 13 #跟住
 ACTION_ROOM_JIAZHU             = 14 #加注
 ACTION_ROOM_KANPAI             = 15 #看牌
 ACTION_ROOM_QIPAI              = 16 #弃牌
-ACTION_ROOM_BIPAI_START        = 171 #
-ACTION_ROOM_BIPAI_END          = 17 #比牌
+ACTION_ROOM_BIPAI              = 17 #比牌
 
 ACTION_ROOM_NEXT               = 18 #下一位
 ACTION_ROOM_SETTLE             = 19 #游戏结算
@@ -37,7 +35,6 @@ ACTION_ROOM_KAIPAI_END         = 23 #
 
 
 DEBUG_ACTION_STRING = {ACTION_ROOM_TIME:"ACTION_ROOM_TIME",
-                       ACTION_ROOM_WAIT:"ACTION_ROOM_WAIT",
                        ACTION_ROOM_READY:"ACTION_ROOM_READY",
                        ACTION_ROOM_START:"ACTION_ROOM_START",
                        ACTION_ROOM_DISPATCH:"ACTION_ROOM_DISPATCH",
@@ -45,8 +42,7 @@ DEBUG_ACTION_STRING = {ACTION_ROOM_TIME:"ACTION_ROOM_TIME",
                        ACTION_ROOM_JIAZHU:"ACTION_ROOM_JIAZHU",
                        ACTION_ROOM_KANPAI:"ACTION_ROOM_KANPAI",
                        ACTION_ROOM_QIPAI:"ACTION_ROOM_QIPAI",
-                       ACTION_ROOM_BIPAI_START:"ACTION_ROOM_BIPAI_START",
-                       ACTION_ROOM_BIPAI_END: "ACTION_ROOM_BIPAI_END",
+                       ACTION_ROOM_BIPAI: "ACTION_ROOM_BIPAI",
                        ACTION_ROOM_NEXT:"ACTION_ROOM_NEXT",
                        ACTION_ROOM_SETTLE:"ACTION_ROOM_SETTLE",
                        ACTION_ROOM_PUBLICH:"ACTION_ROOM_PUBLICH",

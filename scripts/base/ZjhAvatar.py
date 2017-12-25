@@ -3,6 +3,7 @@
 from interfaces.GameObject import *
 from KBEDebug import *
 import Helper
+import Rules_ZJH
 
 class ZjhAvatar(KBEngine.Proxy,GameObject):
 
@@ -31,8 +32,8 @@ class ZjhAvatar(KBEngine.Proxy,GameObject):
 
             self.cellData["cost"] = 0.0
             self.cellData["chip"] = 0.0
-            self.cellData["lookcard"] = 0
-            self.cellData["stateC"] = 0
+            self.cellData["lookcard"] = 1
+            self.cellData["stateC"] = Rules_ZJH.PLAYER_STATE_GARK
             self.cellData["first"] = 0
 
             self.createCellEntity(space)

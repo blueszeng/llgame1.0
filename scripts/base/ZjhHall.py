@@ -113,7 +113,6 @@ class ZjhHall(KBEngine.Base,BaseObject):
 		"""
 		if len(self.notFullRooms) <= 0:
 			return None
-
 		else:
 			return self.notFullRooms[0]
 

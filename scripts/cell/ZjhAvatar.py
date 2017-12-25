@@ -31,6 +31,4 @@ class ZjhAvatar(KBEngine.Entity,EntityCommon):
         if exposed != self.id:
             return
 
-        DEBUG_MSG("%r[%r].Cell::reqMessageC() buf = %r" % (self.className, self.id,buf))
-
         self.getCurrRoom().reqMessage(self, action, buf)

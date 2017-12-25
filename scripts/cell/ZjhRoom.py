@@ -5,13 +5,11 @@ from Rules_ZJH import *
 from interfaces.RoomEntity import *
 import Helper
 
-
 class ZjhRoom(KBEngine.Entity,RoomEntity):
 
     def __init__(self):
         KBEngine.Entity.__init__(self)
         RoomEntity.__init__(self)
-
         self.position = (9999.0, 0.0, 0.0)
 
         # 房间时间
@@ -20,7 +18,7 @@ class ZjhRoom(KBEngine.Entity,RoomEntity):
 
         #先手ID
         self.firstCid   = 0
-        self.victoryID  = 0
+        self.winCid  = 0
 
         #重置房间数据
         self.reset()
@@ -116,7 +114,7 @@ class ZjhRoom(KBEngine.Entity,RoomEntity):
 
             INFO_MSG("ZjhRoom::onDispatchCards Player[%r]" % (pp.cid))
 
-    def _nextPlayer(self):
+    def onNextPlayer(self):
 
         if self.curCid == 0:
 
@@ -151,7 +149,6 @@ class ZjhRoom(KBEngine.Entity,RoomEntity):
 
         DEBUG_MSG("ACTION_ROOM_NEXT cid[%d]" % (self.curCid))
 
-
     def onTimer(self, id, userArg):
         """
         KBEngine method.
@@ -174,12 +171,9 @@ class ZjhRoom(KBEngine.Entity,RoomEntity):
 
             if self.curRoomtime <= 0:
                 self.delTimerMgr(0)
-
                 self.set_state(ROOM_STATE_INGAME)
-
                 self.onDispatchCards()
-
-                self._nextPlayer()
+                self.onNextPlayer()
 
         elif userArg == ACTION_ROOM_NEXT:
             self.curRoomtime -= 1
@@ -191,8 +185,8 @@ class ZjhRoom(KBEngine.Entity,RoomEntity):
         """超时处理"""
 
         if userArg == ACTION_ROOM_NEXT:
-            #弃牌
-            self._nextPlayer()
+            #todo 弃牌操作
+            self.onNextPlayer()
 
     def reqMessage(self, player, action, buf):
 
@@ -201,25 +195,27 @@ class ZjhRoom(KBEngine.Entity,RoomEntity):
 
         if action == ACTION_ROOM_GENZHU:
             self.delTimerMgr(0)
-            self.onGenzhu(player,action,buf)
+            self.onGenzhu(player,buf)
 
         elif action == ACTION_ROOM_KANPAI:
-            player.lookcard = 1
+            player.lookcard = 2
 
         elif action == ACTION_ROOM_JIAZHU:
-            pass
-        elif action == ACTION_ROOM_BIPAI_START:
-            pass
+            self.delTimerMgr(0)
+            self.onPlus(player,buf)
+
+        elif action == ACTION_ROOM_BIPAI:
+            self.delTimerMgr(0)
+            self.onCompare(player,buf)
+
         elif action == ACTION_ROOM_QIPAI:
             self.delTimerMgr(0)
-            self.onQipai(player,action,buf)
+            self.onQipai(player,buf)
 
+    def onGenzhu(self,player,buf):
+        """跟注"""
 
-    def onGenzhu(self,player,action,buf):
-        #跟注
-        curChip = self.curDizhu
-        if player.lookcard == 1:
-            curChip = self.curDizhu * 2
+        curChip = self.curDizhu * player.lookcard
 
         player.goldC -= curChip
         player.cost  += curChip
@@ -227,44 +223,122 @@ class ZjhRoom(KBEngine.Entity,RoomEntity):
 
         self.totalzhu += curChip
         KBEngine.setSpaceData(self.spaceID, "totalzhu", str(self.totalzhu))
+        KBEngine.setSpaceData(self.spaceID, "curDizhu", str(self.curDizhu))
 
-        self._nextPlayer()
+        self.onNextPlayer()
 
-    def onQipai(self,player,action,buf):
+    def onPlus(self,player,buf):
+        """加注"""
+        list = json.loads(self.jzListC)
+        plusIdx = int(buf) - 1
+
+        if plusIdx   < len(list) and plusIdx >= 0:
+
+            self.curDizhu = list[plusIdx]
+
+            curChip = list[plusIdx] * player.lookcard
+
+            player.goldC -= curChip
+            player.cost += curChip
+            player.chip = curChip
+        else:
+            ERROR_MSG("onPlus plusIdx = %d outline" % (plusIdx))
+            return
+
+        self.totalzhu += curChip
+        KBEngine.setSpaceData(self.spaceID, "totalzhu", str(self.totalzhu))
+        KBEngine.setSpaceData(self.spaceID, "curDizhu", str(self.curDizhu))
+
+        self.onNextPlayer()
+
+    def onCompare(self,player,buf):
+        """比牌"""
+
+        #todo 需处理客户端多次发送
+        tCid = int(buf)
+        if tCid in self.players:
+            target = self.players[tCid]
+        else:
+            ERROR_MSG("%r::onCompare() tCid[%d] not in self.players" % (self.className,tCid))
+            return
+
+        #看牌比不看，为4倍钱
+        if player.lookcard == 2 and target.lookcard == 1:
+            mult = 4
+        else:
+            mult = 2
+
+        curChip = self.curDizhu * mult
+
+        #比牌玩家钱不足分在客户端处理，如果服务端收到钱不足的情况，不予处理
+        if player.goldC < curChip:
+            return
+        else:
+            player.goldC -= curChip
+            player.cost += curChip
+            player.chip = curChip
+
+        result = CompareCards(player.cards,target.cards)
+
+        data = {}
+        data["playerCid"] = player.cid
+        data["targetCid"] = target.cid
+        data["result"] = result
+
+        KBEngine.setSpaceData(self.spaceID, "CompareResult", json.dumps(data))
+
+        self.invoke3(3,self.onLastCompare,player,target,result)
+
+    def onLastCompare(self,player,target,result):
+        """比牌之后"""
+        DEBUG_MSG("%r::onLastCompare()" % (self.className))
+        if result:
+            target.stateC = PLAYER_STATE_GARK
+        else:
+            player.stateC = PLAYER_STATE_GARK
+
+        if self.onCheckResult():
+            self.onSettle()
+        else:
+            self.onNextPlayer()
+
+    def onQipai(self,player,buf):
 
         player.stateC = PLAYER_STATE_QIPAI
 
         if self.onCheckResult():
             self.onSettle()
         else:
-            self._nextPlayer()
+            self.onNextPlayer()
 
     def onCheckResult(self):
-        """检测当局是否玩家胜利,并存储胜利玩家的ID"""
+        """检测当局是否有玩家获胜了"""
         count = 0
-        tmpid = 0
-        for pp in self.chairPlayers.values():
+        for pp in self.players.values():
             if pp.stateC == PLAYER_STATE_INGAME:
-                tmpid = pp.chairID
                 count += 1
+                self.winCid = pp.cid
 
-        if count <= 1:
-            # 存储胜利ID
-            self.victoryID = tmpid
-            self.stateC = 2
+        if count == 1:
             return True
+        elif count == 0:
+            ERROR_MSG("%r::onCheckResult() count == 0" % (self.className))
+        else:
+            self.winCid = 0
 
         return False
 
     def onSettle(self):
         #结算
-        taxGold = Helper.Round((self.totalzhu - self.players[self.victoryID].cost) * self.taxRateC)
+        player = self.players[self.winCid]
 
-        KBEngine.globalData["Games"].addIncome(taxGold)
+        taxGold = Helper.Round((self.totalzhu - player.cost) * self.taxRateC)
 
         self.totalzhu -= taxGold
-        self.chairPlayers[self.victoryID].gold += self.totalzhu
-        self.chairPlayers[self.victoryID].chip  = -self.totalzhu
+        player.goldC += self.totalzhu
+
+        #todo 下发结算动画通知,并延迟2秒开始下一局游戏
+        KBEngine.globalData["Games"].addIncome(taxGold)
 
 
 

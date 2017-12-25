@@ -382,7 +382,7 @@ class Room(KBEngine.Base):
 
         elif action == ACTION_ROOM_BIPAI_START:
             self._broadcastMessage(0, ACTION_ROOM_BIPAI_START, string)
-        elif action == ACTION_ROOM_BIPAI_END:
+        elif action == ACTION_ROOM_BIPAI:
             self._removeUserArgTimer(0)
 
             chair1 = data["chair1"]  # chairID
@@ -426,7 +426,7 @@ class Room(KBEngine.Base):
             data["lState"] = self.chairPlayers[data["lid"]].status
 
             data_string = json.dumps(data)
-            self._broadcastMessage(0, ACTION_ROOM_BIPAI_END, data_string)
+            self._broadcastMessage(0, ACTION_ROOM_BIPAI, data_string)
 
             if self._checkResult():
                 # 如果胜利，则先存储庄家ID
@@ -637,6 +637,7 @@ class Room(KBEngine.Base):
         if self.makerID == 0:
             ERROR_MSG("error self.makerID == 0")
         return self.makerID
+
     def _requireList(self, array, length):
         """获取数组的前3位数，并删掉"""
         tmp = []

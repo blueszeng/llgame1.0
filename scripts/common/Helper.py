@@ -39,51 +39,15 @@ def convertDict(httpStr,str1,str2):
 
     return result
 
-notFullRooms = []
-
-roomData = {"room":None,"players":[1]}
 
 
-def sortNotFullRooms(notFullRooms, roomData):
+def callback(func,a,b):
+    func(a,b)
 
-    # 如果房间满人或者没人，则从队列中清理掉
-    if (len(roomData['players']) == 0 or len(roomData['players']) == 5) and roomData in notFullRooms:
+def testFunc(a,b):
+    print(a+b)
 
-        del notFullRooms[notFullRooms.index(roomData)]
-        print("count = %d %r" % (len(notFullRooms), notFullRooms))
-        return
-
-    if len(notFullRooms) <= 0:
-        notFullRooms.append(roomData)
-        print("count = %d %r" % (len(notFullRooms), notFullRooms))
-        return
-
-    # 如果房间还有空位，则排队
-    for notRoom in notFullRooms:
-
-        if notRoom == roomData:
-            break
-
-        index = notFullRooms.index(notRoom)
-
-        if len(roomData['players']) > len(notRoom['players']):
-            notFullRooms.insert(index, roomData)
-            break
-        elif len(notFullRooms) == (index + 1):
-            notFullRooms.append(roomData)
-
-    print("count = %d %r" % (len(notFullRooms),notFullRooms))
-
-# sortNotFullRooms(notFullRooms,roomData)
-#
-# roomData2 = {"room":None,"players":[2]}
-#
-# sortNotFullRooms(notFullRooms,roomData2)
-
-roomData = None
-
-if roomData:
-    print("test")
+callback(testFunc,1,2)
 
 
 
