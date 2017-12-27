@@ -35,8 +35,7 @@ class DdzAvatar(KBEngine.Entity,EntityCommon):
         DEBUG_MSG("%r[%r].Cell::reqMessageC() buf = %r" % (self.className, self.id,buf))
 
         if action == ACTION_ROOM_TUOGUAN:
-            data_json = json.loads(buf)
-            self.tuoguan = data_json["tuoguan"]
+            self.tuoguan = int(buf)
             self.allClients.onMessage(0,action,buf)
         else:
             self.getCurrRoom().reqMessage(self,action,buf)

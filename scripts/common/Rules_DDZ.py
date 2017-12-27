@@ -12,8 +12,7 @@ ACTION_ROOM_JIAOPAI     = 30             #叫牌
 ACTION_ROOM_STARTGAME   = 31             #确定地主，开始游戏
 ACTION_ROOM_CHUPAI     = 32              #chu牌
 ACTION_ROOM_NEXT      = 40               #轮到下一位
-ACTION_ROOM_COMPUTE_DELAY   = 49         #胜利结算
-ACTION_ROOM_COMPUTE   = 50               #胜利结算
+ACTION_ROOM_SETTLE   = 50               #胜利结算
 ACTION_ROOM_KEEPON    = 60               #继续游戏
 ACTION_ROOM_UPDATE    = 70               #更新房间信息
 ACTION_ROOM_JIABEI    = 71               #玩家加倍
@@ -29,8 +28,7 @@ DEBUG_ACTION_STRING = {ACTION_ROOM_READY:"ACTION_ROOM_READY",
                        ACTION_ROOM_STARTGAME:"ACTION_ROOM_STARTGAME",
                        ACTION_ROOM_CHUPAI:"ACTION_ROOM_CHUPAI",
                        ACTION_ROOM_NEXT:"ACTION_ROOM_NEXT",
-                       ACTION_ROOM_COMPUTE_DELAY:"ACTION_ROOM_COMPUTE_DELAY",
-                       ACTION_ROOM_COMPUTE:"ACTION_ROOM_COMPUTE",
+                       ACTION_ROOM_SETTLE: "ACTION_ROOM_COMPUTE",
                        ACTION_ROOM_KEEPON:"ACTION_ROOM_KEEPON",
                        ACTION_ROOM_UPDATE:"ACTION_ROOM_UPDATE",
                        ACTION_ROOM_TUOGUAN:"ACTION_ROOM_TUOGUAN",

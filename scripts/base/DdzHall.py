@@ -52,13 +52,13 @@ class DdzHall(KBEngine.Base,BaseObject):
 				if player:
 					player.destroy()
 
-	def onRoomLoseCell(self,roomMailbox,roomID):
+	def onRoomLoseCell(self,roomMailbox,roomKey):
 		"""
 		Room 销毁时，回调
 		"""
 		# todo 未添加到def
-		if roomID in self.childs:
-			del self.childs[roomID]
+		if roomKey in self.childs:
+			del self.childs[roomKey]
 
 	def reqEnterRoom(self, player):
 		"""

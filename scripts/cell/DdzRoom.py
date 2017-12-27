@@ -140,15 +140,15 @@ class DdzRoom(KBEngine.Entity,RoomEntity):
 
         if action == ACTION_ROOM_JIAOPAI:
 
-            self.onMessage_ACTION_ROOM_JIAOPAI(player,action,json.loads(buf))
+            self.onMessage_ACTION_ROOM_JIAOPAI(player,action,buf)
 
         elif action == ACTION_ROOM_CHUPAI:
 
             self.onMessage_ACTION_ROOM_CHUPAI(player,action,json.loads(buf))
 
-    def onMessage_ACTION_ROOM_JIAOPAI(self,player,action,data_json):
+    def onMessage_ACTION_ROOM_JIAOPAI(self,player,action,value):
 
-        score = data_json["curScore"]
+        score = int(value)
         player.curScore = score
 
         if score <= 3:
@@ -236,7 +236,7 @@ class DdzRoom(KBEngine.Entity,RoomEntity):
             player.cardCount    = len(player.cards)
 
             if player.cardCount == 0:
-                self.addTimerMgr(1.5,0,ACTION_ROOM_COMPUTE)
+                self.addTimerMgr(1.5, 0, ACTION_ROOM_SETTLE)
             else:
                 self.nextPlayer(ACTION_ROOM_NEXT)
         else:
@@ -272,8 +272,8 @@ class DdzRoom(KBEngine.Entity,RoomEntity):
                 self.delTimerMgr(0)
                 self.onAi(userArg, player)
 
-        elif userArg == ACTION_ROOM_COMPUTE:
-            self.onCompute()
+        elif userArg == ACTION_ROOM_SETTLE:
+            self.onSettle()
 
     def onOuttime(self,userArg,player):
         """超时处理"""
@@ -283,16 +283,12 @@ class DdzRoom(KBEngine.Entity,RoomEntity):
             if player.tuoguan == 0:
                 player.tuoguan = 1
 
-            data = {}
-            data["curCid"] = self.curCid
-
             if self.curScore < 3 and player.type == 0:
-                data["curScore"] = 0
+                value = "0"
             else:
-                data["curScore"] = 11
+                value = "11"
 
-            data_json = json.dumps(data)
-            self.reqMessage(player, ACTION_ROOM_JIAOPAI, data_json)
+            self.reqMessage(player, ACTION_ROOM_JIAOPAI, value)
 
         elif userArg == ACTION_ROOM_NEXT:
 
@@ -306,8 +302,7 @@ class DdzRoom(KBEngine.Entity,RoomEntity):
                     data["curCid"] = self.curCid
                     data["cards"] = []
 
-                    data_json = json.dumps(data)
-                    self.reqMessage(player, ACTION_ROOM_CHUPAI, data_json)
+                    self.reqMessage(player, ACTION_ROOM_CHUPAI, json.dumps(data))
 
     def onAi(self,userArg,player):
         """托管"""
@@ -322,7 +317,6 @@ class DdzRoom(KBEngine.Entity,RoomEntity):
             data["curCid"] = self.curCid
 
             if self.curCid == self.powerCid:
-
                 data["cards"] = getMinCards(player.cards)
             else:
                 data["cards"] = getAICards(player.cards, self.powerCards)
@@ -330,7 +324,7 @@ class DdzRoom(KBEngine.Entity,RoomEntity):
             data_json = json.dumps(data)
             self.reqMessage(player, ACTION_ROOM_CHUPAI, data_json)
 
-    def onCompute(self):
+    def onSettle(self):
 
         winPlayer   = self.players[self.curCid]
         dzPlayer    = self.players[self.dzCid]
@@ -447,7 +441,7 @@ class DdzRoom(KBEngine.Entity,RoomEntity):
         self.set_state(ROOM_STATE_FINISH)
 
         data_json   = json.dumps(datas)
-        self.sendAllClients(ACTION_ROOM_COMPUTE,data_json)
+        self.sendAllClients(ACTION_ROOM_SETTLE, data_json)
 
         INFO_MSG("DdzRoom::onCompute() space[%d] data_json = [%r]" % (self.spaceID,data_json))
 

@@ -1,15 +1,14 @@
 import KBEngine
 from KBEDebug import *
-from Rules_DDZ import *
 import random
 import json
 
-class DdzAvatar(KBEngine.Entity):
+class ZjhAvatar(KBEngine.Entity):
 
 	def __init__(self):
 		KBEngine.Entity.__init__(self)
 
-		DEBUG_MSG("DdzAvatar __init__")
+		DEBUG_MSG("Bots::DdzAvatar __init__")
 
 	def onEnterSpace(self):
 		"""
@@ -32,8 +31,6 @@ class DdzAvatar(KBEngine.Entity):
 		"""
 		DEBUG_MSG("%s::onBecomePlayer: %i" % (self.__class__.__name__, self.id))
 
-	def onContinue(self):
-		pass
 
 	def onMessage(self,retcode,action,data):
 		pass
@@ -61,11 +58,11 @@ class DdzAvatar(KBEngine.Entity):
 		pass
 
 
-class PlayerDdzAvatar(DdzAvatar):
+class PlayerZjhAvatar(ZjhAvatar):
 
 	def __init__(self):
 
-		DEBUG_MSG("PlayerDdzAvatar __init__")
+		DEBUG_MSG("Bots::PlayerDdzAvatar __init__")
 		pass
 
 	def onBecomePlayer(self):
@@ -99,8 +96,7 @@ class PlayerDdzAvatar(DdzAvatar):
 		pass
 
 	def onMessage(self,retcode,action,data):
-		if action == ACTION_ROOM_SETTLE :
-			self.base.reqContinue()
+		pass
 
 	def onEnterGame(self,gameID,result):
 
@@ -110,8 +106,6 @@ class PlayerDdzAvatar(DdzAvatar):
 		pass
 
 	def onEnterHall(self,hallID):
-
-		DEBUG_MSG("%s::onEnterHall: %i" % (self.__class__.__name__, self.id))
 		pass
 
 	def onLeaveHall(self,hallID):
