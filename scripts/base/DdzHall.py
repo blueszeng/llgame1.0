@@ -69,7 +69,7 @@ class DdzHall(KBEngine.Base,BaseObject):
 			if len(roomData['players']) < 3:
 				roomData['players'].append(player)
 
-				if not roomData['roomMailbox']:
+				if roomData['roomMailbox']:
 					roomData['roomMailbox'].reqEnter(player)
 
 				return
