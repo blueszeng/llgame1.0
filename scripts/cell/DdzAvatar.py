@@ -36,6 +36,5 @@ class DdzAvatar(KBEngine.Entity,EntityCommon):
 
         if action == ACTION_ROOM_TUOGUAN:
             self.tuoguan = int(buf)
-            self.allClients.onMessage(0,action,buf)
         else:
             self.getCurrRoom().reqMessage(self,action,buf)
