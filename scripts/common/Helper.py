@@ -41,15 +41,6 @@ def convertDict(httpStr,str1,str2):
 
 
 
-def callback(func,a,b):
-    func(a,b)
-
-def testFunc(a,b):
-    print(a+b)
-
-callback(testFunc,1,2)
-
-
 
 
 

@@ -38,7 +38,6 @@ class EntityCommon:
 
 		#先清理可能重复的定时器
 		self.delTimerMgr(userArg)
-
 		if repeatOffset > 0:
 			self.timerMgr[userArg] = tid
 
@@ -76,6 +75,6 @@ class EntityCommon:
         @param userArg	: addTimer 最后一个参数所给入的数据
         """
 		if userArg == 0 and self.callbackFunc:
-			DEBUG_MSG("22222222222222222222222")
+			# DEBUG_MSG("22222222222222222222222")
 			self.callbackFunc(self.arg1,self.arg2,self.arg3)
 			self.callbackFunc = None

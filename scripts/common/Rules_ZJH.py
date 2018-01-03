@@ -26,6 +26,7 @@ ACTION_ROOM_BIPAI              = 17 #比牌
 ACTION_ROOM_NEXT               = 18 #下一位
 ACTION_ROOM_SETTLE             = 19 #游戏结算
 ACTION_ROOM_PUBLICH            = 20 #公布玩家的牌
+ACTION_ROOM_AUTOBIPAI          = 21 #有玩家金钱不足时或回合数到达，则自动比牌
 
 
 
@@ -40,6 +41,7 @@ DEBUG_ACTION_STRING = {ACTION_ROOM_TIME:"ACTION_ROOM_TIME",
                        ACTION_ROOM_NEXT:"ACTION_ROOM_NEXT",
                        ACTION_ROOM_SETTLE:"ACTION_ROOM_SETTLE",
                        ACTION_ROOM_PUBLICH:"ACTION_ROOM_PUBLICH",
+                       ACTION_ROOM_AUTOBIPAI:"ACTION_ROOM_AUTOBIPAI"
                        }
 
 

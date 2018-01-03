@@ -1,20 +1,19 @@
 import KBEngine
 import json
-from KBEDebug import *
 from Rules_ZJH import *
-from interfaces.RoomEntity import *
+from interfaces.LogicZjh import *
 import Helper
 
-class ZjhRoom(KBEngine.Entity,RoomEntity):
+class ZjhRoom(KBEngine.Entity,LogicZjh):
 
     def __init__(self):
         KBEngine.Entity.__init__(self)
-        RoomEntity.__init__(self)
+        LogicZjh.__init__(self)
         self.position = (9999.0, 0.0, 0.0)
 
         # 房间时间
-        self.roomtime   = 10
-        self.curRoomtime = 0
+        self.roomTime   = 10
+        self.curRoomTime = 0
 
         #先手ID
         self.firstCid = 0
@@ -48,12 +47,11 @@ class ZjhRoom(KBEngine.Entity,RoomEntity):
         KBEngine.setSpaceData(self.spaceID, "dizhu", str(self.dizhuC))
         KBEngine.setSpaceData(self.spaceID, "curDizhu", str(self.curDizhu))
         KBEngine.setSpaceData(self.spaceID, "totalzhu", str(self.totalzhu))
-        KBEngine.setSpaceData(self.spaceID, "roomtime", str(self.roomtime))
+        KBEngine.setSpaceData(self.spaceID, "roomtime", str(self.roomTime))
         KBEngine.setSpaceData(self.spaceID, "curRound", str(self.curRound))
         KBEngine.setSpaceData(self.spaceID, "state", str(self.stateC))
 
     def set_state(self,state):
-
         DEBUG_MSG("ZjhRoom::set_state space[%r] state[%r]" % (self.spaceID,state))
 
         self.stateC = state
@@ -115,7 +113,7 @@ class ZjhRoom(KBEngine.Entity,RoomEntity):
 
             KBEngine.setSpaceData(self.spaceID, "totalzhu", str(self.totalzhu))
 
-            INFO_MSG("ZjhRoom::onDispatchCards Player[%r]" % (pp.cid))
+            DEBUG_MSG("ZjhRoom::onDispatchCards Player[%r]" % (pp.cid))
 
     def onNextPlayer(self):
 
@@ -135,21 +133,23 @@ class ZjhRoom(KBEngine.Entity,RoomEntity):
         #计算回合数
         if self.firstCid == self.curCid:
             self.curRound += 1
-            KBEngine.setSpaceData(self.spaceID, "curRound", str(self.curRound))
+            if(self.curRound <= 15):
+                KBEngine.setSpaceData(self.spaceID, "curRound", str(self.curRound))
+            else:
+                self.addTimerMgr(1, 1, ACTION_ROOM_AUTOBIPAI)
 
         # 重置房间时间
-        self.curRoomtime = self.roomtime
+        self.curRoomTime = self.roomTime
         self.delTimerMgr(0)
         self.addTimerMgr(1, 1, ACTION_ROOM_NEXT)
 
-        data = {}
-        data["curCid"] = self.curCid
-        data["curRoomTime"] = self.curRoomtime
-
-        self.sendAllClients(ACTION_ROOM_NEXT,json.dumps(data))
-        self.curAction = ACTION_ROOM_NONE
-
-        DEBUG_MSG("ACTION_ROOM_NEXT cid[%d]" % (self.curCid))
+        #如果金币不足2倍，则自动比牌
+        if self.players[self.curCid].goldC < self.curDizhu * 2:
+            self.addTimerMgr(1,1,ACTION_ROOM_AUTOBIPAI)
+        else:
+            self.curAction = ACTION_ROOM_NONE
+            self.sendAllClients(ACTION_ROOM_NEXT, str(self.curCid))
+            DEBUG_MSG("ACTION_ROOM_NEXT cid[%d]" % (self.curCid))
 
     def onTimer(self, id, userArg):
         """
@@ -158,29 +158,29 @@ class ZjhRoom(KBEngine.Entity,RoomEntity):
         @param id		: addTimer 的返回值ID
         @param userArg	: addTimer 最后一个参数所给入的数据
         """
-        EntityCommon.onTimer(self,id,userArg)
+        # EntityCommon.onTimer(self,id,userArg)
+        super().onTimer(id,userArg)
 
         if userArg == ACTION_ROOM_TIME:
-
-            self.curRoomtime = self.roomtime
+            self.curRoomTime = self.roomTime
             self.set_state(ROOM_STATE_READY)
 
             self.addTimerMgr(1,1,ACTION_ROOM_READY)
-            self.sendAllClients(ACTION_ROOM_READY,str(self.curRoomtime))
+            self.sendAllClients(ACTION_ROOM_READY, str(self.curRoomTime))
 
         elif userArg == ACTION_ROOM_READY:
-            self.curRoomtime -= 1
+            self.curRoomTime -= 1
 
-            if self.curRoomtime <= 0:
+            if self.curRoomTime <= 0:
                 self.delTimerMgr(0)
                 self.set_state(ROOM_STATE_INGAME)
                 self.onDispatchCards()
                 self.onNextPlayer()
 
         elif userArg == ACTION_ROOM_NEXT:
-            self.curRoomtime -= 1
+            self.curRoomTime -= 1
 
-            if self.curRoomtime <= 0:
+            if self.curRoomTime <= 0:
                 self.delTimerMgr(0)
                 self.onQipai(self.players[self.curCid], userArg)
 
@@ -196,6 +196,10 @@ class ZjhRoom(KBEngine.Entity,RoomEntity):
 
             if len(self.players) >= 2:
                 self.addTimerMgr(1, 0, ACTION_ROOM_TIME)
+
+        elif userArg == ACTION_ROOM_AUTOBIPAI:
+            self.delTimerMgr(0)
+            self.onAutoCompare(self.players[self.curCid])
 
     def reqMessage(self, player, action, buf):
 
@@ -289,16 +293,16 @@ class ZjhRoom(KBEngine.Entity,RoomEntity):
             player.cost += curChip
             player.chip = curChip
 
-        result = CompareCards(player.cards,target.cards)
+        bResult = CompareCards(player.cards,target.cards)
 
         data = {}
         data["playerCid"] = player.cid
         data["targetCid"] = target.cid
-        data["result"] = result
+        data["result"] = bResult
 
-        KBEngine.setSpaceData(self.spaceID, "CompareResult", json.dumps(data))
+        KBEngine.setSpaceData(self.spaceID, "compareResult", json.dumps(data))
 
-        self.invoke3(3,self.onLastCompare,player,target,result)
+        self.invoke3(3,self.onLastCompare,player,target,bResult)
 
     def onLastCompare(self,player,target,result):
         """比牌之后"""
@@ -312,6 +316,26 @@ class ZjhRoom(KBEngine.Entity,RoomEntity):
             self.onSettle()
         else:
             self.onNextPlayer()
+
+    def onAutoCompare(self,player):
+        """
+        系统强制比牌
+        """
+        nCid = self.getNextCid(self.curCid)
+        nPlayer = self.players[nCid]
+        bResult = CompareCards(player.cards,nPlayer.cards)
+
+        #todo 检测是否已经只剩下一个玩家，还有满回合数的情况
+        if bResult:
+            self.addTimerMgr(5,0,ACTION_ROOM_AUTOBIPAI)
+
+        data = {}
+        data["playerCid"] = player.cid
+        data["targetCid"] = nPlayer.cid
+        data["result"] = bResult
+
+        KBEngine.setSpaceData(self.spaceID, "compareResult", json.dumps(data))
+        self.invoke3(3, self.onLastCompare, player, nPlayer, bResult)
 
     def onQipai(self,player,buf):
 
