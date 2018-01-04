@@ -52,7 +52,7 @@ class ZjhRoom(KBEngine.Entity,LogicZjh):
         KBEngine.setSpaceData(self.spaceID, "state", str(self.stateC))
 
     def set_state(self,state):
-        DEBUG_MSG("ZjhRoom::set_state space[%r] state[%r]" % (self.spaceID,state))
+        DEBUG_MSG("%r::set_state space[%r] state[%r]" % (self.className,self.spaceID,state))
 
         self.stateC = state
         self.base.set_state(state)
@@ -118,7 +118,6 @@ class ZjhRoom(KBEngine.Entity,LogicZjh):
     def onNextPlayer(self):
 
         if self.curCid == 0:
-
             self.curCid = random.randint(1, len(self.players))
             self.firstCid = self.curCid
             self.players[self.curCid].first = 1
@@ -383,6 +382,11 @@ class ZjhRoom(KBEngine.Entity,LogicZjh):
         self.sendAllClients(ACTION_ROOM_SETTLE,str(self.winCid))
         self.set_state(ROOM_STATE_FINISH)
         self.addTimerMgr(2,0,ACTION_ROOM_SETTLE)
+
+        #开牌
+        for pp in self.players.values():
+            if pp.client:
+                pp.showCards = pp.cards
 
 
 
