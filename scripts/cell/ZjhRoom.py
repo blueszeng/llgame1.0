@@ -136,7 +136,7 @@ class ZjhRoom(KBEngine.Entity,LogicZjh):
             if(self.curRound <= 15):
                 KBEngine.setSpaceData(self.spaceID, "curRound", str(self.curRound))
             else:
-                self.addTimerMgr(1, 1, ACTION_ROOM_AUTOBIPAI)
+                self.addTimerMgr(1, 0, ACTION_ROOM_AUTOBIPAI)
 
         # 重置房间时间
         self.curRoomTime = self.roomTime
@@ -145,7 +145,7 @@ class ZjhRoom(KBEngine.Entity,LogicZjh):
 
         #如果金币不足2倍，则自动比牌
         if self.players[self.curCid].goldC < self.curDizhu * 2:
-            self.addTimerMgr(1,1,ACTION_ROOM_AUTOBIPAI)
+            self.addTimerMgr(1,0,ACTION_ROOM_AUTOBIPAI)
         else:
             self.curAction = ACTION_ROOM_NONE
             self.sendAllClients(ACTION_ROOM_NEXT, str(self.curCid))
