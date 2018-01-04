@@ -67,7 +67,7 @@
 
         <cardCount>
                 <Type>		INT32				</Type>
-                <Flags>		ALL_CLIENTS			</Flags>
+                <Flags>		OTHER_CLIENTS			</Flags>
                 <Default>		0				</Default>
         </cardCount>
 
