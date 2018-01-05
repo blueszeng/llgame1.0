@@ -70,6 +70,9 @@ class ZjhRoom(KBEngine.Base,BaseObject):
             return
 
         super().reqLeave(player)
+        ERROR_MSG("reqLeave %r" % (self.cid))
+        self.parent.onRoomLosePlayer(self.cid,player)
 
         if player.cell:
             player.destroyCellEntity()
+

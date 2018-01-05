@@ -101,16 +101,23 @@ class ZjhHall(KBEngine.Base,BaseObject):
 			self.sortNotFullRooms(self.lastNewRoomKey,roomDatas["players"])
 
 	def onRoomLosePlayer(self,roomkey,player):
-		"""玩家丢失"""
+		"""
+		玩家丢失
+		"""
+		ERROR_MSG("onRoomLosePlayer cid = %r,keys = %r" %
+				  (roomkey,self.childs.keys()))
 
 		if roomkey in self.childs and player in self.childs[roomkey]['players']:
 			del self.childs[roomkey]['players'][player]
+			ERROR_MSG("onRoomLosePlayer len = %r" % (len(self.childs[roomkey]['players'])))
 			self.sortNotFullRooms(roomkey,self.childs[roomkey]['players'])
 
 	def findNotFullRooms(self):
 		"""
 		查找人数最多的有位置房间
 		"""
+		ERROR_MSG("findNotFullRooms len = %r" % len(self.notFullRooms))
+
 		if len(self.notFullRooms) <= 0:
 			return None
 		else:
@@ -121,7 +128,7 @@ class ZjhHall(KBEngine.Base,BaseObject):
 		重新排列房间顺序，优先把人数最多的房间置顶
 		"""
 		playersCount = len(players)
-		sortData = {"roomKey":roomKey,"playersCount":playersCount}
+		sortData = {"roomKey":roomKey}
 
 		#如果房间满人或者没人，则从队列中清理掉
 		if (playersCount == 0 or playersCount == 5) and sortData in self.notFullRooms:
@@ -139,8 +146,8 @@ class ZjhHall(KBEngine.Base,BaseObject):
 				break
 
 			index = self.notFullRooms.index(notRoom)
-
-			if playersCount > notRoom['playersCount']:
+			roomData = self.childs[notRoom['roomKey']]
+			if playersCount > roomData['players']:
 				self.notFullRooms.insert(index,sortData)
 				break
 			elif len(self.notFullRooms) == (index+1):

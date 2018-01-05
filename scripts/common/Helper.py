@@ -40,6 +40,21 @@ def convertDict(httpStr,str1,str2):
     return result
 
 
+test = []
+
+data1 = {"player":1,"tt":2}
+
+
+test.append(data1)
+
+data1 = {"player":1,"tt":1}
+
+if data1 in test:
+    print("true")
+else:
+    print("false")
+
+
 
 
 

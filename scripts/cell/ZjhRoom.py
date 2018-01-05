@@ -202,7 +202,7 @@ class ZjhRoom(KBEngine.Entity,LogicZjh):
 
     def reqMessage(self, player, action, buf):
 
-        DEBUG_MSG("ZjhRoom::reqMessage() %r space[%d] player[%r] buf[%r]" % (DEBUG_ACTION_STRING.get(action), self.spaceID, player.cid, buf))
+        DEBUG_MSG("ZjhRoom::reqMessage() %r space[%d] player[%r] buf[%r]" % (DEBUG_ACTION_STRING[action], self.spaceID, player.cid, buf))
 
         #过滤玩家的重复操作
         if self.curCid == player.cid and self.curAction == action:
@@ -243,20 +243,19 @@ class ZjhRoom(KBEngine.Entity,LogicZjh):
 
     def onPlus(self,player,buf):
         """加注"""
-        list = json.loads(self.jzListC)
-        plusIdx = int(buf) - 1
+        jzList = json.loads(self.jzListC)
+        jzId = int(buf) - 1
 
-        if plusIdx   < len(list) and plusIdx >= 0:
+        if jzId   < len(jzList) and jzId >= 0:
+            self.curDizhu = jzList[jzId]
 
-            self.curDizhu = list[plusIdx]
-
-            curChip = list[plusIdx] * player.lookcard
+            curChip = jzList[jzId] * player.lookcard
 
             player.goldC -= curChip
             player.cost += curChip
             player.chip = curChip
         else:
-            ERROR_MSG("onPlus plusIdx = %d outline" % (plusIdx))
+            ERROR_MSG("onPlus zjId = %d outline" % (jzId))
             return
 
         self.totalzhu += curChip
