@@ -46,13 +46,12 @@ class ZjhAvatar(KBEngine.Proxy,GameObject):
 
         if not self.client:
             self.ExitGame()
-
         else:
             self.reqLeaveRoom()
 
     def onClientDeath(self):
 
-        if self.state == 0:
+        if self.state != Rules_ZJH.PLAYER_STATE_INGAME:
             if self.cell:
                 self.destroyCellEntity()
             else:
@@ -63,7 +62,6 @@ class ZjhAvatar(KBEngine.Proxy,GameObject):
         DEBUG_MSG("%r[%r]::onDestroy() " %(self.className,self.id))
 
     def reqLeaveGame(self):
-
         super().reqLeaveGame()
 
         if self.client:
@@ -79,4 +77,8 @@ class ZjhAvatar(KBEngine.Proxy,GameObject):
         self.gold = self.activeProxy.gold
 
         DEBUG_MSG("%r[%r]::set_gold() gold[%r] settleGold[%r]" %(self.className,self.id,self.gold,settleGold))
+
+    def set_state(self,state):
+
+        self.state = state
 

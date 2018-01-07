@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 import KBEngine
 from KBEDebug import *
-from Rules_ZJH import *
 from interfaces.BaseObject import *
+import Rules_ZJH
 
 class ZjhRoom(KBEngine.Base,BaseObject):
     """
@@ -18,7 +18,7 @@ class ZjhRoom(KBEngine.Base,BaseObject):
         self.cellData["dizhuC"]         = self.dizhu
         self.cellData["taxRateC"]       = self.taxRate
         self.cellData["jzListC"]        = self.jzList
-        self.cellData["stateC"]         = ROOM_STATE_READY
+        self.cellData["stateC"]         = Rules_ZJH.ROOM_STATE_READY
 
         self.createInNewSpace(None)
 
@@ -27,7 +27,7 @@ class ZjhRoom(KBEngine.Base,BaseObject):
         # 所以需要把游戏状态发回base进程
         self.state = state
 
-        if state == ROOM_STATE_FINISH:
+        if state == Rules_ZJH.ROOM_STATE_FINISH:
             for pp in self.players.values():
                 if not pp.client and pp.cell:
                     pp.destroyCellEntity()
@@ -37,7 +37,6 @@ class ZjhRoom(KBEngine.Base,BaseObject):
         KBEngine method.
         entity的cell部分实体被创建成功
         """
-
         DEBUG_MSG("%r[%r]::onGetCell()" % (self.className, self.id))
 
         self.parent.onRoomGetCell(self, self.cid)
@@ -59,18 +58,14 @@ class ZjhRoom(KBEngine.Base,BaseObject):
             return
 
         super().reqEnter(player)
-
         player.createCell(self.cell)
-
 
     def reqLeave(self, player):
 
-        # 如果房间正在游戏中，不予处理
-        if self.state == ROOM_STATE_INGAME:
+        if player.state == Rules_ZJH.PLAYER_STATE_INGAME:
             return
 
         super().reqLeave(player)
-        ERROR_MSG("reqLeave %r" % (self.cid))
         self.parent.onRoomLosePlayer(self.cid,player)
 
         if player.cell:

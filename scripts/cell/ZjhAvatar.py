@@ -18,15 +18,16 @@ class ZjhAvatar(KBEngine.Entity,EntityCommon):
         """
         KBEngine method
         """
-        DEBUG_MSG("%r[%r].Cell::onDestroy()" % (self.className,self.id))
-
-        room = self.getCurrRoom()
-        if room:
-            room.onLeave(self)
+        self.getCurrRoom().onLeave(self)
 
     def set_gold(self,gold):
 
         self.base.set_gold(gold)
+
+    def set_state(self,state):
+
+        self.stateC = state
+        self.base.set_state(state)
 
     def reqMessageC(self,exposed,action,buf):
         if exposed != self.id:

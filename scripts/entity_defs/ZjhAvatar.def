@@ -146,6 +146,10 @@
             <Arg> FLOAT</Arg>
         </set_gold>
 
+        <set_state>
+            <Arg> INT32</Arg>
+        </set_state>
+
 	</BaseMethods>
 
 	<CellMethods>
@@ -153,6 +157,10 @@
         <set_gold>
             <Arg> FLOAT</Arg>
         </set_gold>
+
+        <set_state>
+            <Arg> INT32</Arg>
+        </set_state>
 
 	</CellMethods>
 

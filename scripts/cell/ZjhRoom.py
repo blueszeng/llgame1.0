@@ -19,7 +19,6 @@ class ZjhRoom(KBEngine.Entity,LogicZjh):
         self.firstCid = 0
         self.winCid  = 0
 
-        #重置房间数据
         self.reset()
 
         KBEngine.setSpaceData(self.spaceID, "jzList", self.jzListC)
@@ -59,7 +58,7 @@ class ZjhRoom(KBEngine.Entity,LogicZjh):
 
         if state == ROOM_STATE_INGAME:
             for pp in self.players.values():
-                pp.stateC = PLAYER_STATE_INGAME
+                pp.set_state(PLAYER_STATE_INGAME)
 
         KBEngine.setSpaceData(self.spaceID, "state", str(self.stateC))
 
@@ -81,11 +80,12 @@ class ZjhRoom(KBEngine.Entity,LogicZjh):
 
         #如果该房已开始游戏，则后面加入的玩家设置为灰色状态
         if self.stateC != ROOM_STATE_INGAME:
-            player.stateC = PLAYER_STATE_READY
+            player.set_state(PLAYER_STATE_READY)
             if len(self.players) >= 2:
-                self.addTimerMgr(1, 0, ACTION_ROOM_TIME)
+                self.curRoomTime = self.roomTime
+                self.addTimerMgr(1, 1, ACTION_ROOM_TIMER)
         else:
-            player.stateC = PLAYER_STATE_GARK
+            player.set_state(PLAYER_STATE_GARK)
 
     def onLeave(self, player):
 
@@ -96,10 +96,15 @@ class ZjhRoom(KBEngine.Entity,LogicZjh):
 
             if len(self.players) == 0:
                 self.destroy()
+            elif len(self.players) < 2:
+                if self.stateC == ROOM_STATE_TIMER:
+                    self.delTimerMgr(0)
+                    self.set_state(ROOM_STATE_READY)
 
     def onDispatchCards(self):
         """ 发牌 """
         cards = reqRandomCards52()
+
         for pp in self.players.values():
             pp.cards        = getCardsby(cards, 3)
             pp.cardCount    = len(pp.cards)
@@ -160,15 +165,9 @@ class ZjhRoom(KBEngine.Entity,LogicZjh):
         # EntityCommon.onTimer(self,id,userArg)
         super().onTimer(id,userArg)
 
-        if userArg == ACTION_ROOM_TIME:
-            self.curRoomTime = self.roomTime
-            self.set_state(ROOM_STATE_READY)
-
-            self.addTimerMgr(1,1,ACTION_ROOM_READY)
-            self.sendAllClients(ACTION_ROOM_READY, str(self.curRoomTime))
-
-        elif userArg == ACTION_ROOM_READY:
+        if userArg == ACTION_ROOM_TIMER:
             self.curRoomTime -= 1
+            self.set_state(ROOM_STATE_TIMER)
 
             if self.curRoomTime <= 0:
                 self.delTimerMgr(0)
@@ -188,13 +187,18 @@ class ZjhRoom(KBEngine.Entity,LogicZjh):
             self.reset()
             for pp in self.players.values():
                 pp.cost = 0.0
+                pp.chip = 0.0
                 pp.cards = []
                 pp.cardCount = 0
                 pp.lookcard = 1
-                pp.stateC = PLAYER_STATE_READY
+                pp.set_state(PLAYER_STATE_READY)
 
             if len(self.players) >= 2:
-                self.addTimerMgr(1, 0, ACTION_ROOM_TIME)
+                self.curRoomTime = self.roomTime
+                self.addTimerMgr(1, 1, ACTION_ROOM_TIMER)
+            else:
+                self.delTimerMgr(0)
+                self.set_state(ROOM_STATE_READY)
 
         elif userArg == ACTION_ROOM_AUTOBIPAI:
             self.delTimerMgr(0)
@@ -228,7 +232,6 @@ class ZjhRoom(KBEngine.Entity,LogicZjh):
 
     def onGenzhu(self,player,buf):
         """跟注"""
-
         curChip = self.curDizhu * player.lookcard
 
         player.goldC -= curChip
@@ -306,9 +309,9 @@ class ZjhRoom(KBEngine.Entity,LogicZjh):
         """比牌之后"""
         DEBUG_MSG("%r::onLastCompare()" % (self.className))
         if result:
-            target.stateC = PLAYER_STATE_GARK
+            target.set_state(PLAYER_STATE_GARK)
         else:
-            player.stateC = PLAYER_STATE_GARK
+            player.set_state(PLAYER_STATE_GARK)
 
         if self.onCheckResult():
             self.onSettle()
@@ -337,7 +340,7 @@ class ZjhRoom(KBEngine.Entity,LogicZjh):
 
     def onQipai(self,player,buf):
 
-        player.stateC = PLAYER_STATE_QIPAI
+        player.set_state(PLAYER_STATE_QIPAI)
 
         if self.onCheckResult():
             self.onSettle()

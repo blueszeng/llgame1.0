@@ -40,19 +40,27 @@ def convertDict(httpStr,str1,str2):
     return result
 
 
+
+def comp(x, y):
+    if x < y:
+        return 1
+    elif x > y:
+        return -1
+    else:
+        return 0
+
 test = []
 
-data1 = {"player":1,"tt":2}
-
+data1 = 2
+data2 = 1
+data3 = 0
 
 test.append(data1)
+test.append(data2)
+test.append(data3)
 
-data1 = {"player":1,"tt":1}
+print(2 not in test)
 
-if data1 in test:
-    print("true")
-else:
-    print("false")
 
 
 
