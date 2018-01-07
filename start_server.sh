@@ -1,7 +1,7 @@
 #!/bin/sh
 
 export KBE_ROOT=$(cd ../; pwd)
-export KBE_RES_PATH="$KBE_ROOT/kbe/res/:$KBE_ROOT/llgame:$KBE_ROOT/llgame/res/:$KBE_ROOT/llgame/scripts/"
+export KBE_RES_PATH="$KBE_ROOT/kbe/res/:$KBE_ROOT/llgame1.0:$KBE_ROOT/llgame1.0/res/:$KBE_ROOT/llgame1.0/scripts/"
 export KBE_BIN_PATH="$KBE_ROOT/kbe/bin/server/"
 
 echo KBE_ROOT = \"${KBE_ROOT}\"
