@@ -24,6 +24,8 @@ class Player(KBEngine.Proxy,GameObject):
 
 		self.Games().reqEnter(self)
 
+		# self.streamFileToClient("d_config.py","d_config")
+
 		#如果是机器人，则直接初始化属性
 		if self.getClientType() == 6:
 			self.name = "bots%r" % self.id
@@ -156,7 +158,6 @@ class Player(KBEngine.Proxy,GameObject):
 		else:
 			self.client.onEnterGame(-1, "")
 
-
 	def reqLeaveGame(self):
 
 		if not self.client:
@@ -233,3 +234,7 @@ class Player(KBEngine.Proxy,GameObject):
 		#请求恢复房间
 		if self.activeProxy:
 			self.giveClientTo(self.activeProxy)
+
+	def onStreamComplete(self,id,success):
+		DEBUG_MSG("%r[%d]::onStreamComplete success = %r" % (self.className,id,success))
+

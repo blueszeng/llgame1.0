@@ -24,23 +24,17 @@ class ZjhRoom(KBEngine.Entity,LogicZjh):
         KBEngine.setSpaceData(self.spaceID, "jzList", self.jzListC)
 
     def reset(self):
-        #当前玩家
+        #当前玩家cid
         self.curCid = 0
-
         #当前回合
         self.curRound = 0
-
         #当前低注
         self.curDizhu = self.dizhuC
-
         #总下注
         self.totalzhu = 0
-
         #下注记录，用于给观战玩家生成筹码界面
         self.chipsList = []
-
         self.curAction = ACTION_ROOM_NONE
-
         self.set_state(ROOM_STATE_READY)
 
         KBEngine.setSpaceData(self.spaceID, "dizhu", str(self.dizhuC))
