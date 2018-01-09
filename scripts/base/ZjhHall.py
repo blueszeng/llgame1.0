@@ -110,7 +110,7 @@ class ZjhHall(KBEngine.Base,BaseObject):
 
 	def findNotFullRooms(self):
 		"""
-		查找人数最多的有位置房间
+		查找人数最多的空房
 		"""
 		if len(self.notFullRooms) <= 0:
 			return None

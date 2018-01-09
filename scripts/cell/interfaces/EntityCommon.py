@@ -44,7 +44,7 @@ class EntityCommon:
 	def delTimerMgr(self, userArg):
 
 		if userArg == 0:
-			DEBUG_MSG("%r clean all timers" % (self.className))
+			DEBUG_MSG("%r clear all timers" % (self.className))
 
 			for tt in self.timerMgr.values():
 				self.delTimer(tt)
@@ -75,6 +75,5 @@ class EntityCommon:
         @param userArg	: addTimer 最后一个参数所给入的数据
         """
 		if userArg == 0 and self.callbackFunc:
-			# DEBUG_MSG("22222222222222222222222")
 			self.callbackFunc(self.arg1,self.arg2,self.arg3)
 			self.callbackFunc = None

@@ -16,8 +16,8 @@ ROOM_STATE_INGAME   =   2   #正在游戏
 ROOM_STATE_FINISH   =   3   #游戏结束,清理断线玩家
 
 ACTION_ROOM_NONE               = 0  #空
-ACTION_ROOM_TIME               = 1  #下发房间时间
-ACTION_ROOM_TIMER			   = 10 #准备
+ACTION_ROOM_ADDCHIP            = 1  #添加筹码
+ACTION_ROOM_TIMER			   = 10 #进入倒计时
 ACTION_ROOM_DISPATCH           = 12 #发牌
 ACTION_ROOM_GENZHU             = 13 #跟住
 ACTION_ROOM_JIAZHU             = 14 #加注
@@ -31,7 +31,7 @@ ACTION_ROOM_AUTOBIPAI          = 21 #有玩家金钱不足时或回合数到达�
 
 
 
-DEBUG_ACTION_STRING = {ACTION_ROOM_TIME:"ACTION_ROOM_TIME",
+DEBUG_ACTION_STRING = {
                        ACTION_ROOM_TIMER: "ACTION_ROOM_TIMER",
                        ACTION_ROOM_DISPATCH:"ACTION_ROOM_DISPATCH",
                        ACTION_ROOM_GENZHU:"ACTION_ROOM_GENZHU",

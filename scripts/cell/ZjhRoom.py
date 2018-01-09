@@ -9,7 +9,7 @@ class ZjhRoom(KBEngine.Entity,LogicZjh):
     def __init__(self):
         KBEngine.Entity.__init__(self)
         LogicZjh.__init__(self)
-        self.position = (9999.0, 0.0, 0.0)
+        self.position = (0.0, 0.0, 0.0)
 
         # 房间时间
         self.roomTime   = 10
@@ -32,8 +32,6 @@ class ZjhRoom(KBEngine.Entity,LogicZjh):
         self.curDizhu = self.dizhuC
         #总下注
         self.totalzhu = 0
-        #下注记录，用于给观战玩家生成筹码界面
-        self.chipsList = []
         self.curAction = ACTION_ROOM_NONE
         self.set_state(ROOM_STATE_READY)
 
@@ -49,12 +47,12 @@ class ZjhRoom(KBEngine.Entity,LogicZjh):
 
         self.stateC = state
         self.base.set_state(state)
+        KBEngine.setSpaceData(self.spaceID, "state", str(state))
 
         if state == ROOM_STATE_INGAME:
             for pp in self.players.values():
                 pp.set_state(PLAYER_STATE_INGAME)
 
-        KBEngine.setSpaceData(self.spaceID, "state", str(self.stateC))
 
     def onEnter(self, player):
         """分配座位顺序"""
@@ -105,10 +103,14 @@ class ZjhRoom(KBEngine.Entity,LogicZjh):
 
             pp.goldC     -= self.curDizhu
             pp.cost      += self.curDizhu
-            pp.chip       = self.curDizhu
+            # pp.chip       = self.curDizhu
+
+            data = {}
+            data["curCid"] = pp.cid
+            data["curChip"] = self.curDizhu
+            self.sendAllClients(ACTION_ROOM_ADDCHIP,json.dumps(data))
 
             self.totalzhu += self.curDizhu
-            self.chipsList.append(self.curDizhu)
 
             KBEngine.setSpaceData(self.spaceID, "totalzhu", str(self.totalzhu))
 
@@ -147,7 +149,7 @@ class ZjhRoom(KBEngine.Entity,LogicZjh):
         else:
             self.curAction = ACTION_ROOM_NONE
             self.sendAllClients(ACTION_ROOM_NEXT, str(self.curCid))
-            DEBUG_MSG("ACTION_ROOM_NEXT cid[%d]" % (self.curCid))
+            DEBUG_MSG("ZjhRoom::onNextPlayer cid[%d]" % (self.curCid))
 
     def onTimer(self, id, userArg):
         """
@@ -181,7 +183,6 @@ class ZjhRoom(KBEngine.Entity,LogicZjh):
             self.reset()
             for pp in self.players.values():
                 pp.cost = 0.0
-                pp.chip = 0.0
                 pp.cards = []
                 pp.cardCount = 0
                 pp.lookcard = 1
@@ -230,7 +231,11 @@ class ZjhRoom(KBEngine.Entity,LogicZjh):
 
         player.goldC -= curChip
         player.cost  += curChip
-        player.chip  = curChip
+
+        data = {}
+        data["curCid"] = player.cid
+        data["curChip"] = curChip
+        self.sendAllClients(ACTION_ROOM_ADDCHIP, json.dumps(data))
 
         self.totalzhu += curChip
         KBEngine.setSpaceData(self.spaceID, "totalzhu", str(self.totalzhu))
@@ -250,7 +255,11 @@ class ZjhRoom(KBEngine.Entity,LogicZjh):
 
             player.goldC -= curChip
             player.cost += curChip
-            player.chip = curChip
+
+            data = {}
+            data["curCid"] = player.cid
+            data["curChip"] = curChip
+            self.sendAllClients(ACTION_ROOM_ADDCHIP, json.dumps(data))
         else:
             ERROR_MSG("onPlus zjId = %d outline" % (jzId))
             return
@@ -286,7 +295,11 @@ class ZjhRoom(KBEngine.Entity,LogicZjh):
         else:
             player.goldC -= curChip
             player.cost += curChip
-            player.chip = curChip
+
+            data = {}
+            data["curCid"] = player.cid
+            data["curChip"] = curChip
+            self.sendAllClients(ACTION_ROOM_ADDCHIP, json.dumps(data))
 
         bResult = CompareCards(player.cards,target.cards)
 

@@ -17,7 +17,7 @@ class ZjhAvatar(KBEngine.Proxy,GameObject):
         该entity被正式激活为可使用， 此时entity已经建立了client对应实体， 可以在此创建它的
         cell部分。
         """
-        INFO_MSG("%r[%i]::onEntitiesEnabled()" % (self.className,self.id))
+        DEBUG_MSG("%r[%i]::onEntitiesEnabled()" % (self.className,self.id))
 
     def createCell(self, space):
         """
@@ -45,7 +45,7 @@ class ZjhAvatar(KBEngine.Proxy,GameObject):
         DEBUG_MSG("%r[%r]::onLoseCell()" % (self.className, self.id))
 
         if not self.client:
-            self.ExitGame()
+            self.exitGame()
         else:
             self.reqLeaveRoom()
 
@@ -55,7 +55,7 @@ class ZjhAvatar(KBEngine.Proxy,GameObject):
             if self.cell:
                 self.destroyCellEntity()
             else:
-                self.ExitGame()
+                self.exitGame()
 
     def onDestroy(self):
 
@@ -73,8 +73,8 @@ class ZjhAvatar(KBEngine.Proxy,GameObject):
     def set_gold(self, settleGold):
 
         gold = Helper.Round(settleGold)
-        self.activeProxy.gold += gold
-        self.gold = self.activeProxy.gold
+        self.gold += gold
+        self.activeProxy.gold = self.gold
 
         DEBUG_MSG("%r[%r]::set_gold() gold[%r] settleGold[%r]" %(self.className,self.id,self.gold,settleGold))
 

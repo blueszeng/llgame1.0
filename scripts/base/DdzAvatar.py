@@ -52,7 +52,7 @@ class DdzAvatar(KBEngine.Proxy,GameObject):
             self.reqEnterRoom()
 
         elif not self.client:
-            self.ExitGame()
+            self.exitGame()
 
         else:
             self.reqLeaveRoom()
@@ -63,7 +63,7 @@ class DdzAvatar(KBEngine.Proxy,GameObject):
             if self.cell:
                 self.destroyCellEntity()
             else:
-                self.ExitGame()
+                self.exitGame()
 
     def onDestroy(self):
 
