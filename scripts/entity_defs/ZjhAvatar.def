@@ -107,11 +107,11 @@
 			<Default>			0					</Default>
         </cost>
 
-        <chip>
-                <Type>			FLOAT					</Type>
-                <Flags>			ALL_CLIENTS	 		   </Flags>
-                <Default>			0					</Default>
-        </chip>
+        <chips>
+                <Type>	ARRAY <of> FLOAT </of>    </Type>
+                <Flags>		ALL_CLIENTS			</Flags>
+                <Default>		0				</Default>
+        </chips>
 
         <lookcard>
                 <Type>			UINT8					</Type>

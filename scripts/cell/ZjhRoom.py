@@ -103,12 +103,10 @@ class ZjhRoom(KBEngine.Entity,LogicZjh):
 
             pp.goldC     -= self.curDizhu
             pp.cost      += self.curDizhu
-            # pp.chip       = self.curDizhu
 
-            data = {}
-            data["curCid"] = pp.cid
-            data["curChip"] = self.curDizhu
-            self.sendAllClients(ACTION_ROOM_ADDCHIP,json.dumps(data))
+            chips = pp.chips
+            chips.append(self.curDizhu)
+            pp.chips = chips
 
             self.totalzhu += self.curDizhu
 
@@ -184,6 +182,7 @@ class ZjhRoom(KBEngine.Entity,LogicZjh):
             for pp in self.players.values():
                 pp.cost = 0.0
                 pp.cards = []
+                pp.chips = []
                 pp.cardCount = 0
                 pp.lookcard = 1
                 pp.set_state(PLAYER_STATE_READY)
@@ -232,10 +231,9 @@ class ZjhRoom(KBEngine.Entity,LogicZjh):
         player.goldC -= curChip
         player.cost  += curChip
 
-        data = {}
-        data["curCid"] = player.cid
-        data["curChip"] = curChip
-        self.sendAllClients(ACTION_ROOM_ADDCHIP, json.dumps(data))
+        chips = player.chips
+        chips.append(curChip)
+        player.chips = chips
 
         self.totalzhu += curChip
         KBEngine.setSpaceData(self.spaceID, "totalzhu", str(self.totalzhu))
@@ -256,10 +254,10 @@ class ZjhRoom(KBEngine.Entity,LogicZjh):
             player.goldC -= curChip
             player.cost += curChip
 
-            data = {}
-            data["curCid"] = player.cid
-            data["curChip"] = curChip
-            self.sendAllClients(ACTION_ROOM_ADDCHIP, json.dumps(data))
+            chips = player.chips
+            chips.append(curChip)
+            player.chips = chips
+
         else:
             ERROR_MSG("onPlus zjId = %d outline" % (jzId))
             return
@@ -296,10 +294,9 @@ class ZjhRoom(KBEngine.Entity,LogicZjh):
             player.goldC -= curChip
             player.cost += curChip
 
-            data = {}
-            data["curCid"] = player.cid
-            data["curChip"] = curChip
-            self.sendAllClients(ACTION_ROOM_ADDCHIP, json.dumps(data))
+            chips = player.chips
+            chips.append(curChip)
+            player.chips = chips
 
         bResult = CompareCards(player.cards,target.cards)
 
