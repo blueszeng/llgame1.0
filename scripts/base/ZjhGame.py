@@ -38,8 +38,8 @@ class ZjhGame(KBEngine.Base,BaseObject):
             result = {}
             result["id"] = hall.cid
             result["players_count"] = hall.reqPlayerCount()
-            result["limit"] = d_DDZ[hall.cid]["limit"]
-            result["base"] = d_DDZ[hall.cid]["base"]
+            result["limit"] = d_ZJH[hall.cid]["limit"]
+            result["base"] = d_ZJH[hall.cid]["base"]
 
             results.append(result)
 

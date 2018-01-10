@@ -24,7 +24,7 @@ class Player(KBEngine.Proxy,GameObject):
 
 		self.Games().reqEnter(self)
 
-		# self.streamFileToClient("d_config.py","d_config")
+		# self.streamFileToClient("data/d_config.py","d_config")
 
 		#如果是机器人，则直接初始化属性
 		if self.getClientType() == 6:

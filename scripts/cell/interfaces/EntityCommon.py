@@ -15,6 +15,7 @@ class EntityCommon:
 		self.arg1 = None
 		self.arg2 = None
 		self.arg3 = None
+		self.arg4 = None
 
 	def getCurrRoomBase(self):
 		"""
@@ -57,14 +58,15 @@ class EntityCommon:
 
 			self.delTimer(tid)
 
-	def invoke3(self,initialOffset,callbackFunc,arg1,arg2,arg3):
+	def invoke4(self, initialOffset, callbackFunc, arg1, arg2, arg3, arg4):
 		"""
-		3参数回掉函数
+		4参数回掉函数
 		"""
 		self.callbackFunc = callbackFunc
 		self.arg1 = arg1
 		self.arg2 = arg2
 		self.arg3 = arg3
+		self.arg4 = arg4
 		self.addTimerMgr(initialOffset,0,0)
 
 	def onTimer(self, id, userArg):
@@ -75,5 +77,5 @@ class EntityCommon:
         @param userArg	: addTimer 最后一个参数所给入的数据
         """
 		if userArg == 0 and self.callbackFunc:
-			self.callbackFunc(self.arg1,self.arg2,self.arg3)
+			self.callbackFunc(self.arg1,self.arg2,self.arg3,self.arg4)
 			self.callbackFunc = None
