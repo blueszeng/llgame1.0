@@ -126,6 +126,7 @@ class ZjhRoom(KBEngine.Entity, ZjhLogic):
             for pp in self.players.values():
                 pp.cost = 0.0
                 pp.cards = []
+                pp.showCards = []
                 pp.chips = []
                 pp.cardCount = 0
                 pp.lookcard = 1
@@ -186,7 +187,6 @@ class ZjhRoom(KBEngine.Entity, ZjhLogic):
             self.totalzhu += self.curDizhu
 
             KBEngine.setSpaceData(self.spaceID, "totalzhu", str(self.totalzhu))
-
             DEBUG_MSG("ZjhRoom::onDispatchCards Player[%r]" % (pp.cid))
 
     def onNextPlayer(self):
@@ -301,7 +301,7 @@ class ZjhRoom(KBEngine.Entity, ZjhLogic):
             player.chips = chips
 
         DEBUG_MSG("playerCards = %r   target.cards = %r" % (player.cards,target.cards))
-        self.compareCards(player.cards,target.cards,False)
+        self.compareCards(player,target,False)
 
     def onAutoCompare(self,player):
         """
@@ -310,7 +310,7 @@ class ZjhRoom(KBEngine.Entity, ZjhLogic):
         nCid = self.getNextCid(self.curCid)
         nPlayer = self.players[nCid]
 
-        self.compareCards(player.cards,nPlayer.cards,True)
+        self.compareCards(player,nPlayer,True)
 
     def onQipai(self,player,buf):
 
@@ -355,14 +355,13 @@ class ZjhRoom(KBEngine.Entity, ZjhLogic):
 
         KBEngine.globalData["Games"].addIncome(taxGold)
 
+        # 开牌
+        for pp in self.players.values():
+            pp.showCards = pp.cards
+
         self.sendAllClients(ACTION_ROOM_SETTLE,str(self.winCid))
         self.set_state(ROOM_STATE_FINISH)
         self.addTimerMgr(2,0,ACTION_ROOM_SETTLE)
-
-        #开牌
-        for pp in self.players.values():
-            if pp.client:
-                pp.showCards = pp.cards
 
 
 
