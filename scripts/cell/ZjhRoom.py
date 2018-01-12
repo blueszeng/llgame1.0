@@ -100,7 +100,6 @@ class ZjhRoom(KBEngine.Entity, ZjhLogic):
         @param id		: addTimer 的返回值ID
         @param userArg	: addTimer 最后一个参数所给入的数据
         """
-        # EntityCommon.onTimer(self,id,userArg)
         super().onTimer(id,userArg)
 
         if userArg == ACTION_ROOM_TIMER:

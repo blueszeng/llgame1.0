@@ -1,6 +1,5 @@
 <root>
     <Interfaces>
-		<Interface>	GameObject	</Interface>
 	</Interfaces>
 
 	<Properties>
@@ -62,7 +61,6 @@
 		    <Arg>	UNICODE	</Arg>
 		</onGameInfo>
 
-		<!-- 返回游戏配置 -->
 		<onGamesConfig>
 		    <Arg>	UNICODE	</Arg>
 		</onGamesConfig>
@@ -83,10 +81,6 @@
         	<Arg>	FLOAT		</Arg>
 			<Arg>	FLOAT		</Arg>
 		</onCharge>
-
-        <onRegisterProperties>
-            <Arg> INT32</Arg>
-        </onRegisterProperties>
 
         <onAccessBank>
             <Arg> INT32</Arg>
@@ -120,46 +114,47 @@
 	</ClientMethods>
 
 	<BaseMethods>
+
+	    <reqEnterGame>
+            <Exposed/>
+            <Arg> INT32 </Arg>
+        </reqEnterGame>
+
+        <reqLeaveGame>
+            <Exposed/>
+        </reqLeaveGame>
+
         <reqRefresh>
 			<Exposed/>
-			<Utype> 9999 </Utype>
 		</reqRefresh>
 
         <reqGamesConfig>
 			<Exposed/>
-			<Utype> 10000 </Utype>
 		</reqGamesConfig>
 
         <reqCashInfo>
 			<Exposed/>
-			<Utype> 10001 </Utype>
-
             <Arg>	INT32	</Arg>
 		</reqCashInfo>
 
         <reqCash>
 			<Exposed/>
-			<Utype> 10002 </Utype>
-
             <Arg>	INT32	</Arg>
 			<Arg>	UNICODE	</Arg>
 		</reqCash>
 
 		<reqGameInfo>
 			<Exposed/>
-			<Utype> 10011 </Utype>
 		</reqGameInfo>
 
 		<reqAccessBank>
 			<Exposed/>
-			<Utype> 10016 </Utype>
 			<Arg>  INT32 </Arg>
 			<Arg>  FLOAT </Arg>
 		</reqAccessBank>
 
 		<reqReviseProperties>
 			<Exposed/>
-			<Utype> 10017 </Utype>
 			<Arg>  UNICODE </Arg>
 			<Arg>  INT32 </Arg>
 			<Arg>  INT32 </Arg>
@@ -167,17 +162,14 @@
 
 		<reqNoticeInfos>
 			<Exposed/>
-			<Utype> 10018 </Utype>
 		</reqNoticeInfos>
 
 		<reqRanksInfo>
 	        <Exposed/>
-	        <Utype> 10019 </Utype>
 	    </reqRanksInfo>
 
 	    <reqMyRankInfo>
 	        <Exposed/>
-	        <Utype> 10020 </Utype>
 	    </reqMyRankInfo>
 
 		<reqRestoreRoom>
