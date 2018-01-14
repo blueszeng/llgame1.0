@@ -61,4 +61,9 @@ class GameObject:
         if self.room:
             self.room.reqLeave(self)
 
+    def reqHallsInfo(self):
+
+        if self.game:
+            self.game.reqHallsInfo(self)
+
 

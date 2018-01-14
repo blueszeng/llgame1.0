@@ -10,31 +10,32 @@
 	<ClientMethods>
 
 		<onSay>
-			<Arg>	UNICODE		</Arg>
+			<Arg>	UNICODE	</Arg>
 		</onSay>
 
         <onMessage>
-            <Arg> INT32</Arg>
-            <Arg> INT32</Arg>
+            <Arg> INT32 </Arg>
+            <Arg> INT32 </Arg>
             <Arg> UNICODE </Arg>
         </onMessage>
 
 		<onEnterGame>
-		    <Arg>	INT32	</Arg>
 		    <Arg>	UNICODE	</Arg>
 		</onEnterGame>
 
         <onLeaveGame>
-		    <Arg>	INT32	</Arg>
 		</onLeaveGame>
 
 		<onEnterHall>
-		    <Arg>	INT32	</Arg>
+		    <Arg>	UNICODE	</Arg>
 		</onEnterHall>
 
         <onLeaveHall>
-		    <Arg>	INT32	</Arg>
 		</onLeaveHall>
+
+		<onHallsInfo>
+			<Arg>	UNICODE	</Arg>
+		</onHallsInfo>
 
 	</ClientMethods>
 
@@ -42,7 +43,7 @@
 
         <reqEnterGame>
             <Exposed/>
-            <Arg> INT32 </Arg>
+            <Arg> UNICODE </Arg>
         </reqEnterGame>
 
         <reqLeaveGame>
@@ -65,6 +66,10 @@
         <reqLeaveRoom>
             <Exposed/>
         </reqLeaveRoom>
+
+        <reqHallsInfo>
+            <Exposed/>
+        </reqHallsInfo>
 
 	</BaseMethods>
 

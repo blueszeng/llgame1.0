@@ -20,22 +20,20 @@ class ZjhHall(KBEngine.Base,BaseObject):
 	def reqEnter(self,player):
 
 		if player.gold < d_ZJH[self.cid]["limit"]:
-
 			if player.client:
-				player.client.onEnterHall(-1)
-
+				player.client.onEnterHall("")
 			WARNING_MSG("%r::reqEnter() Entity[%r] Gold < Limit" % (self.className, player.id))
 			return
 
 		super().reqEnter(player)
 		if player.client:
-			player.client.onEnterHall(0)
+			player.client.onEnterHall(self.className)
 
 	def reqLeave(self,player):
 		super().reqLeave(player)
 
 		if player.client:
-			player.client.onLeaveHall(0)
+			player.client.onLeaveHall()
 
 	def onRoomGetCell(self, roomMailbox, roomKey):
 		"""

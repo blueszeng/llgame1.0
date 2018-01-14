@@ -115,11 +115,11 @@ class Player(KBEngine.Proxy,GameObject):
 		notice_string = json.dumps(d_notice)
 		self.client.onNoticeInfos(notice_string)
 
-	def reqGameInfo(self):
+	def reqGamesInfo(self):
 		"""
 		请求游戏类型，游戏信息，游戏在线人数
 		"""
-		self.Games().reqGameInfo(self)
+		self.Games().reqGamesInfo(self)
 
 	def reqGamesConfig(self):
 		self.Games().reqGamesConfig(self)
@@ -136,12 +136,13 @@ class Player(KBEngine.Proxy,GameObject):
 		"""
 		KBEngine.globalData["Ranks"].reqMyRankInfo(self)
 
-	def reqEnterGame(self,gameID):
+	def reqEnterGame(self, game):
 
-		if self.activeProxy == None and gameID in d_games:
-			entity = d_games[gameID]['sign']+"Avatar"
+		if self.activeProxy == None and game in d_games:
 
-			avatar = KBEngine.createBaseLocally(entity, {"gold": self.gold})
+			className = d_games[game]['sign'] + "Avatar"
+
+			avatar = KBEngine.createBaseLocally(className, {"gold": self.gold})
 			if avatar:
 				avatar.cellData["nameC"] = self.name
 				avatar.cellData["goldC"] = self.gold
@@ -153,10 +154,10 @@ class Player(KBEngine.Proxy,GameObject):
 
 				self.giveClientTo(avatar)
 
-				avatar.reqEnterGame(gameID)
+				avatar.reqEnterGame(game)
 				avatar.activeProxy = self
 		else:
-			self.client.onEnterGame(-1, "")
+			self.client.onEnterGame(self.activeProxy.game.className, "")
 
 	def reqLeaveGame(self):
 
@@ -230,7 +231,7 @@ class Player(KBEngine.Proxy,GameObject):
 		if self.client:
 			self.client.onRefresh(json_string)
 
-	def reqRestoreRoom(self):
+	def reqRestoreGame(self):
 		#请求恢复房间
 		if self.activeProxy:
 			self.giveClientTo(self.activeProxy)

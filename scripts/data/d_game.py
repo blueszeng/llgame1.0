@@ -1,14 +1,14 @@
 
 
 d_games = {
-    1:
+    "DdzGame":
         {
             "sign": "Ddz",
             "hallCount": 4,
             "open": 1  # 0为不开放，大于0为开放
         },
 
-    2:
+    "ZjhGame":
         {
             "sign": "Zjh",
             "hallCount": 4,

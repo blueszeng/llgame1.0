@@ -19,9 +19,9 @@ class ZjhGame(KBEngine.Base,BaseObject):
         @param id		: addTimer 的返回值ID
         @param userArg	: addTimer 最后一个参数所给入的数据
         """
-        for i in range(d_games[self.cid]["hallCount"]):
+        for i in range(d_games[self.className]["hallCount"]):
             cid = i + 1
-            KBEngine.createBaseAnywhere(d_games[self.cid]['sign'] + "Hall", {'parent': self, "cid": cid},
+            KBEngine.createBaseAnywhere(d_games[self.className]['sign'] + "Hall", {'parent': self, "cid": cid},
                                         Functor(self.onCreateBaseCallback, cid))
 
     def onCreateBaseCallback(self, id, mailbox):
@@ -31,26 +31,26 @@ class ZjhGame(KBEngine.Base,BaseObject):
     def reqEnter(self,player):
         super().reqEnter(player)
 
-        #下发大厅信息
-        results = []
-        for hall in self.childs.values():
-
-            result = {}
-            result["id"] = hall.cid
-            result["players_count"] = hall.reqPlayerCount()
-            result["limit"] = d_ZJH[hall.cid]["limit"]
-            result["base"] = d_ZJH[hall.cid]["base"]
-
-            results.append(result)
-
-        json_results = json.dumps(results)
-
         if player.client:
-            player.client.onEnterGame(self.cid, json_results)
+            player.client.onEnterGame(self.className)
 
     def reqLeave(self,player):
         super().reqLeave(player)
 
         if player.client:
-            player.client.onLeaveGame(0)
+            player.client.onLeaveGame()
+
+    def reqHallsInfo(self, player):
+        """下发大厅信息"""
+        results = []
+        for hall in self.childs.values():
+            result = {}
+            result["id"] = hall.cid
+            result["players_count"] = hall.reqPlayerCount()
+            result["limit"] = d_ZJH[hall.cid]["limit"]
+            result["base"] = d_ZJH[hall.cid]["base"]
+            results.append(result)
+
+        if player.client:
+            player.client.onHallsInfo(json.dumps(results))
 

@@ -4,13 +4,6 @@
 
 	<Properties>
 
-	<alipay>
-			<Type>			UNICODE					</Type>
-			<Flags>			BASE_AND_CLIENT	      	</Flags>
-			<Default>								</Default>
-			<Persistent>		true				</Persistent>
-	</alipay>
-
 	<name>
 			<Type>			UNICODE					</Type>
 			<Flags>			BASE_AND_CLIENT	      	</Flags>
@@ -31,6 +24,13 @@
 			<Default>								</Default>
 			<Persistent>		true				</Persistent>
 	</bankGold>
+
+	<proxyGold>
+	        <Type>			FLOAT					</Type>
+			<Flags>			BASE_AND_CLIENT	 		</Flags>
+			<Default>								</Default>
+			<Persistent>	true				</Persistent>
+	</proxyGold>
 
 	<sex>
 	        <Type>			INT32					</Type>
@@ -53,13 +53,20 @@
 			<Persistent>	true				</Persistent>
 	</addr>
 
+	<alipay>
+			<Type>			UNICODE					</Type>
+			<Flags>			BASE_AND_CLIENT	      	</Flags>
+			<Default>								</Default>
+			<Persistent>		true				</Persistent>
+	</alipay>
+
 	</Properties>
 
 	<ClientMethods>
 
-		<onGameInfo>
+		<onGamesInfo>
 		    <Arg>	UNICODE	</Arg>
-		</onGameInfo>
+		</onGamesInfo>
 
 		<onGamesConfig>
 		    <Arg>	UNICODE	</Arg>
@@ -117,7 +124,7 @@
 
 	    <reqEnterGame>
             <Exposed/>
-            <Arg> INT32 </Arg>
+            <Arg> UNICODE </Arg>
         </reqEnterGame>
 
         <reqLeaveGame>
@@ -143,9 +150,9 @@
 			<Arg>	UNICODE	</Arg>
 		</reqCash>
 
-		<reqGameInfo>
+		<reqGamesInfo>
 			<Exposed/>
-		</reqGameInfo>
+		</reqGamesInfo>
 
 		<reqAccessBank>
 			<Exposed/>
@@ -172,9 +179,9 @@
 	        <Exposed/>
 	    </reqMyRankInfo>
 
-		<reqRestoreRoom>
+		<reqRestoreGame>
             <Exposed/>
-		</reqRestoreRoom>
+		</reqRestoreGame>
 
 	</BaseMethods>
 

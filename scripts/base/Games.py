@@ -17,7 +17,6 @@ class Games(KBEngine.Base,BaseObject):
 	def __init__(self):
 		KBEngine.Base.__init__(self)
 		BaseObject.__init__(self)
-
 		KBEngine.globalData["Games"] = self
 
 		# 订单管理
@@ -62,25 +61,19 @@ class Games(KBEngine.Base,BaseObject):
 		"""
 		player.client.onGamesConfig(json.dumps(d_config.d_users))
 
-	def reqGameInfo(self,player):
-		"""
-		define.
-		请求游戏信息
-		"""
+	def reqGamesInfo(self,player):
+		"""请求游戏信息"""
 		results = []
 		for game in self.childs.values():
-
 			result = {}
 			result["id"] = game.cid
 			result["name"] = game.className
 			result["players_count"] = game.reqPlayerCount()
 			result["open"] = game.open
-
 			results.append(result)
 
-		json_results = json.dumps(results)
 		if player.client:
-			player.client.onGameInfo(json_results)
+			player.client.onGamesInfo(json.dumps(results))
 
 	def reqChargeToPlayer(self,accountName,amount):
 		"""请求充值"""

@@ -25,9 +25,9 @@
 			<Arg>	FLOAT	</Arg>
 		</reqChargeToPlayer>
 
-		<reqGameInfo>
+		<reqGamesInfo>
 		<Arg>  MAILBOX   </Arg>
-		</reqGameInfo>
+		</reqGamesInfo>
 
 	</BaseMethods>
 

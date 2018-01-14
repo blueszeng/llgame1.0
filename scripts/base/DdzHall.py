@@ -21,18 +21,18 @@ class DdzHall(KBEngine.Base,BaseObject):
 
 			DEBUG_MSG("%r::reqEnter() Entity[%r] Gold < Limit" % (self.className, player.id))
 			if player.client:
-				player.client.onEnterHall(-1)
+				player.client.onEnterHall("")
 			return
 
 		super().reqEnter(player)
 		if player.client:
-			player.client.onEnterHall(0)
+			player.client.onEnterHall(self.className)
 
 	def reqLeave(self,player):
 		super().reqLeave(player)
 
 		if player.client:
-			player.client.onLeaveHall(0)
+			player.client.onLeaveHall()
 
 	def onRoomGetCell(self, roomMailbox, lastNewRoomKey):
 		"""
