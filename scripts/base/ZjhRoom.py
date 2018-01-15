@@ -63,6 +63,9 @@ class ZjhRoom(KBEngine.Base,BaseObject):
     def reqLeave(self, player):
 
         if player.state == Rules_ZJH.PLAYER_STATE_INGAME:
+            if player.client:
+                player.client.onLeaveHall()
+                player.changeClient()
             return
 
         super().reqLeave(player)

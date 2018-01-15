@@ -19,6 +19,11 @@ class GameObject:
         for prop in self.propertys:
             setattr(self,prop.lower(),None)
 
+    def changeClient(self):
+        """切换控制权"""
+        if self.client and self.activeProxy != None:
+            self.giveClientTo(self.activeProxy)
+
     def Games(self):
 
         return KBEngine.globalData['Games']

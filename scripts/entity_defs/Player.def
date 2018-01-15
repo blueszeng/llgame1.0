@@ -72,6 +72,10 @@
 		    <Arg>	UNICODE	</Arg>
 		</onGamesConfig>
 
+		<onEnterGame>
+		    <Arg>	UNICODE	</Arg>
+		</onEnterGame>
+
         <onCashInfo>
             <Arg>	INT32	</Arg>
             <Arg>	INT32	</Arg>

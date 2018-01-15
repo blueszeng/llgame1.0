@@ -157,7 +157,7 @@ class Player(KBEngine.Proxy,GameObject):
 				avatar.reqEnterGame(game)
 				avatar.activeProxy = self
 		else:
-			self.client.onEnterGame(self.activeProxy.game.className, "")
+			self.client.onEnterGame(self.activeProxy.game.className)
 
 	def reqLeaveGame(self):
 
