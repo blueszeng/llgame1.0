@@ -40,19 +40,18 @@ class ZjhRoom(KBEngine.Entity, ZjhLogic):
         KBEngine.setSpaceData(self.spaceID, "totalzhu", str(self.totalzhu))
         KBEngine.setSpaceData(self.spaceID, "roomtime", str(self.roomTime))
         KBEngine.setSpaceData(self.spaceID, "curRound", str(self.curRound))
-        KBEngine.setSpaceData(self.spaceID, "state", str(self.stateC))
+        KBEngine.setSpaceData(self.spaceID, "status", str(self.statusC))
 
-    def set_state(self,state):
-        DEBUG_MSG("%r::set_state space[%r] state[%r]" % (self.className,self.spaceID,state))
+    def set_state(self, status):
+        DEBUG_MSG("%r::set_state space[%r] status[%r]" % (self.className, self.spaceID, status))
 
-        self.stateC = state
-        self.base.set_state(state)
-        KBEngine.setSpaceData(self.spaceID, "state", str(state))
+        self.statusC = status
+        self.base.set_state(status)
+        KBEngine.setSpaceData(self.spaceID, "status", str(status))
 
-        if state == ROOM_STATE_INGAME:
+        if status == ROOM_STATE_INGAME:
             for pp in self.players.values():
                 pp.set_state(PLAYER_STATE_INGAME)
-
 
     def onEnter(self, player):
         """分配座位顺序"""
@@ -71,7 +70,7 @@ class ZjhRoom(KBEngine.Entity, ZjhLogic):
         DEBUG_MSG('%r::onEnter() space[%d] cid[%i]' % (self.className, self.spaceID, player.cid))
 
         #如果该房已开始游戏，则后面加入的玩家设置为灰色状态
-        if self.stateC != ROOM_STATE_INGAME:
+        if self.statusC != ROOM_STATE_INGAME:
             player.set_state(PLAYER_STATE_READY)
             if len(self.players) >= 2:
                 self.curRoomTime = self.roomTime
@@ -89,7 +88,7 @@ class ZjhRoom(KBEngine.Entity, ZjhLogic):
             if len(self.players) == 0:
                 self.destroy()
             elif len(self.players) < 2:
-                if self.stateC == ROOM_STATE_TIMER:
+                if self.statusC == ROOM_STATE_TIMER:
                     self.delTimerMgr(0)
                     self.set_state(ROOM_STATE_READY)
 
@@ -176,7 +175,7 @@ class ZjhRoom(KBEngine.Entity, ZjhLogic):
             pp.cards = getCardsby(cards, 3)
             pp.cardCount = len(pp.cards)
 
-            pp.goldC -= self.curDizhu
+            pp.gold -= self.curDizhu
             pp.cost += self.curDizhu
 
             chips = pp.chips
@@ -198,7 +197,7 @@ class ZjhRoom(KBEngine.Entity, ZjhLogic):
             for i in range(0, 5):
                 tCid = (self.curCid + i) % 5 + 1
                 if tCid in self.players:
-                    if self.players[tCid].stateC == PLAYER_STATE_INGAME:
+                    if self.players[tCid].statusC == PLAYER_STATE_INGAME:
                         self.curCid = tCid
                         break
 
@@ -216,7 +215,7 @@ class ZjhRoom(KBEngine.Entity, ZjhLogic):
         self.addTimerMgr(1, 1, ACTION_ROOM_NEXT)
 
         # 如果金币不足2倍，则自动比牌
-        if self.players[self.curCid].goldC < self.curDizhu * 2:
+        if self.players[self.curCid].gold < self.curDizhu * 2:
             self.addTimerMgr(1, 0, ACTION_ROOM_AUTOBIPAI)
         else:
             self.curAction = ACTION_ROOM_NONE
@@ -227,7 +226,7 @@ class ZjhRoom(KBEngine.Entity, ZjhLogic):
         """跟注"""
         curChip = self.curDizhu * player.lookcard
 
-        player.goldC -= curChip
+        player.gold -= curChip
         player.cost  += curChip
 
         chips = player.chips
@@ -250,7 +249,7 @@ class ZjhRoom(KBEngine.Entity, ZjhLogic):
 
             curChip = jzList[jzId] * player.lookcard
 
-            player.goldC -= curChip
+            player.gold -= curChip
             player.cost += curChip
 
             chips = player.chips
@@ -289,10 +288,10 @@ class ZjhRoom(KBEngine.Entity, ZjhLogic):
         curChip = self.curDizhu * mult
 
         #比牌玩家钱不足分在客户端处理，如果服务端收到钱不足的情况，不予处理
-        if player.goldC < curChip:
+        if player.gold < curChip:
             return
         else:
-            player.goldC -= curChip
+            player.gold -= curChip
             player.cost += curChip
 
             chips = player.chips
@@ -325,7 +324,7 @@ class ZjhRoom(KBEngine.Entity, ZjhLogic):
 
         count = 0
         for pp in self.players.values():
-            if pp.stateC == PLAYER_STATE_INGAME:
+            if pp.statusC == PLAYER_STATE_INGAME:
                 count += 1
                 self.winCid = pp.cid
 
@@ -344,7 +343,7 @@ class ZjhRoom(KBEngine.Entity, ZjhLogic):
         taxGold = Helper.Round((self.totalzhu - player.cost) * self.taxRateC)
 
         self.totalzhu -= taxGold
-        player.goldC += self.totalzhu
+        player.gold += self.totalzhu
 
         #更新base进程数据及税收
         player.set_gold(self.totalzhu)

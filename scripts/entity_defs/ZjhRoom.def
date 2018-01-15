@@ -5,10 +5,10 @@
 
 	<Properties>
 
-		<state>
+		<status>
 			<Type>			INT32				</Type>
 			<Flags>			BASE				</Flags>
-		</state>
+		</status>
 
 		<dizhu>
 			<Type>			FLOAT				</Type>
@@ -32,10 +32,10 @@
 
         <!-- Cell 属性 -->
 
-        <stateC>
+        <statusC>
 			<Type>			INT32				</Type>
 			<Flags>			ALL_CLIENTS				</Flags>
-		</stateC>
+		</statusC>
 
 		<dizhuC>
 			<Type>			FLOAT				</Type>

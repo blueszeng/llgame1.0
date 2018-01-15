@@ -40,16 +40,16 @@ class DdzRoom(KBEngine.Entity,RoomEntity):
         KBEngine.setSpaceData(self.spaceID, "curfen", "%.2f" % self.curfen)
         KBEngine.setSpaceData(self.spaceID, "multiple", str(self.multiple))
         KBEngine.setSpaceData(self.spaceID, "roomtime", str(self.roomtime))
-        KBEngine.setSpaceData(self.spaceID, "state", str(self.stateC))
+        KBEngine.setSpaceData(self.spaceID, "status", str(self.statusC))
 
-    def set_state(self,state):
+    def set_state(self, status):
 
-        DEBUG_MSG("%r::set_state() space[%r] state[%r]" % (self.className,self.spaceID,state))
+        DEBUG_MSG("%r::set_state() space[%r] state[%r]" % (self.className, self.spaceID, status))
 
-        self.stateC = state
-        KBEngine.setSpaceData(self.spaceID, "state", str(self.stateC))
+        self.statusC = status
+        KBEngine.setSpaceData(self.spaceID, "status", str(self.statusC))
 
-        self.base.set_state(state)
+        self.base.set_state(status)
 
     def onEnter(self, player):
 
@@ -346,8 +346,8 @@ class DdzRoom(KBEngine.Entity,RoomEntity):
             canWinGold = baseGold * allMult
             realWinGold = 0.0
 
-            if dzPlayer.goldC < canWinGold:
-                canWinGold = dzPlayer.goldC
+            if dzPlayer.gold < canWinGold:
+                canWinGold = dzPlayer.gold
 
             newBaseGold = Helper.Round(canWinGold/allMult)
 
@@ -355,20 +355,20 @@ class DdzRoom(KBEngine.Entity,RoomEntity):
 
                 settleGold = newBaseGold * pp.multiple
 
-                if pp.type == 2 and pp.goldC < settleGold:
-                    settleGold  = Helper.Round(pp.goldC)
+                if pp.type == 2 and pp.gold < settleGold:
+                    settleGold  = Helper.Round(pp.gold)
                     realWinGold += settleGold
-                    pp.goldC    = 0.0
+                    pp.gold    = 0.0
 
                 elif pp.type == 2:
                     realWinGold += settleGold
-                    pp.goldC    -= settleGold
+                    pp.gold    -= settleGold
 
-                pp.goldC    = Helper.Round(pp.goldC)
+                pp.gold    = Helper.Round(pp.gold)
 
                 data = {}
                 data["settleGold"]    = -settleGold
-                data["gold"]           = pp.goldC
+                data["gold"]           = pp.gold
                 data["cards"]          = copyList(pp.cards)
 
                 datas[pp.cid]           = data
@@ -378,20 +378,20 @@ class DdzRoom(KBEngine.Entity,RoomEntity):
             KBEngine.globalData["Games"].addIncome(taxGold)
 
             realWinGold     -= taxGold
-            dzPlayer.goldC  += realWinGold
+            dzPlayer.gold  += realWinGold
 
-            dzPlayer.goldC = Helper.Round(dzPlayer.goldC)
+            dzPlayer.gold = Helper.Round(dzPlayer.gold)
 
             data = {}
             data["settleGold"]   = realWinGold
-            data["gold"]         = dzPlayer.goldC
+            data["gold"]         = dzPlayer.gold
             data["cards"]        = copyList(dzPlayer.cards)
 
             datas[dzPlayer.cid]   = data
             dzPlayer.set_gold(realWinGold)
 
         else:
-            newBaseGold = Helper.Round(dzPlayer.goldC/allMult)
+            newBaseGold = Helper.Round(dzPlayer.gold/allMult)
             realLoseGold = 0.0
 
             for pp in self.players.values():
@@ -399,8 +399,8 @@ class DdzRoom(KBEngine.Entity,RoomEntity):
 
                     canWinGold = Helper.Round(baseGold * pp.multiple)
 
-                    if pp.goldC < canWinGold:
-                        canWinGold = Helper.Round(pp.goldC)
+                    if pp.gold < canWinGold:
+                        canWinGold = Helper.Round(pp.gold)
 
                     if canWinGold > (newBaseGold*pp.multiple):
                         canWinGold = (newBaseGold*pp.multiple)
@@ -408,30 +408,30 @@ class DdzRoom(KBEngine.Entity,RoomEntity):
                     realLoseGold += canWinGold
                     taxGold      =  round(canWinGold * self.taxRateC,2)
                     canWinGold   -= taxGold
-                    pp.goldC     += canWinGold
+                    pp.gold     += canWinGold
                     KBEngine.globalData["Games"].addIncome(taxGold)
 
-                    pp.goldC = Helper.Round(pp.goldC)
+                    pp.gold = Helper.Round(pp.gold)
 
                     data = {}
                     data["settleGold"]  = canWinGold
-                    data["gold"]        = pp.goldC
+                    data["gold"]        = pp.gold
                     data["cards"]       = copyList(pp.cards)
 
                     datas[pp.cid] = data
                     pp.set_gold(canWinGold)
 
-            dzPlayer.goldC -= realLoseGold
+            dzPlayer.gold -= realLoseGold
 
             #抹掉计算误差
-            if self.players[self.dzCid].goldC <= 0.01:
-                self.players[self.dzCid].goldC = 0.0
+            if self.players[self.dzCid].gold <= 0.01:
+                self.players[self.dzCid].gold = 0.0
 
-            dzPlayer.goldC = Helper.Round(dzPlayer.goldC)
+            dzPlayer.gold = Helper.Round(dzPlayer.gold)
 
             data = {}
             data["settleGold"]       = -realLoseGold
-            data["gold"]             = dzPlayer.goldC
+            data["gold"]             = dzPlayer.gold
             data["cards"]            = copyList(dzPlayer.cards)
 
             datas[self.dzCid]        = data

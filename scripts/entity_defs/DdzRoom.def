@@ -16,18 +16,18 @@
 			<Default>		0				</Default>
 		</taxRate>
 
-		<state>
+		<status>
 			<Type>			INT32				</Type>
 			<Flags>			BASE		</Flags>
 			<Default>		0				</Default>
-		</state>
+		</status>
 
   		<!-- Cell 属性 -->
-        <stateC>
+        <statusC>
 			<Type>			INT32				</Type>
 			<Flags>			ALL_CLIENTS		</Flags>
 			<Default>		0				</Default>
-		</stateC>
+		</statusC>
 
 		<difenC>
 			<Type>			FLOAT				</Type>

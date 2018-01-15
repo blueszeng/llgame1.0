@@ -33,7 +33,7 @@ class ZjhAvatar(KBEngine.Proxy,GameObject):
             self.cellData["cost"] = 0.0
             self.cellData["chips"] = []
             self.cellData["lookcard"] = 1
-            self.cellData["stateC"] = Rules_ZJH.PLAYER_STATE_GARK
+            self.cellData["statusC"] = Rules_ZJH.PLAYER_STATE_GARK
             self.cellData["first"] = 0
 
             self.createCellEntity(space)
@@ -51,7 +51,7 @@ class ZjhAvatar(KBEngine.Proxy,GameObject):
 
     def onClientDeath(self):
 
-        if self.state != Rules_ZJH.PLAYER_STATE_INGAME:
+        if self.status != Rules_ZJH.PLAYER_STATE_INGAME:
             if self.cell:
                 self.destroyCellEntity()
             else:
@@ -72,13 +72,11 @@ class ZjhAvatar(KBEngine.Proxy,GameObject):
 
     def set_gold(self, settleGold):
 
-        gold = Helper.Round(settleGold)
-        self.gold += gold
-        self.activeProxy.gold = self.gold
+        self.activeProxy.gold = Helper.Round(settleGold)
 
-        DEBUG_MSG("%r[%r]::set_gold() gold[%r] settleGold[%r]" %(self.className,self.id,self.gold,settleGold))
+        DEBUG_MSG("%r[%r]::set_gold() gold[%r] settleGold[%r]" %(self.className,self.id,self.activeProxy.gold,settleGold))
 
-    def set_state(self,state):
+    def set_state(self, status):
 
-        self.state = state
+        self.status = status
 

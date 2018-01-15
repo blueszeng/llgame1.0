@@ -17,7 +17,7 @@ class DdzHall(KBEngine.Base,BaseObject):
 
 	def reqEnter(self,player):
 
-		if player.gold < d_DDZ[self.cid]["limit"]:
+		if player.cellData['gold'] < d_DDZ[self.cid]["limit"]:
 
 			DEBUG_MSG("%r::reqEnter() Entity[%r] Gold < Limit" % (self.className, player.id))
 			if player.client:

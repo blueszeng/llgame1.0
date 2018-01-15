@@ -136,25 +136,25 @@ class Player(KBEngine.Proxy,GameObject):
 		"""
 		KBEngine.globalData["Ranks"].reqMyRankInfo(self)
 
-	def reqEnterGame(self, game):
+	def reqEnterGame(self, gameName):
 
-		if self.activeProxy == None and game in d_games:
+		if self.activeProxy == None and gameName in d_games:
 
-			className = d_games[game]['sign'] + "Avatar"
+			className = d_games[gameName]['sign'] + "Avatar"
 
-			avatar = KBEngine.createBaseLocally(className, {"gold": self.gold})
+			avatar = KBEngine.createBaseLocally(className,{})
 			if avatar:
-				avatar.cellData["nameC"] = self.name
-				avatar.cellData["goldC"] = self.gold
-				avatar.cellData["sexC"] = self.sex
-				avatar.cellData["headC"] = self.head
-				avatar.cellData["addrC"] = self.addr
+				avatar.cellData["name"] = self.name
+				avatar.cellData["gold"] = self.gold
+				avatar.cellData["sex"] = self.sex
+				avatar.cellData["head"] = self.head
+				avatar.cellData["addr"] = self.addr
 
 				self.activeProxy = avatar
 
 				self.giveClientTo(avatar)
 
-				avatar.reqEnterGame(game)
+				avatar.reqEnterGame(gameName)
 				avatar.activeProxy = self
 		else:
 			self.client.onEnterGame(self.activeProxy.game.className)

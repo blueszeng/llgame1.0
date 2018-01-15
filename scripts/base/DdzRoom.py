@@ -15,25 +15,25 @@ class DdzRoom(KBEngine.Base,BaseObject):
 
         self.cellData["difenC"]         = self.difen
         self.cellData["taxRateC"]       = self.taxRate
-        self.cellData["stateC"]         = self.state
+        self.cellData["statusC"]         = self.status
 
         self.createInNewSpace(None)
 
-    def set_state(self,state):
+    def set_state(self, status):
 
-        self.state = state
+        self.status = status
 
         for pp in self.players.values():
             #游戏结束，因为只能在base进程中检测client状态
             #所以需要把游戏状态发回base进程
-            if self.state == ROOM_STATE_FINISH :
+            if self.status == ROOM_STATE_FINISH :
 
                 pp.state = ROOM_STATE_READY
 
                 if not pp.client and pp.cell:
                     pp.destroyCellEntity()
             else:
-                pp.state = state
+                pp.state = status
 
     def onGetCell(self):
         """
@@ -62,13 +62,13 @@ class DdzRoom(KBEngine.Base,BaseObject):
 
         super().reqEnter(player)
 
-        if self.state == ROOM_STATE_READY:
+        if self.status == ROOM_STATE_READY:
             player.createCell(self.cell)
 
     def reqLeave(self,player):
 
         #如果房间正在游戏中，不予处理
-        if self.state == ROOM_STATE_INGAME:
+        if self.status == ROOM_STATE_INGAME:
             return
 
         super().reqLeave(player)
@@ -81,7 +81,7 @@ class DdzRoom(KBEngine.Base,BaseObject):
         DEBUG_MSG("%r[%r]::reqContinue() Entity[%r] EntityCount[%r]" % (self.className,self.id,player.id, len(self.players)))
 
         # 如果房间正在游戏中，不予处理
-        if self.state == ROOM_STATE_INGAME:
+        if self.status == ROOM_STATE_INGAME:
             return
 
         if player.cell:

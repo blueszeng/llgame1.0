@@ -4,48 +4,11 @@
 	</Interfaces>
 
 	<Properties>
-
-        <name>
-                <Type>			UNICODE					</Type>
-                <Flags>			BASE_AND_CLIENT	      	</Flags>
-                <Default>								</Default>
-                <Persistent>		true				</Persistent>
-        </name>
-
-        <gold>
-                <Type>			FLOAT					</Type>
-                <Flags>			BASE_AND_CLIENT	 		</Flags>
-                <Default>								</Default>
-                <Persistent>		true				</Persistent>
-        </gold>
-
-        <sex>
-                <Type>			INT32					</Type>
-                <Flags>			BASE_AND_CLIENT	 		</Flags>
-                <Default>								</Default>
-                <Persistent>		true				</Persistent>
-        </sex>
-
-        <head>
-                <Type>			INT32					</Type>
-                <Flags>			BASE_AND_CLIENT	 		</Flags>
-                <Default>								</Default>
-                <Persistent>	true				</Persistent>
-        </head>
-
-        <addr>
-                <Type>			UNICODE					</Type>
-                <Flags>			BASE_AND_CLIENT	 		</Flags>
-                <Default>								</Default>
-                <Persistent>	true				</Persistent>
-        </addr>
-
-        <!-- 0在线，1游戏中 -->
-        <state>
+        <status>
                 <Type>			INT32					</Type>
                 <Flags>			BASE_AND_CLIENT	 		</Flags>
                 <Default>		0						</Default>
-        </state>
+        </status>
 
         <cid>
                 <Type>		INT32				</Type>
@@ -71,35 +34,35 @@
                 <Default>		0				</Default>
         </cardCount>
 
-        <nameC>
+        <name>
                 <Type>			UNICODE					</Type>
                 <Flags>			ALL_CLIENTS	      	</Flags>
                 <Default>								</Default>
-        </nameC>
+        </name>
 
-        <goldC>
+        <gold>
                 <Type>			FLOAT					</Type>
                 <Flags>			ALL_CLIENTS	 		</Flags>
                 <Default>								</Default>
-        </goldC>
+        </gold>
 
-        <sexC>
+        <sex>
                 <Type>			INT32					</Type>
                 <Flags>			ALL_CLIENTS	 		</Flags>
                 <Default>								</Default>
-        </sexC>
+        </sex>
 
-        <headC>
+        <head>
                 <Type>			INT32					</Type>
                 <Flags>			ALL_CLIENTS	 		</Flags>
                 <Default>								</Default>
-        </headC>
+        </head>
 
-        <addrC>
+        <addr>
                 <Type>			UNICODE					</Type>
                 <Flags>			ALL_CLIENTS	 		   </Flags>
                 <Default>								</Default>
-        </addrC>
+        </addr>
 
         <cost>
 	        <Type>			FLOAT					</Type>
@@ -125,11 +88,11 @@
                 <Default>		0						</Default>
         </first>
 
-        <stateC>
-                <Type>			INT32					</Type>
+        <statusC>
+                <Type>			INT32				   </Type>
                 <Flags>			ALL_CLIENTS	 		   </Flags>
                 <Default>		0						</Default>
-        </stateC>
+        </statusC>
 
 	</Properties>
 

@@ -19,7 +19,7 @@ class ZjhHall(KBEngine.Base,BaseObject):
 
 	def reqEnter(self,player):
 
-		if player.gold < d_ZJH[self.cid]["limit"]:
+		if player.cellData['gold'] < d_ZJH[self.cid]["limit"]:
 			if player.client:
 				player.client.onEnterHall("")
 			WARNING_MSG("%r::reqEnter() Entity[%r] Gold < Limit" % (self.className, player.id))

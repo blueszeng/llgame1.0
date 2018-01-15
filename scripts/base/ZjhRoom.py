@@ -18,16 +18,16 @@ class ZjhRoom(KBEngine.Base,BaseObject):
         self.cellData["dizhuC"]         = self.dizhu
         self.cellData["taxRateC"]       = self.taxRate
         self.cellData["jzListC"]        = self.jzList
-        self.cellData["stateC"]         = Rules_ZJH.ROOM_STATE_READY
+        self.cellData["statusC"]         = Rules_ZJH.ROOM_STATE_READY
 
         self.createInNewSpace(None)
 
-    def set_state(self,state):
+    def set_state(self, status):
         # 游戏结束，因为只能在base进程中检测client状态
         # 所以需要把游戏状态发回base进程
-        self.state = state
+        self.status = status
 
-        if state == Rules_ZJH.ROOM_STATE_FINISH:
+        if status == Rules_ZJH.ROOM_STATE_FINISH:
             for pp in self.players.values():
                 if not pp.client and pp.cell:
                     pp.destroyCellEntity()
@@ -62,7 +62,7 @@ class ZjhRoom(KBEngine.Base,BaseObject):
 
     def reqLeave(self, player):
 
-        if player.state == Rules_ZJH.PLAYER_STATE_INGAME:
+        if player.status == Rules_ZJH.PLAYER_STATE_INGAME:
             if player.client:
                 player.client.onLeaveHall()
                 player.changeClient()
