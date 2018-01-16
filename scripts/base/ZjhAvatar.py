@@ -29,12 +29,11 @@ class ZjhAvatar(KBEngine.Proxy,GameObject):
             self.cellData["cards"] = []
             self.cellData["cardCount"] = 0
             self.cellData["showCards"] = []
-
             self.cellData["cost"] = 0.0
             self.cellData["chips"] = []
             self.cellData["lookcard"] = 1
-            self.cellData["statusC"] = Rules_ZJH.PLAYER_STATE_GARK
             self.cellData["first"] = 0
+            self.cellData["statusC"] = Rules_ZJH.PLAYER_STATE_GARK
 
             self.createCellEntity(space)
 
