@@ -24,24 +24,13 @@ class ZjhAvatar(KBEngine.Proxy,GameObject):
         export method.
         """
         if not self.cell:
-            self.status = Rules_ZJH.PLAYER_STATE_GARK
-            self.cellData["cid"] = 0
-            self.cellData["cards"] = []
-            self.cellData["cardCount"] = 0
-            self.cellData["showCards"] = []
-            self.cellData["chips"] = []
-            self.cellData["cost"] = 0.0
-            self.cellData["lookcard"] = 1
-            self.cellData["makers"] = 0
-            self.cellData["cellStatus"] = self.status
-
             self.createCellEntity(space)
 
     def onLoseCell(self):
         """
         KBEngine method.
         """
-        DEBUG_MSG("%r[%r]::onLoseCell()" % (self.className, self.id))
+        # DEBUG_MSG("%r[%r]::onLoseCell()" % (self.className, self.id))
 
         if not self.client:
             self.exitGame()
@@ -58,7 +47,7 @@ class ZjhAvatar(KBEngine.Proxy,GameObject):
 
     def onDestroy(self):
 
-        DEBUG_MSG("%r[%r]::onDestroy() " %(self.className,self.id))
+        DEBUG_MSG("%r(%r)::onDestroy " % (self.className, self.account))
 
     def reqLeaveGame(self):
         super().reqLeaveGame()

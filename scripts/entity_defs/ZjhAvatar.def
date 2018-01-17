@@ -56,7 +56,7 @@
         <cards>
                 <Type>	ARRAY <of> UINT8 </of>    </Type>
                 <Flags>		OWN_CLIENT			</Flags>
-                <Default>		0				</Default>
+                <Default>						</Default>
         </cards>
 
         <showCards>

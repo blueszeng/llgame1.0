@@ -5,6 +5,7 @@
                 <Flags>			BASE	      	</Flags>
                 <Default>		0				</Default>
         </cid>
+
 	</Properties>
 
 	<ClientMethods>
