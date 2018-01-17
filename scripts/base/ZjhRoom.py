@@ -15,14 +15,15 @@ class ZjhRoom(KBEngine.Base,BaseObject):
 
         self.players = {}
 
+        self.status = Rules_ZJH.ROOM_STATE_READY
         self.cellData["dizhuC"]         = self.dizhu
         self.cellData["taxRateC"]       = self.taxRate
         self.cellData["jzListC"]        = self.jzList
-        self.cellData["statusC"]         = Rules_ZJH.ROOM_STATE_READY
+        self.cellData["statusC"]        = self.status
 
         self.createInNewSpace(None)
 
-    def set_state(self, status):
+    def setStatus(self, status):
         # 游戏结束，因为只能在base进程中检测client状态
         # 所以需要把游戏状态发回base进程
         self.status = status

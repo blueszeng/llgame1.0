@@ -56,9 +56,9 @@
 
 	<BaseMethods>
 
-		<set_state>
+		<setStatus>
 		    <Arg>	INT32	</Arg>
-		</set_state>
+		</setStatus>
 
 	</BaseMethods>
 
@@ -78,9 +78,9 @@
             <Arg> UNICODE </Arg>
         </reqMessage>
 
-        <set_state>
+        <setStatus>
 		    <Arg>	INT32	</Arg>
-		</set_state>
+		</setStatus>
 
 	</CellMethods>
 </root>

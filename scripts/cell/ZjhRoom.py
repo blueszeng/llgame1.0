@@ -15,8 +15,8 @@ class ZjhRoom(KBEngine.Entity, ZjhLogic):
         self.roomTime   = 10
         self.curRoomTime = 0
 
-        #先手ID
-        self.firstCid = 0
+        #庄家
+        self.makersCid = 0
         self.winCid  = 0
 
         self.reset()
@@ -33,7 +33,7 @@ class ZjhRoom(KBEngine.Entity, ZjhLogic):
         #总下注
         self.totalzhu = 0
         self.curAction = ACTION_ROOM_NONE
-        self.set_state(ROOM_STATE_READY)
+        self.setStatus(ROOM_STATE_READY)
 
         KBEngine.setSpaceData(self.spaceID, "dizhu", str(self.dizhuC))
         KBEngine.setSpaceData(self.spaceID, "curDizhu", str(self.curDizhu))
@@ -42,16 +42,16 @@ class ZjhRoom(KBEngine.Entity, ZjhLogic):
         KBEngine.setSpaceData(self.spaceID, "curRound", str(self.curRound))
         KBEngine.setSpaceData(self.spaceID, "status", str(self.statusC))
 
-    def set_state(self, status):
-        DEBUG_MSG("%r::set_state space[%r] status[%r]" % (self.className, self.spaceID, status))
+    def setStatus(self, status):
+        DEBUG_MSG("%r::setStatus space[%r] status[%r]" % (self.className, self.spaceID, status))
 
         self.statusC = status
-        self.base.set_state(status)
+        self.base.setStatus(status)
         KBEngine.setSpaceData(self.spaceID, "status", str(status))
 
         if status == ROOM_STATE_INGAME:
             for pp in self.players.values():
-                pp.set_state(PLAYER_STATE_INGAME)
+                pp.setStatus(PLAYER_STATE_INGAME)
 
     def onEnter(self, player):
         """分配座位顺序"""
@@ -71,12 +71,13 @@ class ZjhRoom(KBEngine.Entity, ZjhLogic):
 
         #如果该房已开始游戏，则后面加入的玩家设置为灰色状态
         if self.statusC != ROOM_STATE_INGAME:
-            player.set_state(PLAYER_STATE_READY)
+
+            player.setStatus(PLAYER_STATE_READY)
             if len(self.players) >= 2:
                 self.curRoomTime = self.roomTime
                 self.addTimerMgr(1, 1, ACTION_ROOM_TIMER)
         else:
-            player.set_state(PLAYER_STATE_GARK)
+            player.setStatus(PLAYER_STATE_GARK)
 
     def onLeave(self, player):
 
@@ -90,7 +91,7 @@ class ZjhRoom(KBEngine.Entity, ZjhLogic):
             elif len(self.players) < 2:
                 if self.statusC == ROOM_STATE_TIMER:
                     self.delTimerMgr(0)
-                    self.set_state(ROOM_STATE_READY)
+                    self.setStatus(ROOM_STATE_READY)
 
     def onTimer(self, id, userArg):
         """
@@ -103,11 +104,11 @@ class ZjhRoom(KBEngine.Entity, ZjhLogic):
 
         if userArg == ACTION_ROOM_TIMER:
             self.curRoomTime -= 1
-            self.set_state(ROOM_STATE_TIMER)
+            self.setStatus(ROOM_STATE_TIMER)
 
             if self.curRoomTime <= 0:
                 self.delTimerMgr(0)
-                self.set_state(ROOM_STATE_INGAME)
+                self.setStatus(ROOM_STATE_INGAME)
                 self.onDispatchCards()
                 self.onNextPlayer()
 
@@ -128,14 +129,14 @@ class ZjhRoom(KBEngine.Entity, ZjhLogic):
                 pp.chips = []
                 pp.cardCount = 0
                 pp.lookcard = 1
-                pp.set_state(PLAYER_STATE_READY)
+                pp.setStatus(PLAYER_STATE_READY)
 
             if len(self.players) >= 2:
                 self.curRoomTime = self.roomTime
                 self.addTimerMgr(1, 1, ACTION_ROOM_TIMER)
             else:
                 self.delTimerMgr(0)
-                self.set_state(ROOM_STATE_READY)
+                self.setStatus(ROOM_STATE_READY)
 
         elif userArg == ACTION_ROOM_AUTOBIPAI:
             self.delTimerMgr(0)
@@ -191,18 +192,18 @@ class ZjhRoom(KBEngine.Entity, ZjhLogic):
 
         if self.curCid == 0:
             self.curCid = random.randint(1, len(self.players))
-            self.firstCid = self.curCid
-            self.players[self.curCid].first = 1
+            self.makersCid = self.curCid
+            self.players[self.curCid].makers = 1
         else:
             for i in range(0, 5):
                 tCid = (self.curCid + i) % 5 + 1
                 if tCid in self.players:
-                    if self.players[tCid].statusC == PLAYER_STATE_INGAME:
+                    if self.players[tCid].cellStatus == PLAYER_STATE_INGAME:
                         self.curCid = tCid
                         break
 
         # 计算回合数
-        if self.firstCid == self.curCid:
+        if self.makersCid == self.curCid:
             self.curRound += 1
             if (self.curRound <= 15):
                 KBEngine.setSpaceData(self.spaceID, "curRound", str(self.curRound))
@@ -312,7 +313,7 @@ class ZjhRoom(KBEngine.Entity, ZjhLogic):
 
     def onQipai(self,player,buf):
 
-        player.set_state(PLAYER_STATE_QIPAI)
+        player.setStatus(PLAYER_STATE_QIPAI)
 
         if self.onCheckResult():
             self.onSettle()
@@ -324,7 +325,7 @@ class ZjhRoom(KBEngine.Entity, ZjhLogic):
 
         count = 0
         for pp in self.players.values():
-            if pp.statusC == PLAYER_STATE_INGAME:
+            if pp.cellStatus == PLAYER_STATE_INGAME:
                 count += 1
                 self.winCid = pp.cid
 
@@ -346,10 +347,10 @@ class ZjhRoom(KBEngine.Entity, ZjhLogic):
         player.gold += self.totalzhu
 
         #更新base进程数据及税收
-        player.set_gold(self.totalzhu)
+        player.setGold(self.totalzhu)
 
         for pp in self.players.values():
-            pp.set_gold(-pp.cost)
+            pp.setGold(-pp.cost)
 
         KBEngine.globalData["Games"].addIncome(taxGold)
 
@@ -358,7 +359,7 @@ class ZjhRoom(KBEngine.Entity, ZjhLogic):
             pp.showCards = pp.cards
 
         self.sendAllClients(ACTION_ROOM_SETTLE,str(self.winCid))
-        self.set_state(ROOM_STATE_FINISH)
+        self.setStatus(ROOM_STATE_FINISH)
         self.addTimerMgr(2,0,ACTION_ROOM_SETTLE)
 
 

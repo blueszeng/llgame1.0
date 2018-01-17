@@ -91,5 +91,5 @@ class DdzAvatar(KBEngine.Proxy,GameObject):
 
     def set_gold(self, settleGold):
 
-        self.activeProxy.gold = Helper.Round(settleGold)
+        self.activeProxy.gold += Helper.Round(settleGold)
         DEBUG_MSG("%r[%r]::set_gold() gold[%r] settleGold[%r]" %(self.className,self.id,self.activeProxy.gold,settleGold))

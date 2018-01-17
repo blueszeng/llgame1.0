@@ -4,35 +4,12 @@
 	</Interfaces>
 
 	<Properties>
+
         <status>
-                <Type>			INT32					</Type>
+                <Type>			UINT8					</Type>
                 <Flags>			BASE_AND_CLIENT	 		</Flags>
                 <Default>		0						</Default>
         </status>
-
-        <cid>
-                <Type>		INT32				</Type>
-                <Flags>		ALL_CLIENTS			</Flags>
-                <Default>		0				</Default>
-        </cid>
-
-        <cards>
-                <Type>	ARRAY <of> INT32 </of>    </Type>
-                <Flags>		OWN_CLIENT			</Flags>
-                <Default>		0				</Default>
-        </cards>
-
-        <showCards>
-                <Type>	ARRAY <of> INT32 </of>    </Type>
-                <Flags>		ALL_CLIENTS			</Flags>
-                <Default>		0				</Default>
-        </showCards>
-
-        <cardCount>
-                <Type>		INT32				</Type>
-                <Flags>		OTHER_CLIENTS			</Flags>
-                <Default>		0				</Default>
-        </cardCount>
 
         <name>
                 <Type>			UNICODE					</Type>
@@ -64,6 +41,36 @@
                 <Default>								</Default>
         </addr>
 
+        <cid>
+                <Type>		UINT8				</Type>
+                <Flags>		ALL_CLIENTS			</Flags>
+                <Default>		0				</Default>
+        </cid>
+
+        <cellStatus>
+                <Type>			UINT8				   </Type>
+                <Flags>			ALL_CLIENTS	 		   </Flags>
+                <Default>		0						</Default>
+        </cellStatus>
+
+        <cards>
+                <Type>	ARRAY <of> UINT8 </of>    </Type>
+                <Flags>		OWN_CLIENT			</Flags>
+                <Default>		0				</Default>
+        </cards>
+
+        <showCards>
+                <Type>	ARRAY <of> UINT8 </of>    </Type>
+                <Flags>		ALL_CLIENTS			</Flags>
+                <Default>		0				</Default>
+        </showCards>
+
+        <cardCount>
+                <Type>		UINT8				</Type>
+                <Flags>		OTHER_CLIENTS			</Flags>
+                <Default>		0				</Default>
+        </cardCount>
+
         <cost>
 	        <Type>			FLOAT					</Type>
 			<Flags>			ALL_CLIENTS	 		   </Flags>
@@ -73,26 +80,20 @@
         <chips>
                 <Type>	ARRAY <of> FLOAT </of>    </Type>
                 <Flags>		ALL_CLIENTS			</Flags>
-                <Default>		0				</Default>
+                <Default>						</Default>
         </chips>
 
         <lookcard>
                 <Type>			UINT8					</Type>
                 <Flags>			ALL_CLIENTS	 		    </Flags>
-                <Default>			0					</Default>
+                <Default>			1					</Default>
         </lookcard>
 
-        <first>
+        <makers>
                 <Type>			UINT8					</Type>
                 <Flags>			ALL_CLIENTS	 		</Flags>
                 <Default>		0						</Default>
-        </first>
-
-        <statusC>
-                <Type>			INT32				   </Type>
-                <Flags>			ALL_CLIENTS	 		   </Flags>
-                <Default>		0						</Default>
-        </statusC>
+        </makers>
 
 	</Properties>
 
@@ -105,25 +106,25 @@
 			<Arg>		MAILBOX					</Arg>
 		</createCell>
 
-        <set_gold>
+        <setGold>
             <Arg> FLOAT</Arg>
-        </set_gold>
+        </setGold>
 
-        <set_state>
+        <setStatus>
             <Arg> INT32</Arg>
-        </set_state>
+        </setStatus>
 
 	</BaseMethods>
 
 	<CellMethods>
 
-        <set_gold>
+        <setGold>
             <Arg> FLOAT</Arg>
-        </set_gold>
+        </setGold>
 
-        <set_state>
+        <setStatus>
             <Arg> INT32</Arg>
-        </set_state>
+        </setStatus>
 
 	</CellMethods>
 

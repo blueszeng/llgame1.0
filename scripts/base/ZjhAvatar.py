@@ -24,16 +24,16 @@ class ZjhAvatar(KBEngine.Proxy,GameObject):
         export method.
         """
         if not self.cell:
-
+            self.status = Rules_ZJH.PLAYER_STATE_GARK
             self.cellData["cid"] = 0
             self.cellData["cards"] = []
             self.cellData["cardCount"] = 0
             self.cellData["showCards"] = []
-            self.cellData["cost"] = 0.0
             self.cellData["chips"] = []
+            self.cellData["cost"] = 0.0
             self.cellData["lookcard"] = 1
-            self.cellData["first"] = 0
-            self.cellData["statusC"] = Rules_ZJH.PLAYER_STATE_GARK
+            self.cellData["makers"] = 0
+            self.cellData["cellStatus"] = self.status
 
             self.createCellEntity(space)
 
@@ -69,13 +69,13 @@ class ZjhAvatar(KBEngine.Proxy,GameObject):
         self.activeProxy.reqLeaveGame()
         self.destroy()
 
-    def set_gold(self, settleGold):
+    def setGold(self, settleGold):
 
-        self.activeProxy.gold = Helper.Round(settleGold)
+        self.activeProxy.gold += Helper.Round(settleGold)
 
-        DEBUG_MSG("%r[%r]::set_gold() gold[%r] settleGold[%r]" %(self.className,self.id,self.activeProxy.gold,settleGold))
+        DEBUG_MSG("%r[%r]::setGold() gold[%r] settleGold[%r]" %(self.className,self.id,self.activeProxy.gold,settleGold))
 
-    def set_state(self, status):
+    def setStatus(self, status):
 
         self.status = status
 

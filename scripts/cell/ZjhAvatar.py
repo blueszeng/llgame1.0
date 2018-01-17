@@ -20,14 +20,14 @@ class ZjhAvatar(KBEngine.Entity,EntityCommon):
         """
         self.getCurrRoom().onLeave(self)
 
-    def set_gold(self,gold):
+    def setGold(self,gold):
 
-        self.base.set_gold(gold)
+        self.base.setGold(gold)
 
-    def set_state(self,state):
+    def setStatus(self, status):
 
-        self.stateC = state
-        self.base.set_state(state)
+        self.cellStatus = status
+        self.base.setStatus(status)
 
     def reqMessageC(self,exposed,action,buf):
         if exposed != self.id:

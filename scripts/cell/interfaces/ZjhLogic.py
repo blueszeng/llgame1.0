@@ -31,7 +31,7 @@ class ZjhLogic(RoomEntity):
         data["result"] = bResult
         data["auto"] = auto
 
-        KBEngine.setSpaceData(self.spaceID, "compareResult", json.dumps(data))
+        self.sendAllClients(Rules_ZJH.ACTION_ROOM_BIPAI,json.dumps(data))
         self.invoke4(3, self.onLastCompareCards, player, tPlayer, auto, bResult)
 
     def onLastCompareCards(self, player, target, auto,result):
@@ -39,9 +39,9 @@ class ZjhLogic(RoomEntity):
         DEBUG_MSG("%r::onLastCompareCards()" % (self.className))
 
         if result:
-            target.set_state(Rules_ZJH.PLAYER_STATE_GARK)
+            target.setStatus(Rules_ZJH.PLAYER_STATE_GARK)
         else:
-            player.set_state(Rules_ZJH.PLAYER_STATE_GARK)
+            player.setStatus(Rules_ZJH.PLAYER_STATE_GARK)
 
         if self.onCheckResult():
             self.onSettle()

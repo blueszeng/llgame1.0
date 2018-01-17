@@ -20,6 +20,7 @@
         </onMessage>
 
 		<onEnterGame>
+		    <Arg>	UINT8	</Arg>
 		    <Arg>	UNICODE	</Arg>
 		</onEnterGame>
 

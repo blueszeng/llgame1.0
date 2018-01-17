@@ -32,7 +32,7 @@ class ZjhGame(KBEngine.Base,BaseObject):
         super().reqEnter(player)
 
         if player.client:
-            player.client.onEnterGame(self.className)
+            player.client.onEnterGame(0,self.className)
 
     def reqLeave(self,player):
         super().reqLeave(player)

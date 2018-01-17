@@ -45,7 +45,8 @@ class Player(KBEngine.Proxy,GameObject):
 		KBEngine method.
 		客户端对应实体已经销毁
 		"""
-		self.destroy()
+		if self.activeProxy == None:
+			self.destroy()
 
 	def onDestroy(self):
 
@@ -157,7 +158,7 @@ class Player(KBEngine.Proxy,GameObject):
 				avatar.reqEnterGame(gameName)
 				avatar.activeProxy = self
 		else:
-			self.client.onEnterGame(self.activeProxy.game.className)
+			self.client.onEnterGame(1,self.activeProxy.game.className)
 
 	def reqLeaveGame(self):
 
