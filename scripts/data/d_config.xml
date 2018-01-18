@@ -1,10 +1,71 @@
 <root>
-    <zjh taxRate = "0.04">
-        <base> 0.04 </base>
-        <limit> 0.04 </limit>
-        <limit> 0.04 </limit>
+    <!--炸金花配置-->
+    <zjh taxRate = "0.05">
+        <p1>
+            <base> 1.0 </base>
+            <limit> 50.0 </limit>
+            <plus>
+                <item>3.0</item>
+                <item>5.0</item>
+                <item>8.0</item>
+                <item>10.0</item>
+            </plus>
+        </p1>
+        <p2>
+            <base> 2.0 </base>
+            <limit> 120.0 </limit>
+            <plus>
+                <item>6.0</item>
+                <item>10.0</item>
+                <item>16.0</item>
+                <item>20.0</item>
+            </plus>
+        </p2>
+        <p3>
+            <base> 5.0 </base>
+            <limit> 300.0 </limit>
+            <plus>
+                <item>15.0</item>
+                <item>25.0</item>
+                <item>40.0</item>
+                <item>50.0</item>
+            </plus>
+        </p3>
+        <p4>
+            <base> 10.0 </base>
+            <limit> 600.0 </limit>
+            <plus>
+                <item>30.0</item>
+                <item>50.0</item>
+                <item>80.0</item>
+                <item>100.0</item>
+            </plus>
+        </p4>
     </zjh>
+
+    <!--斗地主配置-->
     <ddz taxRate = "0.05">
-        <taxRate> 0.05 </taxRate>
+        <p1>
+            <base> 0.1 </base>
+            <limit> 2.0 </limit>
+        </p1>
+        <p2>
+            <base> 1.0 </base>
+            <limit> 18.0 </limit>
+        </p2>
+        <p3>
+            <base> 3.0 </base>
+            <limit> 72.0 </limit>
+        </p3>
+        <p4>
+            <base> 6.0 </base>
+            <limit> 150.0 </limit>
+        </p4>
     </ddz>
+
+    <!--公告板-->
+    <bulletin>
+        系统正在升级，近期将公告开服时间! QQ客服：1151351916
+    </bulletin>
+
 </root>

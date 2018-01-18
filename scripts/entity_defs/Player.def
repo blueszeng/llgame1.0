@@ -111,17 +111,14 @@
 			<Arg>  INT32 </Arg>
 		</onReviseProperties>
 
-		<onNoticeInfos>
+        <!--广播 -->
+		<onBroadcast>
 		    <Arg>  UNICODE </Arg>
-		</onNoticeInfos>
+		</onBroadcast>
 
 		<onRanksInfo>
 		    <Arg>  UNICODE </Arg>
 		</onRanksInfo>
-
-		<onMyRankInfo>
-		    <Arg>  UNICODE </Arg>
-		</onMyRankInfo>
 
 		<onRefresh>
 			 <Arg>  UNICODE </Arg>
@@ -143,10 +140,6 @@
         <reqRefresh>
 			<Exposed/>
 		</reqRefresh>
-
-        <reqGamesConfig>
-			<Exposed/>
-		</reqGamesConfig>
 
         <reqCashInfo>
 			<Exposed/>
@@ -176,17 +169,9 @@
 			<Arg>  INT32 </Arg>
 		</reqReviseProperties>
 
-		<reqNoticeInfos>
-			<Exposed/>
-		</reqNoticeInfos>
-
 		<reqRanksInfo>
 	        <Exposed/>
 	    </reqRanksInfo>
-
-	    <reqMyRankInfo>
-	        <Exposed/>
-	    </reqMyRankInfo>
 
 		<reqRestoreGame>
             <Exposed/>

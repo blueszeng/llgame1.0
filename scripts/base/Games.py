@@ -55,12 +55,6 @@ class Games(KBEngine.Base,BaseObject):
 		for name in delList:
 			del self.orders[name]
 
-	def reqGamesConfig(self,player):
-		"""
-		获取游戏配置
-		"""
-		player.client.onGamesConfig(json.dumps(d_config.d_users))
-
 	def reqGamesInfo(self,player):
 		"""请求游戏信息"""
 		results = []

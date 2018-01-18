@@ -24,7 +24,7 @@ class Player(KBEngine.Proxy,GameObject):
 
 		self.Games().reqEnter(self)
 
-		# self.streamFileToClient("data/d_config.py","d_config")
+		# self.streamFileToClient("data/d_config.xml","d_config")
 
 		#如果是机器人，则直接初始化属性
 		if self.getClientType() == 6:
@@ -108,34 +108,17 @@ class Player(KBEngine.Proxy,GameObject):
 		#retcode 0为存取成功，-1为存取失败，防止作弊
 		self.client.onAccessBank(retcode,self.gold,self.bankGold)
 
-	def reqNoticeInfos(self):
-		"""
-		Exposed
-		获取静态公告以及滑动公告信息
-		"""
-		notice_string = json.dumps(d_notice)
-		self.client.onNoticeInfos(notice_string)
-
 	def reqGamesInfo(self):
 		"""
 		请求游戏类型，游戏信息，游戏在线人数
 		"""
 		self.Games().reqGamesInfo(self)
 
-	def reqGamesConfig(self):
-		self.Games().reqGamesConfig(self)
-
 	def reqRanksInfo(self):
 		"""
 		Exposed
 		"""
 		KBEngine.globalData["Ranks"].reqRanksInfo(self)
-
-	def reqMyRankInfo(self):
-		"""
-		Exposed
-		"""
-		KBEngine.globalData["Ranks"].reqMyRankInfo(self)
 
 	def reqEnterGame(self, gameName):
 
@@ -192,7 +175,6 @@ class Player(KBEngine.Proxy,GameObject):
 
 	def reqCash(self,amount,alipay):
 		#请求兑现
-		INFO_MSG("Player::reqCash")
 		retcode = 0
 		income  = 0
 		if self.alipay != alipay:

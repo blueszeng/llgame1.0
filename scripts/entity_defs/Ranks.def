@@ -7,14 +7,8 @@
 
 	<BaseMethods>
 	    <reqRanksInfo>
-	        <Exposed/>
 	        <Arg> MAILBOX </Arg>
 	    </reqRanksInfo>
-
-	    <reqMyRankInfo>
-	        <Exposed/>
-	        <Arg> MAILBOX </Arg>
-	    </reqMyRankInfo>
 	</BaseMethods>
 
 	<CellMethods>
