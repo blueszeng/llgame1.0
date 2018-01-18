@@ -64,6 +64,10 @@
 
 	<ClientMethods>
 
+        <onRestoreGame>
+		    <Arg>	UNICODE	</Arg>
+		</onRestoreGame>
+
 		<onGamesInfo>
 		    <Arg>	UNICODE	</Arg>
 		</onGamesInfo>

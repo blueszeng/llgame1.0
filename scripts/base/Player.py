@@ -147,9 +147,9 @@ class Player(KBEngine.Proxy,GameObject):
 			if avatar:
 				avatar.cellData["name"] = self.name
 				avatar.cellData["gold"] = self.gold
-				avatar.cellData["sex"] = self.sex
 				avatar.cellData["head"] = self.head
 				avatar.cellData["addr"] = self.addr
+				avatar.cellData["sex"] = self.sex
 
 				self.activeProxy = avatar
 
@@ -234,8 +234,11 @@ class Player(KBEngine.Proxy,GameObject):
 
 	def reqRestoreGame(self):
 		#请求恢复房间
-		if self.activeProxy:
+		if self.client and self.activeProxy:
+			self.client.onRestoreGame(self.activeProxy.game.className)
 			self.giveClientTo(self.activeProxy)
+		else:
+			self.client.onRestoreGame("")
 
 	def onStreamComplete(self,id,success):
 		DEBUG_MSG("%r[%d]::onStreamComplete success = %r" % (self.className,id,success))

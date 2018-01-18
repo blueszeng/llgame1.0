@@ -17,9 +17,9 @@ d_games = {
 }
 
 
-# import xml.dom.minidom
-# import os
-#
+import xml.etree.ElementTree as ET
+import os
+
 # dom = xml.dom.minidom.parse(os.path.abspath('d_config.xml'))
 #
 # root = dom.documentElement
@@ -27,6 +27,13 @@ d_games = {
 # zjh = root.getElementsByTagName('zjh')[0]
 # taxRate = zjh.getElementsByTagName('taxRate')[0]
 # gold = 100
-# # result = gold * float(taxRate.data)
-#
-# # print(taxRate.data)
+# result = gold * float(taxRate.data)
+
+# print(taxRate.data)
+
+tree = ET.parse(os.path.abspath('d_config.xml'))
+
+root = tree.getroot()
+
+for child in root:
+    print((float(child.attrib['taxRate']) * 10))

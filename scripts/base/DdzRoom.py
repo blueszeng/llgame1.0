@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import KBEngine
 from KBEDebug import *
-from GlobalConst import *
+from Rules_DDZ import *
 from interfaces.BaseObject import *
 
 class DdzRoom(KBEngine.Base,BaseObject):

@@ -42,6 +42,8 @@
 	</ClientMethods>
 
 	<BaseMethods>
+        <changeClient>
+        </changeClient>
 
         <reqEnterGame>
             <Exposed/>
@@ -77,11 +79,15 @@
 
 	<CellMethods>
 
-	    <reqMessageC>
+	    <reqMessage>
 	        <Exposed/>
             <Arg> INT32</Arg>
             <Arg> UNICODE </Arg>
-        </reqMessageC>
+        </reqMessage>
+
+        <reqLeave>
+            <Exposed/>
+        </reqLeave>
 
 	</CellMethods>
 </root>

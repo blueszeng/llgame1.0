@@ -21,7 +21,7 @@ class ZjhAvatar(KBEngine.Proxy,GameObject):
 
     def createCell(self, space):
         """
-        export method.
+        define method.
         """
         if not self.cell:
             self.createCellEntity(space)
@@ -47,7 +47,7 @@ class ZjhAvatar(KBEngine.Proxy,GameObject):
 
     def onDestroy(self):
 
-        DEBUG_MSG("%r(%r)::onDestroy " % (self.className, self.account))
+        DEBUG_MSG("%r(%r)::onDestroy " % (self.className, self.id))
 
     def reqLeaveGame(self):
         super().reqLeaveGame()

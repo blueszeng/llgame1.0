@@ -1,6 +1,8 @@
 <root>
     <zjh taxRate = "0.04">
-        <taxRate> 0.04 </taxRate>
+        <base> 0.04 </base>
+        <limit> 0.04 </limit>
+        <limit> 0.04 </limit>
     </zjh>
     <ddz taxRate = "0.05">
         <taxRate> 0.05 </taxRate>

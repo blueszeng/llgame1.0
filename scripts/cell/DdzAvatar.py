@@ -1,6 +1,6 @@
 import KBEngine
-import json
-from Rules_DDZ import *
+import Rules_DDZ
+from KBEDebug import *
 from interfaces.EntityCommon import EntityCommon
 
 class DdzAvatar(KBEngine.Entity,EntityCommon):
@@ -24,17 +24,25 @@ class DdzAvatar(KBEngine.Entity,EntityCommon):
         if room:
             room.onLeave(self)
 
+    def reqLeave(self):
+
+        if self.cellStatus == Rules_DDZ.ROOM_STATE_INGAME:
+            self.base.changeClient()
+        else:
+            self.getCurrRoom().onLeave(self)
+
     def set_gold(self,gold):
 
         self.base.set_gold(gold)
 
-    def reqMessageC(self,exposed,action,buf):
+    def reqMessage(self,exposed,action,buf):
+
         if exposed != self.id:
             return
 
         DEBUG_MSG("%r[%r].Cell::reqMessageC() buf = %r" % (self.className, self.id,buf))
 
-        if action == ACTION_ROOM_TUOGUAN:
+        if action == Rules_DDZ.ACTION_ROOM_TUOGUAN:
             self.tuoguan = int(buf)
         else:
             self.getCurrRoom().reqMessage(self,action,buf)

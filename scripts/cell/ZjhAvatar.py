@@ -20,6 +20,15 @@ class ZjhAvatar(KBEngine.Entity,EntityCommon):
         """
         self.getCurrRoom().onLeave(self)
 
+    def reqLeave(self,exposed):
+        if exposed != self.id:
+            return
+
+        if self.cellStatus == Rules_ZJH.PLAYER_STATE_INGAME:
+            self.base.changeClient()
+        else:
+            self.destroy()
+
     def setGold(self,gold):
 
         self.base.setGold(gold)
@@ -29,7 +38,7 @@ class ZjhAvatar(KBEngine.Entity,EntityCommon):
         self.cellStatus = status
         self.base.setStatus(status)
 
-    def reqMessageC(self,exposed,action,buf):
+    def reqMessage(self,exposed,action,buf):
         if exposed != self.id:
             return
 

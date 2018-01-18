@@ -3,6 +3,9 @@
 from KBEDebug import *
 import random
 
+ROOM_STATE_READY    =   0   #房间准备状态
+ROOM_STATE_INGAME   =   1   #正在游戏
+ROOM_STATE_FINISH   =   2   #游戏结束
 
 ACTION_ROOM_READY = 10                   #房间准备状态
 ACTION_ROOM_PLAYERS = 11                 #下发玩家信息

@@ -22,6 +22,7 @@ class GameObject:
     def changeClient(self):
         """切换控制权"""
         if self.client and self.activeProxy != None:
+            self.client.onLeaveHall()
             self.giveClientTo(self.activeProxy)
 
     def Games(self):
