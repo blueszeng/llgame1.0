@@ -39,7 +39,7 @@ class Ranks(KBEngine.Base):
 
 		KBEngine.executeRawDatabaseCommand(sql, Functor.Functor(self.onMyRankInfo, player))
 
-	def onRanksInfo(self, player, result, line, error):
+	def onRanksInfo(self, player, result, rows, insertid, error):
 
 		str_result = []
 		for i in result:
@@ -51,9 +51,10 @@ class Ranks(KBEngine.Base):
 
 		self.ranks["ranks"] = str_result
 
-		INFO_MSG("Ranks._onRanksInfo result = %r, line = %r,error = %r" % (str_result,line,error))
+		if "myRank" in self.ranks and player.client:
+			player.client.onRanksInfo(json.dumps(self.ranks))
 
-	def onMyRankInfo(self, player, result, line, error):
+	def onMyRankInfo(self, player, result, rows, insertid, error):
 		"""
         返回的数据库回掉
         """
@@ -63,8 +64,9 @@ class Ranks(KBEngine.Base):
 				str_j = j.decode()
 				str_result.append(str_j)
 		self.ranks["myRank"] = str_result
-		player.client.onRanksInfo(json.dumps(self.ranks))
 
-		INFO_MSG("Ranks.onMyRankInfo result = %r, line = %r,error = %r" % (str_result, line, error))
+		if "ranks" in self.ranks and player.client:
+			player.client.onRanksInfo(json.dumps(self.ranks))
+
 
 

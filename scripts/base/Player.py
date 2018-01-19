@@ -24,8 +24,6 @@ class Player(KBEngine.Proxy,GameObject):
 
 		self.Games().reqEnter(self)
 
-		# self.streamFileToClient("data/d_config.xml","d_config")
-
 		#如果是机器人，则直接初始化属性
 		if self.getClientType() == 6:
 			self.name = "bots%r" % self.id
@@ -112,6 +110,8 @@ class Player(KBEngine.Proxy,GameObject):
 		"""
 		请求游戏类型，游戏信息，游戏在线人数
 		"""
+		self.streamFileToClient("data/d_config.xml","d_config")
+
 		self.Games().reqGamesInfo(self)
 
 	def reqRanksInfo(self):
