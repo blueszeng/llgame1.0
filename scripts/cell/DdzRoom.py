@@ -42,14 +42,18 @@ class DdzRoom(KBEngine.Entity,RoomEntity):
         KBEngine.setSpaceData(self.spaceID, "roomtime", str(self.roomtime))
         KBEngine.setSpaceData(self.spaceID, "status", str(self.statusC))
 
-    def set_state(self, status):
+    def setStatus(self, status):
 
-        DEBUG_MSG("%r::set_state() space[%r] state[%r]" % (self.className, self.spaceID, status))
+        DEBUG_MSG("%r::setStatus() space[%r] status[%r]" % (self.className, self.spaceID, status))
 
         self.statusC = status
+
+        for pp in self.players.values():
+            pp.setStatus(status)
+
         KBEngine.setSpaceData(self.spaceID, "status", str(self.statusC))
 
-        self.base.set_state(status)
+        self.base.setStatus(status)
 
     def onEnter(self, player):
 
@@ -70,13 +74,10 @@ class DdzRoom(KBEngine.Entity,RoomEntity):
 
         #满足开局人数
         if len(self.players.values()) == 3:
-
-            self.set_state(ROOM_STATE_INGAME)
-
+            self.setStatus(ROOM_STATE_INGAME)
             self.addTimerMgr(1,0,ACTION_ROOM_DISPATCH)
 
     def onLeave(self, player):
-
         DEBUG_MSG('%r::onLeave() space[%d] cid[%i]' % (self.className, self.spaceID, player.cid))
 
         if player.cid in self.players:
@@ -372,7 +373,7 @@ class DdzRoom(KBEngine.Entity,RoomEntity):
                 data["cards"]          = copyList(pp.cards)
 
                 datas[pp.cid]           = data
-                pp.set_gold(-settleGold)
+                pp.setGold(-settleGold)
 
             taxGold = round(realWinGold * self.taxRateC,2)
             KBEngine.globalData["Games"].addIncome(taxGold)
@@ -388,7 +389,7 @@ class DdzRoom(KBEngine.Entity,RoomEntity):
             data["cards"]        = copyList(dzPlayer.cards)
 
             datas[dzPlayer.cid]   = data
-            dzPlayer.set_gold(realWinGold)
+            dzPlayer.setGold(realWinGold)
 
         else:
             newBaseGold = Helper.Round(dzPlayer.gold/allMult)
@@ -419,7 +420,7 @@ class DdzRoom(KBEngine.Entity,RoomEntity):
                     data["cards"]       = copyList(pp.cards)
 
                     datas[pp.cid] = data
-                    pp.set_gold(canWinGold)
+                    pp.setGold(canWinGold)
 
             dzPlayer.gold -= realLoseGold
 
@@ -435,10 +436,10 @@ class DdzRoom(KBEngine.Entity,RoomEntity):
             data["cards"]            = copyList(dzPlayer.cards)
 
             datas[self.dzCid]        = data
-            dzPlayer.set_gold(-realLoseGold)
+            dzPlayer.setGold(-realLoseGold)
 
         # 退出游戏状态
-        self.set_state(ROOM_STATE_FINISH)
+        self.setStatus(ROOM_STATE_FINISH)
 
         data_json   = json.dumps(datas)
         self.sendAllClients(ACTION_ROOM_SETTLE, data_json)

@@ -4,6 +4,7 @@ import KBEngine
 from interfaces.GameObject import *
 from KBEDebug import *
 import Helper
+import Rules_DDZ
 
 class DdzAvatar(KBEngine.Proxy,GameObject):
     """
@@ -28,16 +29,6 @@ class DdzAvatar(KBEngine.Proxy,GameObject):
         export method.
         """
         if not self.cell:
-
-            self.cellData["cards"] = []
-            self.cellData["cardCount"] = 0
-            self.cellData["curScore"]  = -1
-            self.cellData["showCards"] = []
-            self.cellData["multiple"] = 1
-            self.cellData["type"] = 0       # 0无身份 1地主 2农民
-            self.cellData["tuoguan"] = 0    # 0正常 1托管
-            self.cellData["cid"] = 0
-
             self.createCellEntity(space)
 
             self.bContinue = False
@@ -59,7 +50,7 @@ class DdzAvatar(KBEngine.Proxy,GameObject):
 
     def onClientDeath(self):
 
-        if self.state == 0:
+        if self.status == Rules_DDZ.ROOM_STATE_INGAME:
             if self.cell:
                 self.destroyCellEntity()
             else:
@@ -89,7 +80,10 @@ class DdzAvatar(KBEngine.Proxy,GameObject):
         if self.hall:
             self.hall.reqContinue(self)
 
-    def set_gold(self, settleGold):
+    def setGold(self, settleGold):
 
         self.activeProxy.gold += Helper.Round(settleGold)
-        DEBUG_MSG("%r[%r]::set_gold() gold[%r] settleGold[%r]" %(self.className,self.id,self.activeProxy.gold,settleGold))
+        DEBUG_MSG("%r[%r]::setGold() gold[%r] settleGold[%r]" %(self.className,self.id,self.activeProxy.gold,settleGold))
+
+    def setStatus(self, status):
+        self.status = status

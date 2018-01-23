@@ -24,23 +24,30 @@ class DdzAvatar(KBEngine.Entity,EntityCommon):
         if room:
             room.onLeave(self)
 
-    def reqLeave(self):
+    def reqLeave(self, exposed):
+        if exposed != self.id:
+            return
 
         if self.cellStatus == Rules_DDZ.ROOM_STATE_INGAME:
             self.base.changeClient()
         else:
             self.getCurrRoom().onLeave(self)
 
-    def set_gold(self,gold):
+    def setGold(self, gold):
 
-        self.base.set_gold(gold)
+        self.base.setGold(gold)
+
+    def setStatus(self, status):
+
+        self.cellStatus = status
+        self.base.setStatus(status)
 
     def reqMessage(self,exposed,action,buf):
 
         if exposed != self.id:
             return
 
-        DEBUG_MSG("%r[%r].Cell::reqMessageC() buf = %r" % (self.className, self.id,buf))
+        DEBUG_MSG("%r[%r].Cell::reqMessage() buf = %r" % (self.className, self.id,buf))
 
         if action == Rules_DDZ.ACTION_ROOM_TUOGUAN:
             self.tuoguan = int(buf)

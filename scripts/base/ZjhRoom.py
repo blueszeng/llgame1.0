@@ -61,17 +61,7 @@ class ZjhRoom(KBEngine.Base,BaseObject):
             player.createCell(self.cell)
 
     def reqLeave(self, player):
-
-        # if player.status == Rules_ZJH.PLAYER_STATE_INGAME:
-        #     if player.client:
-        #         player.client.onLeaveHall()
-        #         player.changeClient()
-        #     return
-
         super().reqLeave(player)
 
         self.parent.onRoomLosePlayer(self.cid,player)
-
-        # if player.cell:
-        #     player.destroyCellEntity()
 

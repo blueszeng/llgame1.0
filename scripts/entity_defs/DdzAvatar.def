@@ -6,7 +6,7 @@
 	<Properties>
 
         <status>
-                <Type>			INT32					</Type>
+                <Type>			UINT8					</Type>
                 <Flags>			BASE_AND_CLIENT	 		</Flags>
                 <Default>		0						</Default>
         </status>
@@ -17,27 +17,33 @@
                 <Default>		0				</Default>
         </cid>
 
+        <cellStatus>
+                <Type>			UINT8					</Type>
+                <Flags>			ALL_CLIENTS	 		</Flags>
+                <Default>		0						</Default>
+        </cellStatus>
+
         <cards>
-                <Type>	ARRAY <of> INT32 </of>    </Type>
+                <Type>	ARRAY <of> UINT8 </of>    </Type>
                 <Flags>		OWN_CLIENT			</Flags>
-                <Default>		0				</Default>
+                <Default>						</Default>
         </cards>
 
         <showCards>
-                <Type>	ARRAY <of> INT32 </of>    </Type>
+                <Type>	ARRAY <of> UINT8 </of>    </Type>
                 <Flags>		ALL_CLIENTS			</Flags>
-                <Default>		0				</Default>
+                <Default>						</Default>
         </showCards>
 
         <cardCount>
-                <Type>		INT32				</Type>
+                <Type>		UINT8				</Type>
                 <Flags>		ALL_CLIENTS			</Flags>
                 <Default>		0				</Default>
         </cardCount>
 
         <!-- 0为无，1为地主，2为农民 -->
         <type>
-                <Type>		INT32				</Type>
+                <Type>		UINT8				</Type>
                 <Flags>		ALL_CLIENTS			</Flags>
                 <Default>		0				</Default>
         </type>
@@ -45,7 +51,7 @@
         <curScore>
                 <Type>		INT32				</Type>
                 <Flags>		ALL_CLIENTS			</Flags>
-                <Default>		0				</Default>
+                <Default>		-1				</Default>
         </curScore>
 
         <tuoguan>
@@ -55,9 +61,9 @@
         </tuoguan>
 
         <multiple>
-                <Type>		INT32				</Type>
+                <Type>		UINT8				</Type>
                 <Flags>		ALL_CLIENTS			</Flags>
-                <Default>		0				</Default>
+                <Default>		1				</Default>
         </multiple>
 
         <name>
@@ -109,17 +115,25 @@
             <Exposed/>
 		</reqContinue>
 
-        <set_gold>
+        <setGold>
             <Arg> FLOAT</Arg>
-        </set_gold>
+        </setGold>
+
+        <setStatus>
+            <Arg> UINT8 </Arg>
+        </setStatus>
 
 	</BaseMethods>
 
 	<CellMethods>
 
-        <set_gold>
+        <setGold>
             <Arg> FLOAT</Arg>
-        </set_gold>
+        </setGold>
+
+        <setStatus>
+            <Arg> UINT8 </Arg>
+        </setStatus>
 
 	</CellMethods>
 

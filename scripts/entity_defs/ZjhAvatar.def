@@ -111,7 +111,7 @@
         </setGold>
 
         <setStatus>
-            <Arg> INT32</Arg>
+            <Arg> UINT8 </Arg>
         </setStatus>
 
 	</BaseMethods>
@@ -123,7 +123,7 @@
         </setGold>
 
         <setStatus>
-            <Arg> INT32</Arg>
+            <Arg> UINT8</Arg>
         </setStatus>
 
 	</CellMethods>

@@ -52,9 +52,9 @@
 		    <Arg>	MAILBOX	</Arg>
 		</reqContinue>
 
-		<set_state>
-		    <Arg>	INT32	</Arg>
-		</set_state>
+		<setStatus>
+		    <Arg>	UINT8	</Arg>
+		</setStatus>
 
 	</BaseMethods>
 
@@ -74,9 +74,9 @@
             <Arg> UNICODE </Arg>
         </reqMessage>
 
-        <set_state>
-		    <Arg>	INT32	</Arg>
-		</set_state>
+        <setStatus>
+		    <Arg>	UINT8	</Arg>
+		</setStatus>
 
 	</CellMethods>
 </root>

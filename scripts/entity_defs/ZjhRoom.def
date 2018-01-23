@@ -57,7 +57,7 @@
 	<BaseMethods>
 
 		<setStatus>
-		    <Arg>	INT32	</Arg>
+		    <Arg>	UINT8	</Arg>
 		</setStatus>
 
 	</BaseMethods>
@@ -79,7 +79,7 @@
         </reqMessage>
 
         <setStatus>
-		    <Arg>	INT32	</Arg>
+		    <Arg>	UINT8	</Arg>
 		</setStatus>
 
 	</CellMethods>
