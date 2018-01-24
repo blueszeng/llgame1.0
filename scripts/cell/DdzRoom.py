@@ -145,7 +145,7 @@ class DdzRoom(KBEngine.Entity,RoomEntity):
 
         elif action == ACTION_ROOM_CHUPAI:
 
-            self.onMessage_ACTION_ROOM_CHUPAI(player,action,json.loads(buf))
+            self.onMessage_ACTION_ROOM_CHUPAI(player,action,buf)
 
     def onMessage_ACTION_ROOM_JIAOPAI(self,player,action,value):
 
@@ -212,11 +212,15 @@ class DdzRoom(KBEngine.Entity,RoomEntity):
 
         self.nextPlayer(ACTION_ROOM_JIAOPAI_NEXT)
 
-    def onMessage_ACTION_ROOM_CHUPAI(self,player,action,data_json):
+    def onMessage_ACTION_ROOM_CHUPAI(self,player,action,buf):
 
-        cards   = data_json["cards"]
-        player.showCards = cards
+        if buf == "":
+            player.showCards = []
+        else:
+            data_json = json.loads(buf)
+            player.showCards = data_json["cards"]
 
+        cards = player.showCards
         if len(cards) > 0:
 
             self.powerCid   = player.cid
