@@ -57,6 +57,9 @@ class ZjhAvatar(KBEngine.Entity):
 	def onEnterRoom(self,data):
 		pass
 
+	def onHallsInfo(self,data):
+		pass
+
 
 class PlayerZjhAvatar(ZjhAvatar):
 

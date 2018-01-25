@@ -9,9 +9,9 @@ class Player(KBEngine.Entity):
 	def __init__(self):
 		KBEngine.Entity.__init__(self)
 
-		self.base.reqEnterGame(1)
+		self.base.reqEnterGame("DdzGame")
 
-	def onGameInfo(self,data):
+	def onGamesInfo(self,data):
 		pass
 	def onGamesConfig(self,data):
 		pass
@@ -58,5 +58,9 @@ class Player(KBEngine.Entity):
 	def onSay(self,str):
 		pass
 	def onUpdateHalls(self,data):
+		pass
+	def onBroadcast(self,data):
+		pass
+	def onRestoreGame(self,data):
 		pass
 
