@@ -92,7 +92,7 @@ class Entity:
 		pass
 
 	def onEnterWorld( self ):
-		"""		如果实体非客户端控制实体，则表明实体进入了服务端上客户端控制的实体的AOI范围，此时客户端可以看见这个实体了。
+		"""		如果实体非客户端控制实体，则表明实体进入了服务端上客户端控制的实体的View范围，此时客户端可以看见这个实体了。
 		如果实体是客户端控制的实体则表明该实体已经在服务端创建了cell并进入了space。
 		
 		
@@ -102,7 +102,7 @@ class Entity:
 		pass
 
 	def onLeaveWorld( self ):
-		"""		如果实体非客户端控制实体，则表明实体离开了服务端上客户端控制的实体的AOI范围，此时客户端看不见这个实体了。
+		"""		如果实体非客户端控制实体，则表明实体离开了服务端上客户端控制的实体的View范围，此时客户端看不见这个实体了。
 		如果实体是客户端控制的实体则表明该实体已经在服务端销毁了cell并离开了space。
 		
 		
@@ -133,7 +133,7 @@ class Entity:
 	@property
 	def base( self ):
 
-		"""		base是用于联系Base实体的mailbox。这个属性是只读的，且如果这个实体没有关联的Base实体时属性是None。
+		"""		base是用于联系Entity实体的entityCall。这个属性是只读的，且如果这个实体没有关联的Entity实体时属性是None。
 
 		"""
 		pass
@@ -143,7 +143,7 @@ class Entity:
 
 		"""		
 		说明：
-		cell是用于联系cell实体的MAILBOX。这个属性是只读的，且如果这个base实体没有关联的cell时属性是None。
+		cell是用于联系cell实体的ENTITYCALL。这个属性是只读的，且如果这个base实体没有关联的cell时属性是None。
 		
 
 		"""
@@ -253,7 +253,7 @@ class PyClientApp:
 		pass
 
 	def onEnterWorld( self ):
-		"""		如果实体非客户端控制实体，则表明实体进入了服务端上客户端控制的实体的AOI范围，此时客户端可以看见这个实体了。
+		"""		如果实体非客户端控制实体，则表明实体进入了服务端上客户端控制的实体的View范围，此时客户端可以看见这个实体了。
 		如果实体是客户端控制的实体则表明该实体已经在服务端创建了cell并进入了space。
 		
 		
@@ -263,7 +263,7 @@ class PyClientApp:
 		pass
 
 	def onLeaveWorld( self ):
-		"""		如果实体非客户端控制实体，则表明实体离开了服务端上客户端控制的实体的AOI范围，此时客户端看不见这个实体了。
+		"""		如果实体非客户端控制实体，则表明实体离开了服务端上客户端控制的实体的View范围，此时客户端看不见这个实体了。
 		如果实体是客户端控制的实体则表明该实体已经在服务端销毁了cell并离开了space。
 		
 		
@@ -533,7 +533,7 @@ def onInit( isReload ):
 	"""	
 	功能说明：
 	当引擎启动后初始化完所有的脚本后这个接口被调用。
-	注意：该回调接口必须实现在入口模块(kbengine_defs.xml->entryScriptFile)中。
+	注意：该回调接口必须实现在入口模块(kbengine_defaults.xml->entryScriptFile)中。
 	
 	
 	参数：
@@ -555,7 +555,7 @@ def onFinish(  ):
 	"""	
 	功能说明：
 	进程关闭会回调此函数。
-	注意：该回调接口必须实现在入口模块(kbengine_defs.xml->entryScriptFile)中。
+	注意：该回调接口必须实现在入口模块(kbengine_defaults.xml->entryScriptFile)中。
 	
 	
 	

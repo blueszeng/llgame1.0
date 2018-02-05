@@ -1,21 +1,18 @@
 # -*- coding: utf-8 -*-
 import KBEngine
-import d_config
 import Helper
 import json
 from Functor import *
 from d_game import *
 from interfaces.BaseObject import *
 
-
-
-class Games(KBEngine.Base,BaseObject):
+class Games(KBEngine.Entity,BaseObject):
 	"""
 	游戏管理器实体
 	该实体管理该服务组上所有的游戏类型
 	"""
 	def __init__(self):
-		KBEngine.Base.__init__(self)
+		KBEngine.Entity.__init__(self)
 		BaseObject.__init__(self)
 		KBEngine.globalData["Games"] = self
 
@@ -35,7 +32,7 @@ class Games(KBEngine.Base,BaseObject):
 
 		for key,value in d_games.items():
 			params = {'parent':self,'cid': key,'open': value["open"]}
-			KBEngine.createBaseAnywhere(value['sign']+"Game",params,Functor(self.onCreateBaseCallback,key))
+			KBEngine.createEntityAnywhere(value['sign']+"Game",params,Functor(self.onCreateBaseCallback,key))
 
 	def onCreateBaseCallback(self,id,game):
 		self.childs[id] = game

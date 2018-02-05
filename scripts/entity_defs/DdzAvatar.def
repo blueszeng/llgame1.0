@@ -24,13 +24,13 @@
         </cellStatus>
 
         <cards>
-                <Type>	ARRAY <of> UINT8 </of>    </Type>
+                <Type>	ARRAY <of> INT32 </of>    </Type>
                 <Flags>		OWN_CLIENT			</Flags>
                 <Default>						</Default>
         </cards>
 
         <showCards>
-                <Type>	ARRAY <of> UINT8 </of>    </Type>
+                <Type>	ARRAY <of> INT32 </of>    </Type>
                 <Flags>		ALL_CLIENTS			</Flags>
                 <Default>						</Default>
         </showCards>
@@ -108,7 +108,7 @@
 	<BaseMethods>
 
 	    <createCell>
-			<Arg>		MAILBOX					</Arg>
+			<Arg>		ENTITYCALL		</Arg>
 		</createCell>
 
         <reqContinue>

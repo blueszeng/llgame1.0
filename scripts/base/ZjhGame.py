@@ -3,10 +3,10 @@ from d_game import *
 from Functor import *
 from interfaces.BaseObject import *
 
-class ZjhGame(KBEngine.Base,BaseObject):
+class ZjhGame(KBEngine.Entity,BaseObject):
 
     def __init__(self):
-        KBEngine.Base.__init__(self)
+        KBEngine.Entity.__init__(self)
         BaseObject.__init__(self)
 
         # 通过添加一个定时器延时执行游戏大厅的创建，确保一些状态在此期间能够初始化完毕
@@ -21,7 +21,7 @@ class ZjhGame(KBEngine.Base,BaseObject):
         """
         for i in range(d_games[self.className]["hallCount"]):
             cid = i + 1
-            KBEngine.createBaseAnywhere(d_games[self.className]['sign'] + "Hall", {'parent': self, "cid": cid},
+            KBEngine.createEntityAnywhere(d_games[self.className]['sign'] + "Hall", {'parent': self, "cid": cid},
                                         Functor(self.onCreateBaseCallback, cid))
 
     def onCreateBaseCallback(self, id, mailbox):

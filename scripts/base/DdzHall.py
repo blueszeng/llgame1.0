@@ -5,12 +5,12 @@ from d_config import *
 from GlobalConst import *
 from interfaces.BaseObject import *
 
-class DdzHall(KBEngine.Base,BaseObject):
+class DdzHall(KBEngine.Entity,BaseObject):
 	"""
 	大厅实体
 	"""
 	def __init__(self):
-		KBEngine.Base.__init__(self)
+		KBEngine.Entity.__init__(self)
 		BaseObject.__init__(self)
 
 		self.lastNewRoomKey = 0
@@ -18,7 +18,6 @@ class DdzHall(KBEngine.Base,BaseObject):
 	def reqEnter(self,player):
 
 		if player.cellData['gold'] < d_DDZ[self.cid]["limit"]:
-
 			DEBUG_MSG("%r::reqEnter() Entity[%r] Gold < Limit" % (self.className, player.id))
 			if player.client:
 				player.client.onEnterHall("")
@@ -82,7 +81,7 @@ class DdzHall(KBEngine.Base,BaseObject):
 				  'difen': d_DDZ[self.cid]['base'],
 				  'taxRate': d_DDZ['taxRate']}
 
-		KBEngine.createBaseAnywhere("DdzRoom", params, None)
+		KBEngine.createEntityAnywhere("DdzRoom", params, None)
 
 		roomDatas = {"roomMailbox": None,
 					 "players": [player]}

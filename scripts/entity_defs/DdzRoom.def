@@ -49,7 +49,7 @@
 	<BaseMethods>
 
 		<reqContinue>
-		    <Arg>	MAILBOX	</Arg>
+		    <Arg>	ENTITYCALL	</Arg>
 		</reqContinue>
 
 		<setStatus>
@@ -61,15 +61,15 @@
 	<CellMethods>
 
 	    <onEnter>
-			<Arg>		MAILBOX		</Arg>
+			<Arg>		ENTITYCALL		</Arg>
 		</onEnter>
 
 		<onLeave>
-			<Arg>		MAILBOX		</Arg>
+			<Arg>		ENTITYCALL		</Arg>
 		</onLeave>
 
 		<reqMessage>
-		    <Arg> MAILBOX	</Arg>
+		    <Arg> ENTITYCALL	</Arg>
             <Arg> INT32</Arg>
             <Arg> UNICODE </Arg>
         </reqMessage>

@@ -6,13 +6,13 @@ import json
 import Functor
 from KBEDebug import *
 
-class Ranks(KBEngine.Base):
+class Ranks(KBEngine.Entity):
 	"""
 	排行榜管理器实体
 	该实体管理该服务组上所有的游戏类型
 	"""
 	def __init__(self):
-		KBEngine.Base.__init__(self)
+		KBEngine.Entity.__init__(self)
 
 		KBEngine.globalData["Ranks"] = self
 

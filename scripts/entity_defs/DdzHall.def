@@ -9,11 +9,11 @@
 	<BaseMethods>
 
 	    <reqEnterRoom>
-		    <Arg>	MAILBOX	</Arg>
+		    <Arg>	ENTITYCALL	</Arg>
 		</reqEnterRoom>
 
 	    <reqContinue>
-		    <Arg>	MAILBOX	</Arg>
+		    <Arg>	ENTITYCALL	</Arg>
 		</reqContinue>
 
 	</BaseMethods>

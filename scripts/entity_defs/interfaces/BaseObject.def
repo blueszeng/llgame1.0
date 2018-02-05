@@ -2,7 +2,7 @@
 	<Properties>
 
 	    <parent>
-			<Type>			MAILBOX				</Type>
+			<Type>			ENTITYCALL				</Type>
 			<Flags>			BASE			    </Flags>
 		</parent>
 
@@ -11,15 +11,15 @@
 	<BaseMethods>
 
 	    <reqEnter>
-            <Arg> MAILBOX </Arg>
+            <Arg> ENTITYCALL </Arg>
         </reqEnter>
 
         <reqLeave>
-            <Arg> MAILBOX </Arg>
+            <Arg> ENTITYCALL </Arg>
         </reqLeave>
 
         <reqEnterChild>
-            <Arg> MAILBOX </Arg>
+            <Arg> ENTITYCALL </Arg>
             <Arg> INT32 </Arg>
         </reqEnterChild>
 

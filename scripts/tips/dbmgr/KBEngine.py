@@ -1,4 +1,4 @@
-def addTimer( initialOffset, repeatOffset=0, callbackObj ):
+def addTimer( initialOffset, repeatOffset=0, callbackObj=None ):
 	"""	
 	功能说明：
 	注册一个定时器，定时器由回调函数callbackObj触发，回调函数将在"initialOffset"秒后被执行第1次，而后将每间隔"repeatOffset"秒执行1次。
@@ -82,7 +82,7 @@ def onDBMgrReady(  ):
 	"""	
 	功能说明：
 	当前进程已经准备好的时候回调此函数。
-	注意：该回调接口必须实现在入口模块(kbengine_defs.xml->entryScriptFile)中。
+	注意：该回调接口必须实现在入口模块(kbengine_defaults.xml->entryScriptFile)中。
 	
 	
 	
@@ -94,7 +94,66 @@ def onDBMgrShutDown(  ):
 	"""	
 	功能说明：
 	进程关闭会回调此函数。
-	注意：该回调接口必须实现在入口模块(kbengine_defs.xml->entryScriptFile)中。
+	注意：该回调接口必须实现在入口模块(kbengine_defaults.xml->entryScriptFile)中。
+	
+	
+	
+
+	"""
+	pass
+
+def onReadyForShutDown(  ):
+	"""	
+	功能说明：
+	如果这个函数在脚本中有实现，当进程准备退出时，该回调函数被调用。
+	
+	可以通过该回调控制进程退出的时机。
+	注意：该回调接口必须实现在入口模块(kbengine_defaults.xml->entryScriptFile)中。
+	
+	
+	返回：
+	
+	
+	bool，如果返回True，则允许进入进程退出流程，返回其它值则进程会过一段时间后再次询问。
+	
+	
+	
+	
+	
+
+	"""
+	pass
+
+def onSelectAccountDBInterface( accountName ):
+	"""	
+	功能说明：
+	这个回调实现返回某个账号对应的数据库接口，选定接口后dbmgr针对这个账号的相关操作都由对应的数据库接口完成。
+	数据库接口在kbengine_defaults.xml->dbmgr->databaseInterfaces定义。
+	利用该接口可以根据accountName来决定账号应该存储在哪个数据库。
+	注意：该回调接口必须实现在入口模块(kbengine_defaults.xml->entryScriptFile)中。
+	
+	
+	参数：
+	
+	
+	@accountName
+	string，账号的名称。
+	
+	
+	
+	
+	
+	返回：
+	
+	
+	string，数据库接口名（数据库接口在kbengine_defaults.xml->dbmgr->databaseInterfaces定义）。
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	

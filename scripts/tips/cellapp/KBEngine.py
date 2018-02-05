@@ -115,7 +115,7 @@ class Entity:
 		
 		rangeY
 		float，给定触发器y轴高度，必须大于等于0。
-		需要注意的是，这个参数要生效必须开放kbengine_defs.xml->cellapp->coordinate_system->rangemgr_y
+		需要注意的是，这个参数要生效必须开放kbengine_defaults.xml->cellapp->coordinate_system->rangemgr_y
 		
 		开放y轴管理会带来一些消耗，因为一些游戏大量的实体都在同一y轴高度或者在差不多水平线高度，此时碰撞变得非常密集。
 		3D太空类游戏或者小房间类实体较少的游戏比较适合开放此选项。
@@ -229,7 +229,7 @@ class Entity:
 	def clientEntity( self, destID ):
 		"""		
 		功能说明：
-		通过这个方法可以访问自己客户端（当前实体必须绑定了客户端）中某个实体的方法，只有在AOI范围内的实体才会同步到客户端。它只能在一个real实体上被调用。
+		通过这个方法可以访问自己客户端（当前实体必须绑定了客户端）中某个实体的方法，只有在View范围内的实体才会同步到客户端。它只能在一个real实体上被调用。
 		
 		
 		参数：
@@ -266,27 +266,27 @@ class Entity:
 		"""
 		pass
 
-	def debugAOI( self ):
+	def debugView( self ):
 		"""		
 		功能说明：
-		debugAOI输出Entity的AOI的详细信息到cell的调试日志。
-		一份AOI系统工作的描述可以在Entity类文档中找到。
+		debugView输出Entity的View的详细信息到cell的调试日志。
+		一份View系统工作的描述可以在Entity类文档中找到。
 		
 		一份样品信息如下：
 		
-		  INFO cellapp [0x00001a1c] [2014-11-04 00:28:41,409] - Avatar::debugAOI: 100 size=4, Seen=4, Pending=0, aoiRadius=50.000, aoiHyst=5.000
-		  INFO cellapp [0x00001a1c] [2014-11-04 00:28:41,409] - Avatar::debugAOI: 100 Avatar(102), position(771.586.211.002.776.55), dist=0
-		  INFO cellapp [0x00001a1c] [2014-11-04 00:28:41,409] - Avatar::debugAOI: 100 Monster(1028), position(820.834.211.635.768.749), dist=49.8659
-		  INFO cellapp [0x00001a1c] [2014-11-04 00:28:41,409] - Avatar::debugAOI: 100 NPC(1025), position(784.024.210.95.782.273), dist=13.6915
-		  INFO cellapp [0x00001a1c] [2014-11-04 00:28:41,409] - Avatar::debugAOI: 100 Avatar(106), position(771.586.211.002.776.55), dist=0
+		  INFO cellapp [0x00001a1c] [2014-11-04 00:28:41,409] - Avatar::debugView: 100 size=4, Seen=4, Pending=0, ViewRadius=50.000, ViewHyst=5.000
+		  INFO cellapp [0x00001a1c] [2014-11-04 00:28:41,409] - Avatar::debugView: 100 Avatar(102), position(771.586.211.002.776.55), dist=0
+		  INFO cellapp [0x00001a1c] [2014-11-04 00:28:41,409] - Avatar::debugView: 100 Monster(1028), position(820.834.211.635.768.749), dist=49.8659
+		  INFO cellapp [0x00001a1c] [2014-11-04 00:28:41,409] - Avatar::debugView: 100 NPC(1025), position(784.024.210.95.782.273), dist=13.6915
+		  INFO cellapp [0x00001a1c] [2014-11-04 00:28:41,409] - Avatar::debugView: 100 Avatar(106), position(771.586.211.002.776.55), dist=0
 		
 		信息的第一行告诉我们：
 		
 		实体#1000的数据
-		有4个实体在它的AOI区域并且已经同步给客户端。
-		有0个实体在它的AOI区域，正在等待同步到客户端。
-		AOI的半径是 50.000
-		AOI的滞后区域向外延伸了5.000
+		有4个实体在它的View区域并且已经同步给客户端。
+		有0个实体在它的View区域，正在等待同步到客户端。
+		View的半径是 50.000
+		View的滞后区域向外延伸了5.000
 		
 		
 
@@ -332,10 +332,10 @@ class Entity:
 		"""
 		pass
 
-	def entitiesInAOI( self ):
+	def entitiesInView( self ):
 		"""		
 		功能说明：
-		获得这个实体的AOI范围内的实体列表。
+		获得这个实体的View范围内的实体列表。
 		
 
 		"""
@@ -345,7 +345,7 @@ class Entity:
 		"""		
 		功能说明：
 		在给定的距离内搜索实体。这是一个球形的搜索，3个轴的距离
-		都要测量。这可以找到在这个实体的AOI范围之外的实体，但不能找到其他cell的实体。
+		都要测量。这可以找到在这个实体的View范围之外的实体，但不能找到其他cell的实体。
 		例子：
 		
 		  self.entitiesInRange( 100, 'Creature', (100, 0, 100) )
@@ -541,18 +541,18 @@ class Entity:
 		"""
 		pass
 
-	def getAoiRadius( self ):
+	def getViewRadius( self ):
 		"""		
 		功能说明：
-		这个函数返回这个Entity当前的Aoi半径值。
+		这个函数返回这个Entity当前的View半径值。
 		
 		数据可以通过
-		Entity.setAoiRadius( radius, hyst )设置。
+		Entity.setViewRadius( radius, hyst )设置。
 		
 		
 		返回：
 		
-		float， Aoi半径。
+		float， View半径。
 		
 		
 		
@@ -562,18 +562,18 @@ class Entity:
 		"""
 		pass
 
-	def getAoiHystArea( self ):
+	def getViewHystArea( self ):
 		"""		
 		功能说明：
-		这个函数返回这个Entity的Aoi当前滞后区域值。
+		这个函数返回这个Entity的View当前滞后区域值。
 		
 		数据可以通过
-		Entity.setAoiRadius( radius, hyst )设置。
+		Entity.setViewRadius( radius, hyst )设置。
 		
 		
 		返回：
 		
-		float， Aoi当前滞后区域值。
+		float， View当前滞后区域值。
 		
 		
 		
@@ -736,7 +736,7 @@ class Entity:
 		"""
 		pass
 
-	def setAoiRadius( self, radius, hyst=5 ):
+	def setViewRadius( self, radius, hyst=5 ):
 		"""		
 		功能说明：
 		指定Entity的感兴趣的区域大小。
@@ -744,22 +744,22 @@ class Entity:
 		这个函数只能用于有Witness关联的实体。
 		
 		注意：
-		你可以通过设置kbengine.xml配置选项'cellapp/defaultAoIRadius'来设置默认的AOI半径。
+		你可以通过设置kbengine.xml配置选项'cellapp/defaultViewRadius'来设置默认的View半径。
 		
 		数据可以通过
-		Entity.getAoiRadius( )与Entity.getAoiHystArea( )获得。
+		Entity.getViewRadius( )与Entity.getViewHystArea( )获得。
 		
 		
 		参数：
 		
 		
 		@radius
-		float，radius指定AOI区域的半径
+		float，radius指定View区域的半径
 		
 		
 		@hyst
-		float，指定超过AOI区域的滞后区域的大小。合理的设定滞后区域将能够降低AOI碰撞的敏感度从而提高CPU执行效率。
-		一个实体进入另一个实体的AOI必须跨越AOI半径区域，但实体离开AOI区域则需要移出AOI半径区域包括滞后区域。
+		float，指定超过View区域的滞后区域的大小。合理的设定滞后区域将能够降低View碰撞的敏感度从而提高CPU执行效率。
+		一个实体进入另一个实体的View必须跨越View半径区域，但实体离开View区域则需要移出View半径区域包括滞后区域。
 		
 		
 		
@@ -781,7 +781,7 @@ class Entity:
 		"""		
 		功能说明：
 		瞬间移动一个Entity到一个指定的空间。这个函数允许指定实体移动后的位置与朝向。
-		如果需要在不同空间跳转（ 通常用于不同场景或者房间跳转 ），可以传一个CellMailbox给这个函数（ 这个mailbox所对应的实体必须在目的空间中 ）。
+		如果需要在不同空间跳转（ 通常用于不同场景或者房间跳转 ），可以传一个CellEntityCall给这个函数（ 这个entityCall所对应的实体必须在目的空间中 ）。
 		
 		这个函数只能在real的实体上被调用。
 		
@@ -790,7 +790,7 @@ class Entity:
 		
 		
 		@nearbyMBRef
-		一个决定Entity跳往哪个Space的CellMailbox（ 这个mailbox所对应的实体必须在目的Space中 ），它被认为是传送目的地。
+		一个决定Entity跳往哪个Space的CellEntityCall（ 这个entityCall所对应的实体必须在目的Space中 ），它被认为是传送目的地。
 		这个可以设为None，在这种情形下它会在当前的cell完成瞬移。
 		
 		
@@ -826,14 +826,14 @@ class Entity:
 		
 		@shouldAutoLoad
 		这个可选参数指定这个实体在服务启动的时候是否需要从数据库加载。
-		注意：服务器启动时自动加载实体，底层默认将会调用createBaseAnywhereFromDBID将实体创建到一个负载最小的baseapp上，整个过程将会在第一个启动的baseapp调用onBaseAppReady之前完成。
-		脚本层可以在个性化脚本(kbengine_defs.xml->baseapp->entryScriptFile定义)中重新实现实体的创建方法，例如：
+		注意：服务器启动时自动加载实体，底层默认将会调用createEntityAnywhereFromDBID将实体创建到一个负载最小的baseapp上，整个过程将会在第一个启动的baseapp调用onBaseAppReady之前完成。
+		脚本层可以在个性化脚本(kbengine_defaults.xml->baseapp->entryScriptFile定义)中重新实现实体的创建方法，例如：
 		def onAutoLoadEntityCreate(entityType, dbid): 
-		          KBEngine.createBaseFromDBID(entityType, dbid)
+		          KBEngine.createEntityFromDBID(entityType, dbid)
 		
 		
 		@dbInterfaceName
-		string，可选参数，指定由某个数据库接口来完成, 默认使用"default"接口。数据库接口由kbengine_defs.xml->dbmgr->databaseInterfaces中定义。
+		string，可选参数，指定由某个数据库接口来完成, 默认使用"default"接口。数据库接口由kbengine_defaults.xml->dbmgr->databaseInterfaces中定义。
 		
 		
 		
@@ -847,7 +847,7 @@ class Entity:
 		pass
 
 	def onDestroy( self ):
-		"""		如果这个函数在脚本中有实现，这个函数在调用Base.destroy()后，在实际销毁之前被调用。
+		"""		如果这个函数在脚本中有实现，这个函数在调用Entity.destroy()后，在实际销毁之前被调用。
 		这个函数没有参数。
 		
 
@@ -870,7 +870,7 @@ class Entity:
 		
 		@rangeY
 		float，给定触发器y轴高度，必须大于等于0。
-		需要注意的是，这个参数要生效必须开放kbengine_defs.xml->cellapp->coordinate_system->rangemgr_y
+		需要注意的是，这个参数要生效必须开放kbengine_defaults.xml->cellapp->coordinate_system->rangemgr_y
 		
 		开放y轴管理会带来一些消耗，因为一些游戏大量的实体都在同一y轴高度或者在差不多水平线高度，此时碰撞变得非常密集。
 		3D太空类游戏或者小房间类实体较少的游戏比较适合开放此选项。
@@ -888,14 +888,14 @@ class Entity:
 		"""
 		pass
 
-	def onEnteredAoI( self, entity ):
-		"""		如果这个函数在脚本中有实现，当一个实体进入了当前实体的AOI范围，该回调被触发。
+	def onEnteredView( self, entity ):
+		"""		如果这个函数在脚本中有实现，当一个实体进入了当前实体的View范围，该回调被触发。
 		
 		
 		参数：
 		
 		
-		@entity 进入AOI范围的实体。
+		@entity 进入View范围的实体。
 		
 		
 		
@@ -930,7 +930,7 @@ class Entity:
 		
 		@rangeY
 		float，给定触发器y轴高度，必须大于等于0。
-		需要注意的是，这个参数要生效必须开放kbengine_defs.xml->cellapp->coordinate_system->rangemgr_y
+		需要注意的是，这个参数要生效必须开放kbengine_defaults.xml->cellapp->coordinate_system->rangemgr_y
 		
 		开放y轴管理会带来一些消耗，因为一些游戏大量的实体都在同一y轴高度或者在差不多水平线高度，此时碰撞变得非常密集。
 		3D太空类游戏或者小房间类实体较少的游戏比较适合开放此选项。
@@ -1079,7 +1079,7 @@ class Entity:
 		pass
 
 	def onTeleport( self ):
-		"""		如果这个函数在脚本中有实现，在通过Base.teleport调用发生的实体传送中，实体(Real entity)被传送之前的时刻此方法会被调用。
+		"""		如果这个函数在脚本中有实现，在通过baseapp的Entity.teleport调用发生的实体传送中，实体(Real entity)被传送之前的时刻此方法会被调用。
 		请注意，在cell上调用实体的teleport并不会回调此接口，如果你需要这个功能请在Entity.teleport之后调用此回调。
 		
 		
@@ -1134,12 +1134,31 @@ class Entity:
 		
 		
 		
+		
+
+		"""
+		pass
+
+	def onUpdateBegin( self ):
+		"""		当同步一帧开始时被调用。
+		
+		
+		
+
+		"""
+		pass
+
+	def onUpdateEnd( self ):
+		"""		当同步一帧结束时被调用。
+		
+		
+		
 
 		"""
 		pass
 
 	def onWitnessed( self, isWitnessed ):
-		"""		如果这个函数在脚本中有实现，如果当前实体进入了另一个绑定了Witness的实体的AOI范围（也可以理解为一个实体被观察者观察到了），则该实体的回调函数被调用。
+		"""		如果这个函数在脚本中有实现，如果当前实体进入了另一个绑定了Witness的实体的View范围（也可以理解为一个实体被观察者观察到了），则该实体的回调函数被调用。
 		可以利用这个函数在实体被观察时激活实体的AI，实体停止被观察时可以停止AI的执行，这样可以降低服务端的计算量从而提升效率。
 		
 		
@@ -1169,9 +1188,9 @@ class Entity:
 	@property
 	def allClients( self ):
 
-		"""		通过这个属性调用实体的客户端远程方法，引擎会将这个消息广播给实体AOI范围内所有的其他绑定了客户端的实体(包括自己的客户端，绑定了客户端的实体通常为玩家)。
+		"""		通过这个属性调用实体的客户端远程方法，引擎会将这个消息广播给实体View范围内所有的其他绑定了客户端的实体(包括自己的客户端，绑定了客户端的实体通常为玩家)。
 		例子：
-		avatar的AOI范围内有玩家A和玩家B以及怪物C。
+		avatar的View范围内有玩家A和玩家B以及怪物C。
 		avatar.allClients.attack(monsterID，skillID, damage)
 		此时，玩家自己和玩家A还有玩家B的客户端都会调用到该实体attack方法，在他们的客户端可以调用指定技能的攻击动作做表现。
 
@@ -1181,7 +1200,7 @@ class Entity:
 	@property
 	def base( self ):
 
-		"""		base是用于联系Base实体的mailbox。这个属性是只读的，且如果这个实体没有关联的Base实体时属性是None。
+		"""		base是用于联系Entity实体的entityCall。这个属性是只读的，且如果这个实体没有关联的Entity实体时属性是None。
 
 		"""
 		pass
@@ -1197,7 +1216,7 @@ class Entity:
 	@property
 	def client( self ):
 
-		"""		client是用于联系客户端的mailbox。这个属性是只读的，且如果这个实体没有关联的客户端时属性是None。
+		"""		client是用于联系客户端的entityCall。这个属性是只读的，且如果这个实体没有关联的客户端时属性是None。
 
 		"""
 		pass
@@ -1205,8 +1224,8 @@ class Entity:
 	@property
 	def controlledBy( self ):
 
-		"""		该属性如果设置为某个客户端所关联的服务端实体的BaseEntityMailBox，那么该实体由对应的客户端来控制移动，如果该属性为None则实体由服务端移动。
-		当客户端登陆后调用giveClientTo到该实体时，该属性会自动的设置为自己的BaseEntityMailBox。
+		"""		该属性如果设置为某个客户端所关联的服务端实体的BaseEntityCall，那么该实体由对应的客户端来控制移动，如果该属性为None则实体由服务端移动。
+		当客户端登陆后调用giveClientTo到该实体时，该属性会自动的设置为自己的BaseEntityCall。
 		
 		脚本可以灵活的控制该实体由服务端控制移动或是由客户端（自己的客户端或是其他客户端）控制移动。
 
@@ -1224,7 +1243,7 @@ class Entity:
 	@property
 	def hasWitness( self ):
 
-		"""		这个只读属性如果为True，表示实体已经绑定了一个Witness，绑定了Witness的实体则客户端可以通过实体获得实体AOI范围内的信息。否则为False。
+		"""		这个只读属性如果为True，表示实体已经绑定了一个Witness，绑定了Witness的实体则客户端可以通过实体获得实体View范围内的信息。否则为False。
 
 		"""
 		pass
@@ -1256,7 +1275,7 @@ class Entity:
 	@property
 	def isWitnessed( self ):
 
-		"""		如果当前实体进入了另一个绑定了Witness的实体的AOI范围（也可以理解为一个实体被观察者观察到了, 这个属性值为True，否则为False。
+		"""		如果当前实体进入了另一个绑定了Witness的实体的View范围（也可以理解为一个实体被观察者观察到了, 这个属性值为True，否则为False。
 		
 		参考：
 		Entity.onWitnessed
@@ -1279,20 +1298,11 @@ class Entity:
 	@property
 	def otherClients( self ):
 
-		"""		通过这个属性调用实体的客户端远程方法，引擎会将这个消息广播给实体AOI范围内所有的其他绑定了客户端的实体(不包括自己的客户端，绑定了客户端的实体通常为玩家)。
+		"""		通过这个属性调用实体的客户端远程方法，引擎会将这个消息广播给实体View范围内所有的其他绑定了客户端的实体(不包括自己的客户端，绑定了客户端的实体通常为玩家)。
 		例子：
-		avatar的AOI范围内有玩家A和玩家B以及怪物C。
+		avatar的View范围内有玩家A和玩家B以及怪物C。
 		avatar.otherClients.attack(monsterID，skillID, damage)
 		此时，玩家A与玩家B的客户端都会调用到该实体attack方法，在他们的客户端可以调用指定技能的攻击动作做表现。
-
-		"""
-		pass
-
-	@property
-	def pitch( self ):
-
-		"""		实体在世界空间中的俯仰角，绕X轴旋转。
-		这个属性也可以通过direction属性访问。
 
 		"""
 		pass
@@ -1314,15 +1324,6 @@ class Entity:
 			import Math
 			self.copyPosition = Math.Vector3( self.position )
 		
-
-		"""
-		pass
-
-	@property
-	def roll( self ):
-
-		"""		实体在世界空间中的横滚角，绕Z轴旋转。
-		这个属性也可以通过direction属性访问。
 
 		"""
 		pass
@@ -1356,25 +1357,20 @@ class Entity:
 
 		"""		这个属性指定Entity的易变类数据同步到客户端的策略。
 		易变类数据包括实体的坐标position和实体的朝向direction，易变类数据由于极易改变的特性，引擎底层使用了一套优化的方案将其同步到客户端。
-		这个属性是四个float的序列（position，yaw，pitch，roll）代表距离值，当一个实体靠近当前实体达到距离则服务端向其同步相关数据。
+		这个属性是四个float（position，yaw，pitch，roll）代表距离值，当一个实体靠近当前实体达到距离则服务端向其同步相关数据。如果距离值大于View半径则代表总是同步。
+		还有一个特殊的bool属性optimized，它的作用是控制服务器同步时是否进行优化，目前主要的优化是Y轴。
+		如果为true，在一些行为(如：navigate)导致服务器能确定实体在地面时，服务器不同步实体的Y轴坐标，当同步大量实体时能节省大量带宽，默认为true。
 		
 		用户也可以在.def制定不同实体的同步策略：
 		
-		&lt;Volatile&gt;
-		    &lt;position/&gt;           &lt;!-- 总是同步 --&gt;
-		    &lt;yaw/&gt;                &lt;!-- 总是同步 --&gt;
-		    &lt;pitch&gt;20&lt;/pitch&gt;     &lt;!-- 相距20米或以内同步     --&gt;
-		&lt;/Volatile&gt;               &lt;!-- roll未指明则总是同步  --&gt;
+		〈Volatile〉
+		    〈position/〉           〈!-- 总是同步 --〉
+		    〈yaw/〉                〈!-- 总是同步 --〉
+		    〈pitch〉20〈/pitch〉     〈!-- 相距20米或以内同步     --〉
+		    〈optimized〉 true 〈/optimized〉   
+		〈/Volatile〉               〈!-- roll未指明则总是同步  --〉
 		
-
-		"""
-		pass
-
-	@property
-	def yaw( self ):
-
-		"""		实体在世界空间中的偏航角，绕Y轴旋转。
-		这个属性也可以通过direction属性访问。
+		
 
 		"""
 		pass
@@ -1573,10 +1569,10 @@ def debugTracing(  ):
 	"""	
 	功能说明：
 	输出当前KBEngine追踪的Python扩展对象计数器。
-	扩展对象包括：固定字典、固定数组、Entity、Mailbox...
+	扩展对象包括：固定字典、固定数组、Entity、EntityCall...
 	在服务端正常关闭时如果计数器不为零，此时说明泄露已存在，日志将会输出错误信息。
 	ERROR cellapp [0x0000cd64] [2014-11-12 00:38:07,300] - PyGC::debugTracing(): FixedArray : leaked(128)
-	ERROR cellapp [0x0000cd64] [2014-11-12 00:38:07,300] - PyGC::debugTracing(): EntityMailbox : leaked(8)
+	ERROR cellapp [0x0000cd64] [2014-11-12 00:38:07,300] - PyGC::debugTracing(): EntityCall : leaked(8)
 	
 	
 
@@ -1630,6 +1626,54 @@ def delWatcher( path ):
 	"""
 	pass
 
+def deregisterReadFileDescriptor( fileDescriptor ):
+	"""	
+	功能说明：
+	注销已经通过KBEngine.registerReadFileDescriptor注册的回调。
+	
+	
+	例子:
+	http://www.kbengine.org/assets/other/py/Poller.py
+	
+	
+	参数：
+	
+	
+	@fileDescriptor
+	socket描述符/文件描述符。
+	
+	
+	
+	
+
+	"""
+	pass
+
+def deregisterWriteFileDescriptor( fileDescriptor ):
+	"""	
+	功能说明：
+	注销已经通过KBEngine.registerWriteFileDescriptor注册的回调。
+	
+	
+	例子:
+	http://www.kbengine.org/assets/other/py/Poller.py
+	
+	
+	参数：
+	
+	
+	@fileDescriptor
+	socket描述符/文件描述符。
+	
+	
+	
+	
+	
+	
+
+	"""
+	pass
+
 def executeRawDatabaseCommand( command, callback, threadID, dbInterfaceName ):
 	"""	
 	功能说明：
@@ -1646,17 +1690,24 @@ def executeRawDatabaseCommand( command, callback, threadID, dbInterfaceName ):
 	这个数据库命令将会因为不同数据库配置方案而不同。对于方案为MySQL数据库它是一个SQL查询语句。
 	
 	
-	@callback
-	可选参数，带有命令执行结果的回调对象（比如说是一个函数）。这个回调带有3个参数：结果集合，影响的行数与错误信息。
-	
-	这个结果集合参数是一个行列表。每一行是一个包含字段值的字符串列表。命令执行没有返回结果集合（比如说是DELETE命令），或者
-	命令执行有错误时这个结果集合为None。
-	
-	这个数字是命令执行受影响的行数。这个参数只和不返回结果结合的命令（如DELETE）相关。
-	如果有结果集合返回或者命令执行有错误时这个参数为None。
-	
-	命令执行有错误时这个错误信息参数是一个描述错误的字符串。命令执行没有发生错误时这个参数为None。
-	
+	@callback可选参数，带有命令执行结果的回调对象（比如说是一个函数）。这个回调带有4个参数：结果集合，影响的行数，自増长值，错误信息。 
+	  声明样例：
+	  def 
+	  sqlcallback(result, rows, insertid, error):
+	      print(result, rows, insertid, error) 
+	  
+	  如同上面的例子所示，result参数对应的就是&ldquo;结果集合&rdquo;，这个结果集合参数是一个行列表。
+	  每一行是一个包含字段值的字符串列表。
+	  命令执行没有返回结果集合（比如说是DELETE命令），
+	  或者
+	  命令执行有错误时这个结果集合为None。 
+	  
+	  rows参数则是&ldquo;影响的行数&rdquo;，它是一个整数，表示命令执行受影响的行数。这个参数只和不返回结果结合的命令（如DELETE）相关。
+	  如果有结果集合返回或者命令执行有错误时这个参数为None。 
+	    insertid对应的是&ldquo;自増长值&rdquo;，类似于实体的databaseID，当成功的向一张带有自増长类型字段的表中插入数据时，它返回该数据在插入时自増长字段所被赋于的值。
+	      更多的信息可以参阅mysql的mysql_insert_id()方法。另外，此参数仅在数据库类型为mysql时有意义。
+	  
+	  error则对应了&ldquo;错误信息&rdquo;，当命令执行有错误时，这个参数是一个描述错误的字符串。命令执行没有发生错误时这个参数为None。 
 	
 	@threadID
 	int32，可选参数，指定一个线程来处理本条命令。用户可以通过这个参数控制某一类命令的执行先后顺序（dbmgr是多线程处理的），默认是不指定，如果threadID是实体的ID，
@@ -1664,7 +1715,7 @@ def executeRawDatabaseCommand( command, callback, threadID, dbInterfaceName ):
 	
 	
 	@dbInterfaceName
-	string，可选参数，指定由某个数据库接口来完成, 默认使用"default"接口。数据库接口由kbengine_defs.xml->dbmgr->databaseInterfaces中定义。
+	string，可选参数，指定由某个数据库接口来完成, 默认使用"default"接口。数据库接口由kbengine_defaults.xml->dbmgr->databaseInterfaces中定义。
 	
 	
 	
@@ -2089,7 +2140,6 @@ def publish(  ):
 	
 	
 	
-	
 
 	"""
 	pass
@@ -2128,6 +2178,61 @@ def raycast( spaceID, layer, src, dst ):
 	
 	list， 碰撞到的坐标点列表。
 	
+	
+	
+	
+	
+	
+
+	"""
+	pass
+
+def registerReadFileDescriptor( fileDescriptor, callback ):
+	"""	
+	功能说明：
+	注册一个回调函数，这个回调函数当文件描述符可读时被调用。
+	
+	
+	例子:
+	http://www.kbengine.org/assets/other/py/Poller.py
+	
+	
+	参数：
+	
+	
+	@fileDescriptor
+	socket描述符/文件描述符。
+	
+	
+	@callback
+	一个回调函数，socket描述符/文件描述符作为它的唯一参数。
+	
+	
+	
+	
+
+	"""
+	pass
+
+
+	"""	
+	功能说明：
+	注册一个回调函数，这个回调函数当socket描述符/文件描述符可写时被调用。
+	
+	
+	例子:
+	http://www.kbengine.org/assets/other/py/Poller.py
+	
+	
+	参数：
+	
+	
+	@fileDescriptor
+	socket描述符/文件描述符。
+	
+	
+	@callback
+	一个回调函数，socket描述符/文件描述符作为它的唯一参数。
 	
 	
 	
@@ -2248,7 +2353,7 @@ def time(  ):
 	返回：
 	
 	
-	uint32，当前游戏的时间，这里指周期数，周期受频率影响，频率由配置文件kbengine.xml或者kbengine_defs.xml->gameUpdateHertz决定。
+	uint32，当前游戏的时间，这里指周期数，周期受频率影响，频率由配置文件kbengine.xml或者kbengine_defaults.xml->gameUpdateHertz决定。
 	
 	
 	
@@ -2263,7 +2368,7 @@ def onCellAppData( key, value ):
 	"""	
 	功能说明：
 	KBEngine.cellAppData有改变时回调此函数。
-	注意：该回调接口必须实现在入口模块(kbengine_defs.xml->entryScriptFile)中。
+	注意：该回调接口必须实现在入口模块(kbengine_defaults.xml->entryScriptFile)中。
 	
 	
 	参数：
@@ -2287,7 +2392,7 @@ def onCellAppDataDel( key ):
 	"""	
 	功能说明：
 	KBEngine.cellAppData有删除的时候回调此函数。
-	注意：该回调接口必须实现在入口模块(kbengine_defs.xml->entryScriptFile)中。
+	注意：该回调接口必须实现在入口模块(kbengine_defaults.xml->entryScriptFile)中。
 	
 	
 	参数：
@@ -2307,7 +2412,7 @@ def onGlobalData( key, value ):
 	"""	
 	功能说明：
 	KBEngine.globalData有改变的时候回调此函数。
-	注意：该回调接口必须实现在入口模块(kbengine_defs.xml->entryScriptFile)中。
+	注意：该回调接口必须实现在入口模块(kbengine_defaults.xml->entryScriptFile)中。
 	
 	
 	参数：
@@ -2331,7 +2436,7 @@ def onGlobalDataDel( key ):
 	"""	
 	功能说明：
 	KBEngine.globalData有删除的时候回调此函数。
-	注意：该回调接口必须实现在入口模块(kbengine_defs.xml->entryScriptFile)中。
+	注意：该回调接口必须实现在入口模块(kbengine_defaults.xml->entryScriptFile)中。
 	
 	
 	参数：
@@ -2351,7 +2456,7 @@ def onInit( isReload ):
 	"""	
 	功能说明：
 	当引擎启动后初始化完所有的脚本后这个接口被调用。
-	注意：该回调接口必须实现在入口模块(kbengine_defs.xml->entryScriptFile)中。
+	注意：该回调接口必须实现在入口模块(kbengine_defaults.xml->entryScriptFile)中。
 	
 	
 	参数：

@@ -1,4 +1,4 @@
-class Base:
+class Entity:
 	def addTimer( self, initialOffset, repeatOffset=0, userArg=0 ):
 		"""		
 		功能说明：
@@ -11,10 +11,10 @@ class Base:
 		# 这里是使用addTimer的一个例子
 		import KBEngine
 		 
-		class MyBaseEntity( KBEngine.Base ):
+		class MyBaseEntity( KBEngine.Entity ):
 		 
 		    def __init__( self ):
-		        KBEngine.Base.__init__( self )
+		        KBEngine.Entity.__init__( self )
 		 
 		        # 增加一个定时器，5秒后执行第1次，而后每1秒执行1次，用户参数是9
 		        self.addTimer( 5, 1, 9 )
@@ -22,7 +22,7 @@ class Base:
 		        # 增加一个定时器，1秒后执行，用户参数缺省是0
 		        self.addTimer( 1 )
 		 
-		    # Base的定时器回调"onTimer"被调用
+		    # Entity的定时器回调"onTimer"被调用
 		    def onTimer( self, id, userArg ):
 		        print "MyBaseEntity.onTimer called: id %i, userArg: %i" % ( id, userArg )
 		        # if 这是不断重复的定时器，当不再需要该定时器的时候，调用下面函数移除:
@@ -72,20 +72,20 @@ class Base:
 		
 		
 		@cellEntityMB
-		一个可选的CellEntityMailBox参数，
+		一个可选的CellEntityCall参数，
 		指定哪个空间里创建这个cell实体的。
 		
-		只能使用一个直接的CellEntityMailBox。如果你有一个实体的BaseMailbox，你不可以使用baseMailbox.cell传给这个函数。
-		你必须在这个实体的base上创建一个新的函数来回传这个直接的CellEntityMailBox。
+		只能使用一个直接的CellEntityCall。如果你有一个实体的BaseEntityCall，你不可以使用baseEntityCall.cell传给这个函数。
+		你必须在这个实体的base上创建一个新的函数来回传这个直接的CellEntityCall。
 		
 		例如：
-		baseMailboxOfNearbyEntity.createCellNearSelf( self )
+		baseEntityCallOfNearbyEntity.createCellNearSelf( self )
 		在实体的base上：
-		def createCellNearSelf( self, baseMailbox ):
-		    baseMailbox.createCellNearHere( self.cell )
+		def createCellNearSelf( self, baseEntityCall ):
+		    baseEntityCall.createCellNearHere( self.cell )
 		在原实体的base上调用createCellNearSelf()方法：
-		def createCellNearHere( self. cellMailbox ):
-		    self.createCellEntity( cellMailbox )
+		def createCellNearHere( self. cellEntityCall ):
+		    self.createCellEntity( cellEntityCall )
 		
 		
 		
@@ -94,10 +94,10 @@ class Base:
 		"""
 		pass
 
-	def createInNewSpace( self, cellappIndex ):
+	def createCellEntityInNewSpace( self, cellappIndex ):
 		"""		
 		功能说明：
-		在一个空间的cell上创建一个关联的实体，它请求通过cellappmgr来完成。
+		在cellapp上创建一个空间(space)并且将该实体的cell创建到这个新的空间中，它请求通过cellappmgr来完成。
 		
 		用于创建cell实体的信息被存储在该实体的属性cellData里。这个属性是一个字典，对应实体的.def文件里的默认值同时还包括用于表示
 		实体位置和方向(roll, pitch, yaw)的"position", "direction" 和 "spaceID"。
@@ -127,7 +127,7 @@ class Base:
 		函数delTimer用于移除一个注册的定时器，移除后的定时器不再执行。只执行1次的定时器在执行回调后自动移除，不必要使用delTimer移除。
 		如果delTimer函数使用一个无效的id（例如已经移除），将会产生错误。
 		
-		到Base.addTimer参考定时器的一个使用例子。
+		到Entity.addTimer参考定时器的一个使用例子。
 		
 		
 		参数：
@@ -146,7 +146,7 @@ class Base:
 	def destroy( self, deleteFromDB, writeToDB ):
 		"""		
 		功能说明：
-		这个函数销毁该实体的base部分。如果实体存在cell部分，那么用户必须先销毁cell部分，否则将会产生错误。要销毁实体的cell部分，调用Base.destroyCellEntity。
+		这个函数销毁该实体的base部分。如果实体存在cell部分，那么用户必须先销毁cell部分，否则将会产生错误。要销毁实体的cell部分，调用Entity.destroyCellEntity。
 		
 		也许在onLoseCell回调里调用self.destroy更为恰当。这能保证实体的base部分被销毁。
 		
@@ -159,7 +159,7 @@ class Base:
 		
 		
 		@writeToDB
-		如果是True，与这个实体相关联的存档属性将会写入数据库。只有在这个实体是从数据库读取的或者是使用过Base.writeToDB写入数据库才会被执行。这个参数默认为True，但当deleteFromDB为True的时候它将被忽略。
+		如果是True，与这个实体相关联的存档属性将会写入数据库。只有在这个实体是从数据库读取的或者是使用过Entity.writeToDB写入数据库才会被执行。这个参数默认为True，但当deleteFromDB为True的时候它将被忽略。
 		
 		
 		
@@ -189,7 +189,7 @@ class Base:
 		
 		
 		@baseEntityMB
-		实体应该移到的指定实体所在的空间，baseEntityMB即指定实体的mailbox。当成功的时候，与此参数相关联的cell实体会被传入到Entity.onTeleportSuccess函数。
+		实体应该移到的指定实体所在的空间，baseEntityMB即指定实体的EntityCall。当成功的时候，与此参数相关联的cell实体会被传入到Entity.onTeleportSuccess函数。
 		
 		
 		
@@ -216,14 +216,14 @@ class Base:
 		
 		@shouldAutoLoad
 		这个可选参数指定这个实体在服务启动的时候是否需要从数据库加载。
-		注意：服务器启动时自动加载实体，底层默认将会调用createBaseAnywhereFromDBID将实体创建到一个负载最小的baseapp上，整个过程将会在第一个启动的baseapp调用onBaseAppReady之前完成。
-		脚本层可以在个性化脚本(kbengine_defs.xml->baseapp->entryScriptFile定义)中重新实现实体的创建方法，例如：
+		注意：服务器启动时自动加载实体，底层默认将会调用createEntityAnywhereFromDBID将实体创建到一个负载最小的baseapp上，整个过程将会在第一个启动的baseapp调用onBaseAppReady之前完成。
+		脚本层可以在个性化脚本(kbengine_defaults.xml->baseapp->entryScriptFile定义)中重新实现实体的创建方法，例如：
 		def onAutoLoadEntityCreate(entityType, dbid): 
-		          KBEngine.createBaseFromDBID(entityType, dbid)
+		          KBEngine.createEntityFromDBID(entityType, dbid)
 		
 		
 		@dbInterfaceName
-		string，可选参数，指定由某个数据库接口来完成, 默认使用"default"接口。数据库接口由kbengine_defs.xml->dbmgr->databaseInterfaces中定义。
+		string，可选参数，指定由某个数据库接口来完成, 默认使用"default"接口。数据库接口由kbengine_defaults.xml->dbmgr->databaseInterfaces中定义。
 		
 		
 		
@@ -246,7 +246,7 @@ class Base:
 	def onDestroy( self ):
 		"""		
 		功能说明：
-		如果这个函数在脚本中有实现，这个函数在调用Base.destroy()后，在实际销毁之前被调用。
+		如果这个函数在脚本中有实现，这个函数在调用Entity.destroy()后，在实际销毁之前被调用。
 		这个函数没有参数。
 		
 
@@ -276,7 +276,7 @@ class Base:
 	def onPreArchive( self ):
 		"""		
 		功能说明：
-		如果这个函数在脚本中有实现，这个函数在该实体自动写入数据库之前被调用。这个回调在Base.onWriteToDB回调之前被调用。
+		如果这个函数在脚本中有实现，这个函数在该实体自动写入数据库之前被调用。这个回调在Entity.onWriteToDB回调之前被调用。
 		如果该回调返回False，该归档操作中止。这个回调应该返回True使得操作继续。如果这个回调不存在，则归档操作继续进行。
 		
 
@@ -286,7 +286,7 @@ class Base:
 	def onRestore( self ):
 		"""		
 		功能说明：
-		如果这个函数在脚本中有实现，这个函数在Base应用程序崩溃后在其它Base应用程序上
+		如果这个函数在脚本中有实现，这个函数在Entity应用程序崩溃后在其它Entity应用程序上
 		重新创建该实体时被调用。
 		这个函数没有参数。
 		
@@ -298,7 +298,7 @@ class Base:
 		"""		
 		功能说明：
 		这个函数当一个与此实体关联的定时器触发的时候被调用。
-		一个定时器可以使用Base.addTimer函数添加。
+		一个定时器可以使用Entity.addTimer函数添加。
 		
 		
 		参数：
@@ -309,7 +309,7 @@ class Base:
 		
 		
 		@userData
-		传进Base.addTimer的integer用户数据。
+		传进Entity.addTimer的integer用户数据。
 		
 		
 		
@@ -346,7 +346,7 @@ class Base:
 
 		"""		
 		说明：
-		cell是用于联系cell实体的MAILBOX。这个属性是只读的，且如果这个base实体没有关联的cell时属性是None。
+		cell是用于联系cell实体的ENTITYCALL。这个属性是只读的，且如果这个base实体没有关联的cell时属性是None。
 		
 
 		"""
@@ -380,7 +380,7 @@ class Base:
 
 		"""		
 		说明：
-		client是用于联系客户端的mailbox。这个属性是只读的，且如果这个base实体没有关联的客户端时属性是None。
+		client是用于联系客户端的EntityCall。这个属性是只读的，且如果这个base实体没有关联的客户端时属性是None。
 
 		"""
 		pass
@@ -391,6 +391,16 @@ class Base:
 		"""		
 		说明：
 		databaseID是实体的永久ID(数据库id)。这个id是uint64类型且大于0，如果是0则表示该实体不是永久的。
+
+		"""
+		pass
+
+	@property
+	def databaseInterfaceName( self ):
+
+		"""		
+		说明：
+		databaseInterfaceName是实体持久化所在的数据库接口名称，该接口名称在kbengine_defaults->dbmgr中配置。实体必须持久化过（databaseID>0）该属性才可用，否则返回空字符串。
 
 		"""
 		pass
@@ -411,7 +421,7 @@ class Base:
 
 		"""		
 		说明：
-		如果该Base实体已经被销毁了，这个属性为True。
+		如果该Entity实体已经被销毁了，这个属性为True。
 
 		"""
 		pass
@@ -441,6 +451,16 @@ class Base:
 		pass
 
 class Proxy:
+	def disconnect( self ):
+		"""		
+		断开客户端连接。
+		
+		
+		
+
+		"""
+		pass
+
 	def getClientType( self ):
 		"""		
 		功能说明：
@@ -471,14 +491,15 @@ class Proxy:
 	def getClientDatas( self ):
 		"""		
 		功能说明：
-		这个函数返回客户端登录时所附带的数据。
+		这个函数返回客户端登录时和注册时所附带的数据。
 		此数据可用于运营系统扩展，如果连接了第三方账号服务，此数据会经过interfaces进程发往第三方服务系统。
 		
 		
 		返回:
 		
 		
-		bytes, 字节流数据。
+		tuple, 固定为2个元素的tuple(登陆数据bytes，注册数据bytes)，第一个元素为登陆时客户端调用登陆时传入的datas参数，
+		第二个元素为注册时客户端调用注册所传入的datas参数。由于可以存储任意二进制数据，因此他们都是以bytes类型存在。
 		
 		
 		
@@ -616,7 +637,7 @@ class Proxy:
 		"""
 		pass
 
-	def onEntitiesEnabled( self ):
+	def onClientEnabled( self ):
 		"""		如果在脚本中实现了此回调，当实体可用时（ 各种初始化完毕并且可以与客户端通讯 ）该回调被调用。 这个方法没有参数。
 		注意：giveClientTo将控制权赋给了该实体时也会导致该回调被调用。
 		
@@ -713,7 +734,7 @@ class Proxy:
 		pass
 
 	@property
-	def entitiesEnabled( self ):
+	def clientEnabled( self ):
 
 		"""		实体是否已经可用。在实体可用之前脚本不能与客户端进行通讯。
 
@@ -852,7 +873,7 @@ def charge( ordersID, dbID, byteDatas, pycallback ):
 	
 	@pycallback
 	计费回调。
-	计费回调原型:
+	计费回调原型: (当在interfaces中调用KBEngine.chargeResponse后，如果某个订单设置过回调则该回调被调用)
 	def on**ChargeCB(self, orderID, dbID, success, datas):
 	ordersID：string，订单ID
 	dbID：uint64，通常为entity的databaseID
@@ -866,22 +887,22 @@ def charge( ordersID, dbID, byteDatas, pycallback ):
 	"""
 	pass
 
-def createBase(  ):
+def createEntity(  ):
 	"""	
 	功能说明：
-	KBEngine.createBaseLocally的别名.
+	KBEngine.createEntityLocally的别名.
 	
 
 	"""
 	pass
 
-def createBaseAnywhere( entityType, params, callback ):
+def createEntityAnywhere( entityType, params, callback ):
 	"""	
 	功能说明：
-	创建一个新的Base实体，
-	服务端可能选择任何的Baseapp来创建Base实体。
+	创建一个新的Entity实体，
+	服务端可能选择任何的Baseapp来创建Entity实体。
 	
-	这个方法应作为KBEngine.createBaseLocally的首选，
+	这个方法应作为KBEngine.createEntityLocally的首选，
 	这样服务端会灵活地选择一个合适的Baseapp来创建实体。
 	
 	函数参数需要提供创建的实体的类型，还有一个Python字典作为参数来初始化实体的值。
@@ -896,10 +917,10 @@ def createBaseAnywhere( entityType, params, callback ):
 		"tmp" : "tmp"	# baseEntity.tmp
 	}
 	
-	def onCreateBaseCallback(entity)
+	def onCreateEntityCallback(entity)
 		print(entity)
 	
-	createBaseAnywhere("Avatar", params, onCreateBaseCallback)
+	createEntityAnywhere("Avatar", params, onCreateEntityCallback)
 	
 	
 	
@@ -908,18 +929,18 @@ def createBaseAnywhere( entityType, params, callback ):
 	
 	
 	@entityType
-	string，指定要创建的Base实体的类型。有效的实体类型在/scripts/entities.xml列出。
+	string，指定要创建的Entity实体的类型。有效的实体类型在/scripts/entities.xml列出。
 	
 	
 	@params
 	可选参数, 一个Python字典对象。
-	如果一个指定的键是一个Base属性，他的值会用来初始化这个Base实体的属性。
-	如果这个键是一个Cell属性，它会被添加到Base实体的'cellData'属性，这个'cellData'属性是一个Python字典，
+	如果一个指定的键是一个Entity属性，他的值会用来初始化这个Entity实体的属性。
+	如果这个键是一个Cell属性，它会被添加到Entity实体的'cellData'属性，这个'cellData'属性是一个Python字典，
 	然后在后面会用来初始化cell实体的属性。
 	
 	
 	@callback
-	callback是一个可选的回调函数，当实体完成创建时被调用。回调函数带有一个参数，当成功的时候是Base实体的mailbox，失败时是None。
+	callback是一个可选的回调函数，当实体完成创建时被调用。回调函数带有一个参数，当成功的时候是Entity实体的entityCall，失败时是None。
 	
 	
 	
@@ -928,7 +949,7 @@ def createBaseAnywhere( entityType, params, callback ):
 	返回：
 	
 	
-	通过回调返回Base实体的mailbox。
+	通过回调返回Entity实体的entityCall。
 	
 	
 	
@@ -939,12 +960,12 @@ def createBaseAnywhere( entityType, params, callback ):
 	"""
 	pass
 
-def createBaseRemotely( entityType, baseMB, params, callback ):
+def createEntityRemotely( entityType, baseMB, params, callback ):
 	"""	
 	功能说明：
-	通过baseMB参数在一个指定的baseapp上创建一个新的Base实体。
+	通过baseMB参数在一个指定的baseapp上创建一个新的Entity实体。
 	
-	应该将KBEngine.createBaseAnywhere方法作为首选。
+	应该将KBEngine.createEntityAnywhere方法作为首选。
 	
 	函数参数需要提供创建的实体的类型，还有一个Python字典作为参数来初始化实体的值。
 	
@@ -958,10 +979,10 @@ def createBaseRemotely( entityType, baseMB, params, callback ):
 		"tmp" : "tmp"	# baseEntity.tmp
 	}
 	
-	def onCreateBaseCallback(entity)
+	def onCreateEntityCallback(entity)
 		print(entity)
 	
-	createBaseRemotely("Avatar", baseMailbox, params, onCreateBaseCallback)
+	createEntityRemotely("Avatar", baseEntityCall, params, onCreateEntityCallback)
 	
 	
 	
@@ -970,22 +991,22 @@ def createBaseRemotely( entityType, baseMB, params, callback ):
 	
 	
 	@entityType
-	string，指定要创建的Base实体的类型。有效的实体类型在/scripts/entities.xml列出。
+	string，指定要创建的Entity实体的类型。有效的实体类型在/scripts/entities.xml列出。
 	
 	
 	@baseMB
-	BaseMailbox，这是一个Base的Mailbox。实体将被创建在该Base对应的Baseapp进程上。
+	BaseEntityCall，这是一个Entity的EntityCall。实体将被创建在该Entity对应的Baseapp进程上。
 	
 	
 	@params
 	可选参数, 一个Python字典对象。
-	如果一个指定的键是一个Base属性，他的值会用来初始化这个Base实体的属性。
-	如果这个键是一个Cell属性，它会被添加到Base实体的'cellData'属性，这个'cellData'属性是一个Python字典，
+	如果一个指定的键是一个Entity属性，他的值会用来初始化这个Entity实体的属性。
+	如果这个键是一个Cell属性，它会被添加到Entity实体的'cellData'属性，这个'cellData'属性是一个Python字典，
 	然后在后面会用来初始化cell实体的属性。
 	
 	
 	@callback
-	callback是一个可选的回调函数，当实体完成创建时被调用。回调函数带有一个参数，当成功的时候是Base实体的mailbox，失败时是None。
+	callback是一个可选的回调函数，当实体完成创建时被调用。回调函数带有一个参数，当成功的时候是Entity实体的entityCall，失败时是None。
 	
 	
 	
@@ -994,7 +1015,7 @@ def createBaseRemotely( entityType, baseMB, params, callback ):
 	返回：
 	
 	
-	通过回调返回Base实体的mailbox。
+	通过回调返回Entity实体的entityCall。
 	
 	
 	
@@ -1005,19 +1026,19 @@ def createBaseRemotely( entityType, baseMB, params, callback ):
 	"""
 	pass
 
-def createBaseFromDBID( entityType, dbID, callback, dbInterfaceName ):
+def createEntityFromDBID( entityType, dbID, callback, dbInterfaceName ):
 	"""	
 	功能说明：
-	从数据库里加载数据创建一个Base实体。
-	这个新的Base实体会在调用这个函数的Baseapp上创建。
-	如果该实体已经从数据库检出，那么将返回这个存在的Base实体的引用。
+	从数据库里加载数据创建一个Entity实体。
+	这个新的Entity实体会在调用这个函数的Baseapp上创建。
+	如果该实体已经从数据库检出，那么将返回这个存在的Entity实体的引用。
 	
 	
 	参数：
 	
 	
 	@entityType
-	string，指定要加载的Base实体类型。实体类型在/scripts/entities.xml列出。
+	string，指定要加载的Entity实体类型。实体类型在/scripts/entities.xml列出。
 	
 	
 	@dbID
@@ -1026,13 +1047,13 @@ def createBaseFromDBID( entityType, dbID, callback, dbInterfaceName ):
 	
 	@callback
 	这是一个可选的回调函数，当操作完成的时候它会被调用。回调函数带有3个参数：baseRef，databaseID和wasActive。
-	如果操作成功，baseRef会是一个mailbox或者是新创建的Base实体的直接引用，databaseID会是实体的数据库ID，无论该实体是否已经激活
-	wasActive都会有所指示，如果wasActive是True则baseRef是已经存在的实体的引用(已经从数据库检出)。如果操作失败，baseRef会是None，databaseID会是0，
-	wasActive会是False。失败最常见的原因是实体在数据库里不存在，但偶尔也会出现其它错误比如说超时或者是分配ID失败。
+	如果操作成功，baseRef会是一个entityCall或者是新创建的Entity实体的直接引用，databaseID会是实体的数据库ID，无论该实体是否已经激活
+	wasActive都会有所指示，如果wasActive是True则baseRef是已经存在的实体的引用(已经从数据库检出)。如果操作失败这三个参数的值，baseRef将会是None，databaseID将会是0，wasActive将会是False。
+	失败最常见的原因是实体在数据库里不存在，但偶尔也会出现其它错误比如说超时或者是分配ID失败。
 	
 	
 	@dbInterfaceName
-	string，可选参数，指定由某个数据库接口来完成, 默认使用"default"接口。数据库接口由kbengine_defs.xml->dbmgr->databaseInterfaces中定义。
+	string，可选参数，指定由某个数据库接口来完成, 默认使用"default"接口。数据库接口由kbengine_defaults.xml->dbmgr->databaseInterfaces中定义。
 	
 	
 	
@@ -1042,22 +1063,22 @@ def createBaseFromDBID( entityType, dbID, callback, dbInterfaceName ):
 	"""
 	pass
 
-def createBaseAnywhereFromDBID( entityType, dbID, callback, dbInterfaceName ):
+def createEntityAnywhereFromDBID( entityType, dbID, callback, dbInterfaceName ):
 	"""	
 	功能说明：
-	从数据库里加载数据创建一个Base实体。
-	服务端可能选择任何的Baseapp来创建Base实体。
+	从数据库里加载数据创建一个Entity实体。
+	服务端可能选择任何的Baseapp来创建Entity实体。
 	
 	使用这个函数将有助于BaseApps负载平衡。
 	
-	如果该实体已经从数据库检出，那么将返回这个存在的Base实体的引用。
+	如果该实体已经从数据库检出，那么将返回这个存在的Entity实体的引用。
 	
 	
 	参数：
 	
 	
 	@entityType
-	string，指定要创建的Base实体的类型。有效的实体类型在/scripts/entities.xml列出。
+	string，指定要创建的Entity实体的类型。有效的实体类型在/scripts/entities.xml列出。
 	
 	
 	@dbID
@@ -1066,13 +1087,13 @@ def createBaseAnywhereFromDBID( entityType, dbID, callback, dbInterfaceName ):
 	
 	@callback
 	这是一个可选的回调函数，当操作完成的时候它会被调用。回调函数带有3个参数：baseRef，databaseID和wasActive。
-	如果操作成功，baseRef会是一个mailbox或者是新创建的Base实体的直接引用，databaseID会是实体的数据库ID，无论该实体是否已经激活
-	wasActive都会有所指示，如果wasActive是True则baseRef是已经存在的实体的引用(已经从数据库检出)。如果操作失败，baseRef会是None，databaseID会是0，
-	wasActive会是False。失败最常见的原因是实体在数据库里不存在，但偶尔也会出现其它错误比如说超时或者是分配ID失败。
+	如果操作成功，baseRef会是一个entityCall或者是新创建的Entity实体的直接引用，databaseID会是实体的数据库ID，无论该实体是否已经激活
+	wasActive都会有所指示，如果wasActive是True则baseRef是已经存在的实体的引用(已经从数据库检出)。如果操作失败这三个参数的值，baseRef将会是None，databaseID将会是0，wasActive将会是False。
+	失败最常见的原因是实体在数据库里不存在，但偶尔也会出现其它错误比如说超时或者是分配ID失败。
 	
 	
 	@dbInterfaceName
-	string，可选参数，指定由某个数据库接口来完成, 默认使用"default"接口。数据库接口由kbengine_defs.xml->dbmgr->databaseInterfaces中定义。
+	string，可选参数，指定由某个数据库接口来完成, 默认使用"default"接口。数据库接口由kbengine_defaults.xml->dbmgr->databaseInterfaces中定义。
 	
 	
 	
@@ -1081,7 +1102,7 @@ def createBaseAnywhereFromDBID( entityType, dbID, callback, dbInterfaceName ):
 	返回：
 	
 	
-	通过回调返回Base实体的mailbox。
+	通过回调返回Entity实体的entityCall。
 	
 	
 	
@@ -1091,19 +1112,19 @@ def createBaseAnywhereFromDBID( entityType, dbID, callback, dbInterfaceName ):
 	"""
 	pass
 
-def createBaseRemotelyFromDB( entityType, dbID, baseMB, callback, dbInterfaceName ):
+def createEntityRemotelyFromDBID( entityType, dbID, baseMB, callback, dbInterfaceName ):
 	"""	
 	功能说明：
-	从数据库里加载数据并通过baseMB参数在一个指定的baseapp上创建一个Base实体。
+	从数据库里加载数据并通过baseMB参数在一个指定的baseapp上创建一个Entity实体。
 	
-	如果该实体已经从数据库检出，那么将返回这个存在的Base实体的引用。
+	如果该实体已经从数据库检出，那么将返回这个存在的Entity实体的引用。
 	
 	
 	参数：
 	
 	
 	@entityType
-	string，指定要创建的Base实体的类型。有效的实体类型在/scripts/entities.xml列出。
+	string，指定要创建的Entity实体的类型。有效的实体类型在/scripts/entities.xml列出。
 	
 	
 	@dbID
@@ -1111,18 +1132,18 @@ def createBaseRemotelyFromDB( entityType, dbID, baseMB, callback, dbInterfaceNam
 	
 	
 	@baseMB
-	BaseMailbox，这是一个Base的Mailbox。实体将被创建在该Base对应的Baseapp进程上。
+	BaseEntityCall，这是一个Entity的EntityCall。实体将被创建在该Entity对应的Baseapp进程上。
 	
 	
 	@callback
 	这是一个可选的回调函数，当操作完成的时候它会被调用。回调函数带有3个参数：baseRef，databaseID和wasActive。
-	如果操作成功，baseRef会是一个mailbox或者是新创建的Base实体的直接引用，databaseID会是实体的数据库ID，无论该实体是否已经激活
-	wasActive都会有所指示，如果wasActive是True则baseRef是已经存在的实体的引用(已经从数据库检出)。如果操作失败，baseRef会是None，databaseID会是0，
-	wasActive会是False。失败最常见的原因是实体在数据库里不存在，但偶尔也会出现其它错误比如说超时或者是分配ID失败。
+	如果操作成功，baseRef会是一个entityCall或者是新创建的Entity实体的直接引用，databaseID会是实体的数据库ID，无论该实体是否已经激活
+	wasActive都会有所指示，如果wasActive是True则baseRef是已经存在的实体的引用(已经从数据库检出)。如果操作失败这三个参数的值，baseRef将会是None，databaseID将会是0，wasActive将会是False。
+	失败最常见的原因是实体在数据库里不存在，但偶尔也会出现其它错误比如说超时或者是分配ID失败。
 	
 	
 	@dbInterfaceName
-	string，可选参数，指定由某个数据库接口来完成, 默认使用"default"接口。数据库接口由kbengine_defs.xml->dbmgr->databaseInterfaces中定义。
+	string，可选参数，指定由某个数据库接口来完成, 默认使用"default"接口。数据库接口由kbengine_defaults.xml->dbmgr->databaseInterfaces中定义。
 	
 	
 	
@@ -1131,7 +1152,7 @@ def createBaseRemotelyFromDB( entityType, dbID, baseMB, callback, dbInterfaceNam
 	返回：
 	
 	
-	通过回调返回Base实体的mailbox。
+	通过回调返回Entity实体的entityCall。
 	
 	
 	
@@ -1142,15 +1163,15 @@ def createBaseRemotelyFromDB( entityType, dbID, baseMB, callback, dbInterfaceNam
 	"""
 	pass
 
-def createBaseLocally( entityType, params ):
+def createEntityLocally( entityType, params ):
 	"""	
 	功能说明：
-	创建一个新的Base实体。
+	创建一个新的Entity实体。
 	函数参数需要提供创建的实体的类型，还有一个Python字典作为参数来初始化实体的值。
 	
 	这个Python字典不需要用户提供所有的属性，没有提供的属性默认为实体定义文件".def"提供的默认值。
 	
-	KBEngine.createBaseAnywhere应该作为这个方法的首选，因为服务端可以灵活地
+	KBEngine.createEntityAnywhere应该作为这个方法的首选，因为服务端可以灵活地
 	在合适的Baseapp上创建实体。
 	
 	例子：
@@ -1161,7 +1182,7 @@ def createBaseLocally( entityType, params ):
 		"tmp" : "tmp"	# baseEntity.tmp
 	}
 	
-	baseEntity = createBaseLocally("Avatar", params)
+	baseEntity = createEntityLocally("Avatar", params)
 	
 	
 	
@@ -1169,13 +1190,13 @@ def createBaseLocally( entityType, params ):
 	
 	
 	@entityType
-	string，指定要创建的Base实体的类型。有效的实体类型在/scripts/entities.xml列出。
+	string，指定要创建的Entity实体的类型。有效的实体类型在/scripts/entities.xml列出。
 	
 	
 	@params
 	可选参数, 一个Python字典对象。
-	如果一个指定的键是一个Base属性，他的值会用来初始化这个Base实体的属性。
-	如果这个键是一个Cell属性，它会被添加到Base实体的'cellData'属性，这个'cellData'属性是一个Python字典，
+	如果一个指定的键是一个Entity属性，他的值会用来初始化这个Entity实体的属性。
+	如果这个键是一个Cell属性，它会被添加到Entity实体的'cellData'属性，这个'cellData'属性是一个Python字典，
 	然后在后面会用来初始化cell实体的属性。
 	
 	
@@ -1184,19 +1205,11 @@ def createBaseLocally( entityType, params ):
 	
 	返回：
 	
-	新创建的Base实体（参考Base）
+	新创建的Entity实体（参考Entity）
 	
 	
 	
 	
-
-	"""
-	pass
-
-def createEntity(  ):
-	"""	
-	功能说明：
-	KBEngine.createBaseLocally的别名.
 	
 	
 	
@@ -1208,10 +1221,10 @@ def debugTracing(  ):
 	"""	
 	功能说明：
 	输出当前KBEngine追踪的Python扩展对象计数器。
-	扩展对象包括：固定字典、固定数组、Entity、Mailbox...
+	扩展对象包括：固定字典、固定数组、Entity、EntityCall...
 	在服务端正常关闭时如果计数器不为零，此时说明泄露已存在，日志将会输出错误信息。
 	ERROR cellapp [0x0000cd64] [2014-11-12 00:38:07,300] - PyGC::debugTracing(): FixedArray : leaked(128)
-	ERROR cellapp [0x0000cd64] [2014-11-12 00:38:07,300] - PyGC::debugTracing(): EntityMailbox : leaked(8)
+	ERROR cellapp [0x0000cd64] [2014-11-12 00:38:07,300] - PyGC::debugTracing(): EntityCall : leaked(8)
 	
 	
 	参数：
@@ -1249,19 +1262,19 @@ def delWatcher( path ):
 	"""
 	pass
 
-def deleteBaseByDBID( entityType, dbID, callback, dbInterfaceName ):
+def deleteEntityByDBID( entityType, dbID, callback, dbInterfaceName ):
 	"""	
 	功能说明：
 	从数据库删除指定的实体（包括属性所产生的子表数据），如果实体没有从数据库检出则删除成功，
 	如果实体已经从数据库检出那么KBEngine服务系统将会删除失败，并且从回调中返回
-	Base实体的mailbox。
+	Entity实体的entityCall。
 	
 	
 	参数：
 	
 	
 	@entityType
-	string，指定要删除的Base实体的类型。有效的实体类型在/scripts/entities.xml列出。
+	string，指定要删除的Entity实体的类型。有效的实体类型在/scripts/entities.xml列出。
 	
 	
 	@dbID
@@ -1269,11 +1282,11 @@ def deleteBaseByDBID( entityType, dbID, callback, dbInterfaceName ):
 	
 	
 	@callback
-	callback是一个可选的回调函数，只有一个参数，当实体没有从数据库检出时将会成功删除数据，参数是True。如果实体已经从数据库检出那么参数是Base实体的mailbox。
+	callback是一个可选的回调函数，只有一个参数，当实体没有从数据库检出时将会成功删除数据，参数是True。如果实体已经从数据库检出那么参数是Entity实体的entityCall。
 	
 	
 	@dbInterfaceName
-	string，可选参数，指定由某个数据库接口来完成, 默认使用"default"接口。数据库接口由kbengine_defs.xml->dbmgr->databaseInterfaces中定义。
+	string，可选参数，指定由某个数据库接口来完成, 默认使用"default"接口。数据库接口由kbengine_defaults.xml->dbmgr->databaseInterfaces中定义。
 	
 	
 	
@@ -1291,7 +1304,7 @@ def deregisterReadFileDescriptor( fileDescriptor ):
 	
 	
 	例子:
-	http://www.kbengine.org/assets/other/py/ZyfPoller.py
+	http://www.kbengine.org/assets/other/py/Poller.py
 	
 	
 	参数：
@@ -1314,7 +1327,7 @@ def deregisterWriteFileDescriptor( fileDescriptor ):
 	
 	
 	例子:
-	http://www.kbengine.org/assets/other/py/ZyfPoller.py
+	http://www.kbengine.org/assets/other/py/Poller.py
 	
 	
 	参数：
@@ -1349,16 +1362,28 @@ def executeRawDatabaseCommand( command, callback, threadID, dbInterfaceName ):
 	
 	
 	@callback
-	可选参数，带有命令执行结果的回调对象（比如说是一个函数）。这个回调带有3个参数：结果集合，影响的行数与错误信息。
 	
-	这个结果集合参数是一个行列表。每一行是一个包含字段值的字符串列表。命令执行没有返回结果集合（比如说是DELETE命令），或者
-	命令执行有错误时这个结果集合为None。
-	
-	这个数字是命令执行受影响的行数。这个参数只和不返回结果结合的命令（如DELETE）相关。
-	如果有结果集合返回或者命令执行有错误时这个参数为None。
-	
-	命令执行有错误时这个错误信息参数是一个描述错误的字符串。命令执行没有发生错误时这个参数为None。
-	
+	  可选参数，带有命令执行结果的回调对象（比如说是一个函数）。这个回调带有4个参数：结果集合，影响的行数，自増长值，错误信息。
+	  
+	  声明样例：
+	  def 
+	  sqlcallback(result, rows, insertid, error):
+	    print(result, rows, insertid, error)  
+	    
+	    如同上面的例子所示，result参数对应的就是&ldquo;结果集合&rdquo;，这个结果集合参数是一个行列表。
+	    每一行是一个包含字段值的字符串列表。
+	    命令执行没有返回结果集合（比如说是DELETE命令），
+	    或者
+	    命令执行有错误时这个结果集合为None。
+	    
+	    rows参数则是&ldquo;影响的行数&rdquo;，它是一个整数，表示命令执行受影响的行数。这个参数只和不返回结果结合的命令（如DELETE）相关。
+	    如果有结果集合返回或者命令执行有错误时这个参数为None。
+	    
+	  insertid对应的是&ldquo;自増长值&rdquo;，类似于实体的databaseID，当成功的向一张带有自増长类型字段的表中插入数据时，它返回该数据在插入时自増长字段所被赋于的值。
+	    更多的信息可以参阅mysql的mysql_insert_id()方法。另外，此参数仅在数据库类型为mysql时有意义。
+	    
+	    error则对应了&ldquo;错误信息&rdquo;，当命令执行有错误时，这个参数是一个描述错误的字符串。命令执行没有发生错误时这个参数为None。
+	  
 	
 	@threadID
 	int32，可选参数，指定一个线程来处理本条命令。用户可以通过这个参数控制某一类命令的执行先后顺序（dbmgr是多线程处理的），默认是不指定，如果threadID是实体的ID，
@@ -1366,7 +1391,7 @@ def executeRawDatabaseCommand( command, callback, threadID, dbInterfaceName ):
 	
 	
 	@dbInterfaceName
-	string，可选参数，指定由某个数据库接口来完成, 默认使用"default"接口。数据库接口由kbengine_defs.xml->dbmgr->databaseInterfaces中定义。
+	string，可选参数，指定由某个数据库接口来完成, 默认使用"default"接口。数据库接口由kbengine_defaults.xml->dbmgr->databaseInterfaces中定义。
 	
 	
 	
@@ -1641,30 +1666,30 @@ def listPathRes( path, extension ):
 	"""
 	pass
 
-def lookUpBaseByDBID( entityType, dbID, callback, dbInterfaceName ):
+def lookUpEntityByDBID( entityType, dbID, callback, dbInterfaceName ):
 	"""	
 	功能说明：
 	查询一个实体是否从数据库检出，
-	如果实体已经从数据库检出那么KBEngine服务系统将从回调中返回Base实体的mailbox。
+	如果实体已经从数据库检出那么KBEngine服务系统将从回调中返回Entity实体的entityCall。
 	
 	
 	参数：
 	
 	
 	@entityType
-	string，指定要查询的Base实体的类型。有效的实体类型在/scripts/entities.xml列出。
+	string，指定要查询的Entity实体的类型。有效的实体类型在/scripts/entities.xml列出。
 	
 	
 	@dbID
-	指定要查询的Base实体的数据库ID。这个实体的数据库ID存储在该实体的databaseID属性。
+	指定要查询的Entity实体的数据库ID。这个实体的数据库ID存储在该实体的databaseID属性。
 	
 	
 	@callback
-	callback只有一个参数，当实体没有从数据库检出时将会返回True。如果实体已经从数据库检出那么将返回Base实体的mailbox, 其他任何情况返回False。
+	callback只有一个参数，当实体没有从数据库检出时将会返回True。如果实体已经从数据库检出那么将返回Entity实体的entityCall, 其他任何情况返回False。
 	
 	
 	@dbInterfaceName
-	string，可选参数，指定由某个数据库接口来完成, 默认使用"default"接口。数据库接口由kbengine_defs.xml->dbmgr->databaseInterfaces中定义。
+	string，可选参数，指定由某个数据库接口来完成, 默认使用"default"接口。数据库接口由kbengine_defaults.xml->dbmgr->databaseInterfaces中定义。
 	
 	
 	
@@ -1778,6 +1803,8 @@ def quantumPassedPercent(  ):
 	
 	
 	
+	
+	
 
 	"""
 	pass
@@ -1789,7 +1816,7 @@ def registerReadFileDescriptor( fileDescriptor, callback ):
 	
 	
 	例子:
-	http://www.kbengine.org/assets/other/py/ZyfPoller.py
+	http://www.kbengine.org/assets/other/py/Poller.py
 	
 	
 	参数：
@@ -1816,7 +1843,7 @@ def registerReadFileDescriptor( fileDescriptor, callback ):
 	
 	
 	例子:
-	http://www.kbengine.org/assets/other/py/ZyfPoller.py
+	http://www.kbengine.org/assets/other/py/Poller.py
 	
 	
 	参数：
@@ -1828,6 +1855,8 @@ def registerReadFileDescriptor( fileDescriptor, callback ):
 	
 	@callback
 	一个回调函数，socket描述符/文件描述符作为它的唯一参数。
+	
+	
 	
 	
 	
@@ -1915,7 +1944,7 @@ def time(  ):
 	返回：
 	
 	
-	uint32，当前游戏的时间，这里指周期数，周期受频率影响，频率由配置文件kbengine.xml或者kbengine_defs.xml->gameUpdateHertz决定。
+	uint32，当前游戏的时间，这里指周期数，周期受频率影响，频率由配置文件kbengine.xml或者kbengine_defaults.xml->gameUpdateHertz决定。
 	
 	
 	
@@ -1928,7 +1957,7 @@ def onBaseAppReady( isBootstrap ):
 	"""	
 	功能说明：
 	当前Baseapp进程已经准备好的时候回调此函数。
-	注意：该回调接口必须实现在入口模块(kbengine_defs.xml->entryScriptFile)中。
+	注意：该回调接口必须实现在入口模块(kbengine_defaults.xml->entryScriptFile)中。
 	
 	
 	参数：
@@ -1948,7 +1977,7 @@ def onBaseAppShutDown( state ):
 	"""	
 	功能说明：
 	Baseapp关闭过程会回调此函数。
-	注意：该回调接口必须实现在入口模块(kbengine_defs.xml->entryScriptFile)中。
+	注意：该回调接口必须实现在入口模块(kbengine_defaults.xml->entryScriptFile)中。
 	
 	
 	参数：
@@ -1968,7 +1997,7 @@ def onCellAppDeath( addr ):
 	"""	
 	功能说明：
 	某个cellapp死亡会回调此函数。
-	注意：该回调接口必须实现在入口模块(kbengine_defs.xml->entryScriptFile)中。
+	注意：该回调接口必须实现在入口模块(kbengine_defaults.xml->entryScriptFile)中。
 	
 	
 	参数：
@@ -1989,7 +2018,7 @@ def onFini(  ):
 	"""	
 	功能说明：
 	引擎正式关闭后回调此函数。
-	注意：该回调接口必须实现在入口模块kbengine_defs.xml->entryScriptFile)中。
+	注意：该回调接口必须实现在入口模块kbengine_defaults.xml->entryScriptFile)中。
 	
 
 	"""
@@ -1999,7 +2028,7 @@ def onBaseAppData( key, value ):
 	"""	
 	功能说明：
 	KBEngine.baseAppData有改变时回调此函数。
-	注意：该回调接口必须实现在入口模块(kbengine_defs.xml->entryScriptFile)中。
+	注意：该回调接口必须实现在入口模块(kbengine_defaults.xml->entryScriptFile)中。
 	
 	
 	参数：
@@ -2023,7 +2052,7 @@ def onBaseAppDataDel( key ):
 	"""	
 	功能说明：
 	KBEngine.baseAppData有删除的时候回调此函数。
-	注意：该回调接口必须实现在入口模块(kbengine_defs.xml->entryScriptFile)中。
+	注意：该回调接口必须实现在入口模块(kbengine_defaults.xml->entryScriptFile)中。
 	
 	
 	参数：
@@ -2043,7 +2072,7 @@ def onGlobalData( key, value ):
 	"""	
 	功能说明：
 	KBEngine.globalData有改变的时候回调此函数。
-	注意：该回调接口必须实现在入口模块(kbengine_defs.xml->entryScriptFile)中。
+	注意：该回调接口必须实现在入口模块(kbengine_defaults.xml->entryScriptFile)中。
 	
 	
 	参数：
@@ -2067,7 +2096,7 @@ def onGlobalDataDel( key ):
 	"""	
 	功能说明：
 	KBEngine.globalData有删除的时候回调此函数。
-	注意：该回调接口必须实现在入口模块(kbengine_defs.xml->entryScriptFile)中。
+	注意：该回调接口必须实现在入口模块(kbengine_defaults.xml->entryScriptFile)中。
 	
 	
 	参数：
@@ -2087,7 +2116,7 @@ def onInit( isReload ):
 	"""	
 	功能说明：
 	当引擎启动后初始化完所有的脚本后这个接口被调用。
-	注意：该回调接口必须实现在入口模块(kbengine_defs.xml->entryScriptFile)中。
+	注意：该回调接口必须实现在入口模块(kbengine_defaults.xml->entryScriptFile)中。
 	
 	
 	参数：
@@ -2106,8 +2135,8 @@ def onInit( isReload ):
 def onLoseChargeCB( orderID, dbID, success, datas ):
 	"""	
 	功能说明：
-	当一个订单丢失或者不明订单被处理会收到此回调通知。
-	注意：该回调接口必须实现在入口模块(kbengine_defs.xml->entryScriptFile)中。
+	当在interfaces中调用KBEngine.chargeResponse后，如果该订单丢失或者是不明interfaces未被记录的订单会收到此回调通知。
+	注意：该回调接口必须实现在入口模块(kbengine_defaults.xml->entryScriptFile)中。
 	
 	
 	参数：
@@ -2118,7 +2147,7 @@ def onLoseChargeCB( orderID, dbID, success, datas ):
 	
 	
 	@dbID
-	uint64，实体的数据库ID, 参见: Base.databaseID。
+	uint64，实体的数据库ID, 参见: Entity.databaseID。
 	
 	
 	@success
@@ -2138,7 +2167,7 @@ def onReadyForLogin( isBootstrap ):
 	"""	
 	功能说明：
 	当引擎启动并初始化完成后会一直调用此接口询问脚本层是否准备完毕，如果脚本层准备完毕则loginapp允许客户端登录。
-	注意：该回调接口必须实现在入口模块(kbengine_defs.xml->entryScriptFile)中。
+	注意：该回调接口必须实现在入口模块(kbengine_defaults.xml->entryScriptFile)中。
 	
 	
 	参数：
@@ -2162,6 +2191,27 @@ def onReadyForLogin( isBootstrap ):
 	
 	
 	
+
+	"""
+	pass
+
+def onReadyForShutDown(  ):
+	"""	
+	功能说明：
+	如果这个函数在脚本中有实现，当进程准备退出时，该回调函数被调用。
+	
+	可以通过该回调控制进程退出的时机。
+	注意：该回调接口必须实现在入口模块(kbengine_defaults.xml->entryScriptFile)中。
+	
+	
+	返回：
+	
+	
+	bool，如果返回True，则允许进入进程退出流程，返回其它值则进程会过一段时间后再次询问。
+	
+	
+	
+	
 	
 
 	"""
@@ -2170,8 +2220,8 @@ def onReadyForLogin( isBootstrap ):
 def onAutoLoadEntityCreate( entityType, dbID ):
 	"""	
 	功能说明：
-	自动加载的实体创建时的回调，如果脚本层实现此回调，那么实体由脚本层创建，否则引擎默认使用createBaseAnywhereFromDBID来创建实体。
-	这个回调被调用是由于Base.writeToDB时设置了实体自动加载。
+	自动加载的实体创建时的回调，如果脚本层实现此回调，那么实体由脚本层创建，否则引擎默认使用createEntityAnywhereFromDBID来创建实体。
+	这个回调被调用是由于Entity.writeToDB时设置了实体自动加载。
 	注：该回调优先于onBaseAppReady执行，可在onBaseAppReady时检查是否已加载实体。
 	
 	
@@ -2179,11 +2229,11 @@ def onAutoLoadEntityCreate( entityType, dbID ):
 	
 	
 	@entityType
-	string，指定要查询的Base实体的类型。有效的实体类型在/scripts/entities.xml列出。
+	string，指定要查询的Entity实体的类型。有效的实体类型在/scripts/entities.xml列出。
 	
 	
 	@dbID
-	指定要查询的Base实体的数据库ID。这个实体的数据库ID存储在该实体的databaseID属性。
+	指定要查询的Entity实体的数据库ID。这个实体的数据库ID存储在该实体的databaseID属性。
 	
 	
 	
@@ -2291,7 +2341,7 @@ def NEXT_ONLY():
 
 	"""	
 	说明：
-	这个常量用于Base.shouldAutoBackup和Base.shouldAutoArchive属性。这个值意指在下一次认为可以的时候自动备份该实体，然后这个属性自动设为False（0）。
+	这个常量用于Entity.shouldAutoBackup和Entity.shouldAutoArchive属性。这个值意指在下一次认为可以的时候自动备份该实体，然后这个属性自动设为False（0）。
 
 	"""
 	pass

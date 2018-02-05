@@ -9,12 +9,12 @@
 	<BaseMethods>
 
 	    <reqEnterRoom>
-		    <Arg>	MAILBOX	</Arg>
+		    <Arg>	ENTITYCALL	</Arg>
 		</reqEnterRoom>
 
         <onRoomLosePlayer>
             <Arg>	INT32	</Arg>
-		    <Arg>	MAILBOX	</Arg>
+		    <Arg>	ENTITYCALL	</Arg>
 		</onRoomLosePlayer>
 
 	</BaseMethods>

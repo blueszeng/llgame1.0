@@ -2,8 +2,6 @@
 import KBEngine
 import json
 from Rules_DDZ import *
-from KBEDebug import *
-from GlobalConst import *
 from interfaces.RoomEntity import *
 import Helper
 
@@ -117,8 +115,7 @@ class DdzRoom(KBEngine.Entity,RoomEntity):
             data["curScore"]    = self.curScore
             data["type"]        = self.players[self.curCid].type
 
-            data_json = json.dumps(data)
-            KBEngine.setSpaceData(self.spaceID, "ACTION_ROOM_JIAOPAI_NEXT", data_json)
+            KBEngine.setSpaceData(self.spaceID, "ACTION_ROOM_JIAOPAI_NEXT", json.dumps(data))
 
         elif userArg == ACTION_ROOM_NEXT:
 
@@ -127,11 +124,9 @@ class DdzRoom(KBEngine.Entity,RoomEntity):
             data["powerCid"]    = self.powerCid
             data["powerCards"]  = self.powerCards
 
-            data_json = json.dumps(data)
-            KBEngine.setSpaceData(self.spaceID, "ACTION_ROOM_NEXT", data_json)
+            KBEngine.setSpaceData(self.spaceID, "ACTION_ROOM_NEXT", json.dumps(data))
 
     def reqMessage(self,player,action,buf):
-
         DEBUG_MSG("%r::reqMessage() %r space[%d] player[%r] buf[%r]"
                   % (self.className,DEBUG_ACTION_STRING.get(action),self.spaceID,player.cid,buf))
 
@@ -140,11 +135,9 @@ class DdzRoom(KBEngine.Entity,RoomEntity):
             return
 
         if action == ACTION_ROOM_JIAOPAI:
-
             self.onMessage_ACTION_ROOM_JIAOPAI(player,action,buf)
 
         elif action == ACTION_ROOM_CHUPAI:
-
             self.onMessage_ACTION_ROOM_CHUPAI(player,action,buf)
 
     def onMessage_ACTION_ROOM_JIAOPAI(self,player,action,value):
@@ -217,8 +210,7 @@ class DdzRoom(KBEngine.Entity,RoomEntity):
         if buf == "":
             player.showCards = []
         else:
-            data_json = json.loads(buf)
-            player.showCards = data_json["cards"]
+            player.showCards = json.loads(buf)
 
         cards = player.showCards
         if len(cards) > 0:
@@ -306,28 +298,21 @@ class DdzRoom(KBEngine.Entity,RoomEntity):
                     data = {}
                     data["curCid"] = self.curCid
                     data["cards"] = []
-
                     self.reqMessage(player, ACTION_ROOM_CHUPAI, json.dumps(data))
 
     def onAi(self,userArg,player):
         """托管"""
 
         if userArg == ACTION_ROOM_JIAOPAI_NEXT:
-
             self.onOuttime(userArg,player)
-
         elif userArg == ACTION_ROOM_NEXT:
 
-            data = {}
-            data["curCid"] = self.curCid
-
             if self.curCid == self.powerCid:
-                data["cards"] = getMinCards(player.cards)
+                data = getMinCards(player.cards)
             else:
-                data["cards"] = getAICards(player.cards, self.powerCards)
+                data = getAICards(player.cards, self.powerCards)
 
-            data_json = json.dumps(data)
-            self.reqMessage(player, ACTION_ROOM_CHUPAI, data_json)
+            self.reqMessage(player, ACTION_ROOM_CHUPAI, json.dumps(data))
 
     def onSettle(self):
 
@@ -445,8 +430,7 @@ class DdzRoom(KBEngine.Entity,RoomEntity):
         # 退出游戏状态
         self.setStatus(ROOM_STATE_FINISH)
 
-        data_json   = json.dumps(datas)
-        self.sendAllClients(ACTION_ROOM_SETTLE, data_json)
+        self.sendAllClients(ACTION_ROOM_SETTLE, json.dumps(datas))
 
-        INFO_MSG("DdzRoom::onCompute() space[%d] data_json = [%r]" % (self.spaceID,data_json))
+        INFO_MSG("DdzRoom::onCompute() space[%d] data_json = [%r]" % (self.spaceID,json.dumps(datas)))
 

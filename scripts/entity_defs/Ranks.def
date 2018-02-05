@@ -7,7 +7,7 @@
 
 	<BaseMethods>
 	    <reqRanksInfo>
-	        <Arg> MAILBOX </Arg>
+	        <Arg> ENTITYCALL </Arg>
 	    </reqRanksInfo>
 	</BaseMethods>
 

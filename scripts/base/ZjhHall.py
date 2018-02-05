@@ -4,12 +4,12 @@ from KBEDebug import *
 from d_config import *
 from interfaces.BaseObject import *
 
-class ZjhHall(KBEngine.Base,BaseObject):
+class ZjhHall(KBEngine.Entity,BaseObject):
 	"""
 	大厅实体
 	"""
 	def __init__(self):
-		KBEngine.Base.__init__(self)
+		KBEngine.Entity.__init__(self)
 		BaseObject.__init__(self)
 
 		self.lastNewRoomKey = 0
@@ -88,7 +88,7 @@ class ZjhHall(KBEngine.Base,BaseObject):
 					  'taxRate': d_ZJH['taxRate']
 					  }
 
-			KBEngine.createBaseAnywhere("ZjhRoom", params, None)
+			KBEngine.createEntityAnywhere("ZjhRoom", params, None)
 
 			roomDatas = {"roomMailbox": None,
 						 "players": [player]}

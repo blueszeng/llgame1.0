@@ -126,7 +126,7 @@ class Player(KBEngine.Proxy,GameObject):
 
 			className = d_games[gameName]['sign'] + "Avatar"
 
-			avatar = KBEngine.createBaseLocally(className,{})
+			avatar = KBEngine.createEntityLocally(className,{})
 			if avatar:
 				avatar.cellData["name"] = self.name
 				avatar.cellData["gold"] = self.gold

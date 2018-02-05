@@ -14,7 +14,5 @@ def countPlayers():
 
 	return i
 	
-
-
 def setup():
 	KBEngine.addWatcher("players", "UINT32", countPlayers)

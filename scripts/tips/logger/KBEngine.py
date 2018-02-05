@@ -1,38 +1,4 @@
-def onRequestCharge( ordersID, entityDBID, datas ):
-	"""	
-	功能说明：
-	当请求计费时（通常是baseapp上调用了KBEngine.charge），该回调被调用。
-	可在此函数内数据进行检查和修改，将最终结果通过KBEngine.chargeResponse提交给引擎。
-	
-	注意：该回调接口必须实现在入口模块(kbengine_defs.xml->entryScriptFile)中。
-	
-	
-	参数：
-	
-	
-	@ordersID
-	uint64，订单的ID。
-	
-	
-	@entityDBID
-	uint64，提交订单的实体DBID。
-	
-	
-	@datas
-	bytes，客户端请求时所附带的数据，可将数据转发第三方平台。
-	
-	
-	
-	
-	
-	
-	版权归KBEngine所有。
-	
-
-	"""
-	pass
-
-def addTimer( initialOffset, repeatOffset=0, callbackObj ):
+def addTimer( initialOffset, repeatOffset=0, callbackObj=None ):
 	"""	
 	功能说明：
 	注册一个定时器，定时器由回调函数callbackObj触发，回调函数将在"initialOffset"秒后被执行第1次，而后将每间隔"repeatOffset"秒执行1次。
@@ -116,7 +82,7 @@ def onLoggerAppReady(  ):
 	"""	
 	功能说明：
 	当前进程已经准备好的时候回调此函数。
-	注意：该回调接口必须实现在入口模块(kbengine_defs.xml->entryScriptFile)中。
+	注意：该回调接口必须实现在入口模块(kbengine_defaults.xml->entryScriptFile)中。
 	
 	
 	
@@ -128,7 +94,7 @@ def onLoggerAppShutDown(  ):
 	"""	
 	功能说明：
 	进程关闭会回调此函数。
-	注意：该回调接口必须实现在入口模块(kbengine_defs.xml->entryScriptFile)中。
+	注意：该回调接口必须实现在入口模块(kbengine_defaults.xml->entryScriptFile)中。
 	
 	
 	
@@ -140,9 +106,9 @@ def onLogWrote( datas ):
 	"""	
 	功能说明：
 	如果这个函数在脚本中有实现，logger进程获得了一条新日志，该回调函数被调用。
-	数据库接口在kbengine_defs.xml->dbmgr->databaseInterfaces定义。
+	数据库接口在kbengine_defaults.xml->dbmgr->databaseInterfaces定义。
 	
-	注意：该回调接口必须实现在入口模块(kbengine_defs.xml->entryScriptFile)中。
+	注意：该回调接口必须实现在入口模块(kbengine_defaults.xml->entryScriptFile)中。
 	
 	
 	参数：
@@ -150,6 +116,32 @@ def onLogWrote( datas ):
 	
 	@datas
 	bytes，日志数据。
+	
+	
+	
+	
+	
+	
+
+	"""
+	pass
+
+def onReadyForShutDown(  ):
+	"""	
+	功能说明：
+	如果这个函数在脚本中有实现，当进程准备退出时，该回调函数被调用。
+	
+	可以通过该回调控制进程退出的时机。
+	注意：该回调接口必须实现在入口模块(kbengine_defaults.xml->entryScriptFile)中。
+	
+	
+	返回：
+	
+	
+	bool，如果返回True，则允许进入进程退出流程，返回其它值则进程会过一段时间后再次询问。
+	
+	
+	
 	
 	
 	

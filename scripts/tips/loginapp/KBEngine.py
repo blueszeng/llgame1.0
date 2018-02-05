@@ -1,30 +1,4 @@
-def onReadyForShutDown(  ):
-	"""	
-	功能说明：
-	如果这个函数在脚本中有实现，当进程准备退出时，该回调函数被调用。
-	
-	可以在收到回调时进行脚本层的数据清理工作，以保证程序的安全退出。
-	注意：该回调接口必须实现在入口模块(kbengine_defs.xml->entryScriptFile)中。
-	
-	
-	返回：
-	
-	
-	bool，如果返回True，则允许进入进程退出流程，返回其它值则进程会过一段时间后再次询问。
-	
-	
-	
-	
-	
-	
-	
-	版权归KBEngine所有。
-	
-
-	"""
-	pass
-
-def addTimer( initialOffset, repeatOffset=0, callbackObj ):
+def addTimer( initialOffset, repeatOffset=0, callbackObj=None ):
 	"""	
 	功能说明：
 	注册一个定时器，定时器由回调函数callbackObj触发，回调函数将在"initialOffset"秒后被执行第1次，而后将每间隔"repeatOffset"秒执行1次。
@@ -108,7 +82,7 @@ def onLoginAppReady(  ):
 	"""	
 	功能说明：
 	当前进程已经准备好的时候回调此函数。
-	注意：该回调接口必须实现在入口模块(kbengine_defs.xml->entryScriptFile)中。
+	注意：该回调接口必须实现在入口模块(kbengine_defaults.xml->entryScriptFile)中。
 	
 	
 	
@@ -120,7 +94,7 @@ def onLoginAppShutDown(  ):
 	"""	
 	功能说明：
 	进程关闭会回调此函数。
-	注意：该回调接口必须实现在入口模块(kbengine_defs.xml->entryScriptFile)中。
+	注意：该回调接口必须实现在入口模块(kbengine_defaults.xml->entryScriptFile)中。
 	
 	
 	
@@ -128,14 +102,14 @@ def onLoginAppShutDown(  ):
 	"""
 	pass
 
-def onReuqestLogin( loginName, password, clientType, datas ):
+def onRequestLogin( loginName, password, clientType, datas ):
 	"""	
 	功能说明：
 	客户端请求服务器登陆账号时回调。
 	
 	此处可以对用户登陆做一些管理控制，例如：
 	利用该接口可以在此截断用户的登陆，将请求记录下来进行排队并返回一个错误码告诉客户端排队状态，客户端通过不断登陆从此处获得状态。
-	注意：该回调接口必须实现在入口模块(kbengine_defs.xml->entryScriptFile)中。
+	注意：该回调接口必须实现在入口模块(kbengine_defaults.xml->entryScriptFile)中。
 	
 	
 	参数：
@@ -178,7 +152,7 @@ def onLoginAppReady(  ):
 	"""	
 	功能说明：
 	当前进程已经准备好的时候回调此函数。
-	注意：该回调接口必须实现在入口模块(kbengine_defs.xml->entryScriptFile)中。
+	注意：该回调接口必须实现在入口模块(kbengine_defaults.xml->entryScriptFile)中。
 	
 	
 	
@@ -190,7 +164,7 @@ def onLoginAppShutDown(  ):
 	"""	
 	功能说明：
 	进程关闭会回调此函数。
-	注意：该回调接口必须实现在入口模块(kbengine_defs.xml->entryScriptFile)中。
+	注意：该回调接口必须实现在入口模块(kbengine_defaults.xml->entryScriptFile)中。
 	
 	
 	
@@ -203,7 +177,7 @@ def onLoginCallbackFromDB( loginName, accountName, errorno, datas ):
 	功能说明：
 	客户端请求服务器登陆账号后由dbmgr返回的回调。
 	
-	注意：该回调接口必须实现在入口模块(kbengine_defs.xml->entryScriptFile)中。
+	注意：该回调接口必须实现在入口模块(kbengine_defaults.xml->entryScriptFile)中。
 	
 	
 	参数：
@@ -238,7 +212,7 @@ def onRequestCreateAccount( accountName, password, data ):
 	功能说明：
 	客户端请求服务器创建账号时回调。
 	
-	注意：该回调接口必须实现在入口模块(kbengine_defs.xml->entryScriptFile)中。
+	注意：该回调接口必须实现在入口模块(kbengine_defaults.xml->entryScriptFile)中。
 	
 	
 	参数：
@@ -263,6 +237,42 @@ def onRequestCreateAccount( accountName, password, data ):
 	
 	
 	Tuple，返回值分别为（错误码，真实账号名，密码，客户端提交的数据datas），如果没有任何需要扩展修改的则通常返回值为毁掉传入的值（KBEngine.SERVER_SUCCESS, loginName, password, datas）。
+	
+	
+	
+	
+	
+	
+	
+
+	"""
+	pass
+
+def onCreateAccountCallbackFromDB( accountName, errorno, datas ):
+	"""	
+	功能说明：
+	客户端请求服务器创建账号后由dbmgr返回的回调。
+	
+	注意：该回调接口必须实现在入口模块(kbengine_defaults.xml->entryScriptFile)中。
+	
+	
+	参数：
+	
+	
+	
+	@accountName
+	string，客户端提交的账号名称。
+	
+	
+	@errorno
+	integer，错误码，如果非KBEngine.SERVER_SUCCESS则表示登陆失败。
+	
+	
+	@datas
+	bytes，可能是任何数据，例如：第三方平台返回的数据或者由dbmgr以及interfaces中处理登陆时返回的数据。
+	
+	
+	
 	
 	
 	

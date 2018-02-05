@@ -20,8 +20,8 @@ def onBaseAppReady(isBootstrap):
 
 	if isBootstrap:
 
-		KBEngine.createBaseLocally("Games", {})
-		KBEngine.createBaseLocally("Ranks", {})
+		KBEngine.createEntityLocally("Games", {})
+		KBEngine.createEntityLocally("Ranks", {})
 
 def onReadyForLogin(isBootstrap):
 	"""
