@@ -93,7 +93,7 @@ class DdzHall(KBEngine.Entity,BaseObject):
 		if not player.room:
 			return
 
-		if player.gold < d_DDZ[self.cid]["limit"]:
+		if player.cellData['gold'] < d_DDZ[self.cid]["limit"]:
 
 			DEBUG_MSG("%r[%r]::reqContinue() Entity[%d].gold < limit" % (self.className,self.id,player.id))
 			player.room.reqLeave(player)

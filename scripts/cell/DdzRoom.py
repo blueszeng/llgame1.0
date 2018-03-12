@@ -120,9 +120,14 @@ class DdzRoom(KBEngine.Entity,RoomEntity):
         elif userArg == ACTION_ROOM_NEXT:
 
             data = {}
-            data["curCid"]      = self.curCid
-            data["powerCid"]    = self.powerCid
-            data["powerCards"]  = self.powerCards
+            data["curCid"] = self.curCid
+            data["powerCid"] = self.powerCid
+
+            #如果又是自己，则powerCards为空
+            if self.curCid == self.powerCid:
+                data["powerCards"] = []
+            else:
+                data["powerCards"]  = copyList(self.powerCards)
 
             KBEngine.setSpaceData(self.spaceID, "ACTION_ROOM_NEXT", json.dumps(data))
 
@@ -295,18 +300,15 @@ class DdzRoom(KBEngine.Entity,RoomEntity):
                 if player.cid == self.powerCid:
                     self.onAi(ACTION_ROOM_NEXT,player)
                 else:
-                    data = {}
-                    data["curCid"] = self.curCid
-                    data["cards"] = []
-                    self.reqMessage(player, ACTION_ROOM_CHUPAI, json.dumps(data))
+                    self.reqMessage(player, ACTION_ROOM_CHUPAI, "")
 
     def onAi(self,userArg,player):
         """托管"""
 
         if userArg == ACTION_ROOM_JIAOPAI_NEXT:
             self.onOuttime(userArg,player)
-        elif userArg == ACTION_ROOM_NEXT:
 
+        elif userArg == ACTION_ROOM_NEXT:
             if self.curCid == self.powerCid:
                 data = getMinCards(player.cards)
             else:

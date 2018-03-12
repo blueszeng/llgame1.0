@@ -39,13 +39,6 @@ def convertDict(httpStr,str1,str2):
     return result
 
 
-import json
-cards = [3,2,1]
-
-data = json.loads(json.dumps(cards))
-print(data[1])
-
-
 
 
 
